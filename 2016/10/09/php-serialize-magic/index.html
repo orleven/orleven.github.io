@@ -1,0 +1,948 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="php,serialize,magic," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="概述有时候需要把一个对象在网络上传输，为了方便传输，可以把整个对象转化为二进制串，等到达另一端时，再还原为原来的对象，这个过程称之为也叫序列化。   
+有两种情况我们必须把对象也叫序列化，第一种情况就是把一个对象在网络中传输的时候要将对象也叫序列化，第二种情况就是把对象写入文件或是数据库的时候用到也叫序列化。   
+串行化有两个过程，一个是序列化，就是把对象转化为二进制的字符串，我们使用seria">
+<meta property="og:type" content="article">
+<meta property="og:title" content="php 序列化以及 magic 学习">
+<meta property="og:url" content="https://orleven.github.io/2016/10/09/php-serialize-magic/index.html">
+<meta property="og:site_name" content="Orleven Blog">
+<meta property="og:description" content="概述有时候需要把一个对象在网络上传输，为了方便传输，可以把整个对象转化为二进制串，等到达另一端时，再还原为原来的对象，这个过程称之为也叫序列化。   
+有两种情况我们必须把对象也叫序列化，第一种情况就是把一个对象在网络中传输的时候要将对象也叫序列化，第二种情况就是把对象写入文件或是数据库的时候用到也叫序列化。   
+串行化有两个过程，一个是序列化，就是把对象转化为二进制的字符串，我们使用seria">
+<meta property="og:updated_time" content="2017-03-14T06:38:25.982Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="php 序列化以及 magic 学习">
+<meta name="twitter:description" content="概述有时候需要把一个对象在网络上传输，为了方便传输，可以把整个对象转化为二进制串，等到达另一端时，再还原为原来的对象，这个过程称之为也叫序列化。   
+有两种情况我们必须把对象也叫序列化，第一种情况就是把一个对象在网络中传输的时候要将对象也叫序列化，第二种情况就是把对象写入文件或是数据库的时候用到也叫序列化。   
+串行化有两个过程，一个是序列化，就是把对象转化为二进制的字符串，我们使用seria">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://orleven.github.io/2016/10/09/php-serialize-magic/"/>
+
+
+
+
+
+  <title> php 序列化以及 magic 学习 | Orleven Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Orleven Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Orleven Blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://orleven.github.io/2016/10/09/php-serialize-magic/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Orleven">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/orleven.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Orleven Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                php 序列化以及 magic 学习
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-09T02:31:12+08:00">
+                2016-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/php/" itemprop="url" rel="index">
+                    <span itemprop="name">php</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>有时候需要把一个对象在网络上传输，为了方便传输，可以把整个对象转化为二进制串，等到达另一端时，再还原为原来的对象，这个过程称之为也叫序列化。   </p>
+<p>有两种情况我们必须把对象也叫序列化，第一种情况就是把一个对象在网络中传输的时候要将对象也叫序列化，第二种情况就是把对象写入文件或是数据库的时候用到也叫序列化。   </p>
+<p>串行化有两个过程，一个是序列化，就是把对象转化为二进制的字符串，我们使用serialize()函数来序列化一个对象，另一个是反序列化，就是把对象转化的二进制字符串再转化为对象， 我们使用unserialize()函数来反序列化一个对象。  </p>
+<a id="more"></a> 
+<h1 id="详情"><a href="#详情" class="headerlink" title="详情"></a>详情</h1><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">error_reporting(<span class="number">7</span>);</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">var</span> $name;</div><div class="line">	<span class="keyword">var</span> $age; </div><div class="line">	<span class="keyword">var</span> $friends;</div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($name = <span class="string">""</span>, $age = <span class="string">""</span>,$friends = array<span class="params">()</span>)</span> </span>&#123;</div><div class="line">		<span class="keyword">$this</span>-&gt;name = $name;</div><div class="line">		<span class="keyword">$this</span>-&gt;age = $age;</div><div class="line">		<span class="keyword">$this</span>-&gt;friends = $friends;</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">say</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">echo</span> <span class="string">"I am "</span> . <span class="keyword">$this</span>-&gt;name . <span class="string">",my age is "</span> . <span class="keyword">$this</span>-&gt;age . <span class="string">"my friends has "</span>;</div><div class="line">		<span class="keyword">foreach</span> (<span class="keyword">$this</span>-&gt;friends <span class="keyword">as</span> $friend)&#123;</div><div class="line">			<span class="keyword">echo</span> $friend.<span class="string">" "</span>;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">echo</span>  <span class="string">".&lt;br&gt;"</span>;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">$p1 = <span class="keyword">new</span> Person(<span class="string">"Bob"</span>, <span class="number">20</span>,<span class="keyword">array</span>(<span class="string">"Alice"</span>,<span class="string">"Jhon"</span>) );</div><div class="line">$p1_string = serialize($p1); <span class="comment">//把一个对象序列化，返一个字符串</span></div><div class="line"><span class="keyword">echo</span> $p1_string . <span class="string">"&lt;br&gt;"</span>; <span class="comment">//串行化的字符串我们通常不去解析</span></div><div class="line">$p2 = unserialize($p1_string); <span class="comment">//把一个序列化的字符串反序列化形成对象$p2</span></div><div class="line">$p2-&gt;say();</div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure>
+<p>具体输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">O:6:&quot;Person&quot;:3:&#123;s:4:&quot;name&quot;;s:3:&quot;Bob&quot;;s:3:&quot;age&quot;;i:20;s:7:&quot;friends&quot;;a:2:&#123;i:0;s:5:&quot;Alice&quot;;i:1;s:4:&quot;Jhon&quot;;&#125;&#125;    </div><div class="line">I am Bob,my age is 20my friends has Alice Jhon .</div><div class="line">&#123;: .notice&#125;</div></pre></td></tr></table></figure>
+<p>至于序列化语法解析，看如下代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">error_reporting(<span class="number">7</span>);</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">public</span> $name;</div><div class="line">	<span class="keyword">private</span> $age; </div><div class="line">	<span class="keyword">protected</span>  $friends;</div><div class="line">	<span class="keyword">var</span> $job;</div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($name = <span class="string">"Bob"</span>, $age = <span class="number">20</span>,$friends =array<span class="params">(<span class="string">"Alice"</span>,<span class="string">"Jhon"</span>)</span> ,$job=Null)</span> </span>&#123;</div><div class="line">		<span class="keyword">$this</span>-&gt;name = $name;</div><div class="line">		<span class="keyword">$this</span>-&gt;age = $age;</div><div class="line">		<span class="keyword">$this</span>-&gt;friends = $friends;</div><div class="line">		<span class="keyword">$this</span>-&gt;job = $job;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">$p1 = <span class="keyword">new</span> Person();</div><div class="line">$p1_string = serialize($p1); <span class="comment">//把一个对象序列化，返一个字符串</span></div><div class="line"><span class="keyword">echo</span> $p1_string . <span class="string">"&lt;br&gt;"</span>; <span class="comment">//串行化的字符串我们通常不去解析</span></div><div class="line">$p2 = unserialize($p1_string); <span class="comment">//把一个序列化的字符串反序列化形成对象$p2</span></div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure>
+<p>具体输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">O:6:&quot;Person&quot;:4:&#123;s:4:&quot;name&quot;;s:3:&quot;Bob&quot;;s:11:&quot;Personage&quot;;i:20;s:10:&quot;*friends&quot;;a:2:&#123;i:0;s:5:&quot;Alice&quot;;i:1;s:4:&quot;Jhon&quot;;&#125;s:3:&quot;job&quot;;N;&#125;</div></pre></td></tr></table></figure>
+<p>需要序列化一个类的话，首先PHP会先将类名序列化。格式为 O:类名长度:”类名”:值:{} ,大致Fuzzy了下，这个类名长度前可以有<code>%2b</code>、<code>%30</code> 这些符号也可以反序列化。其他的格式可以自己对照了解。如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">O:+6:&quot;Person&quot;:4:&#123;s:4:&quot;name&quot;;s:3:&quot;Bob&quot;;s:11:&quot;Personage&quot;;i:20;s:10:&quot;*friends&quot;;a:2:&#123;i:0;s:5:&quot;Alice&quot;;i:1;s:4:&quot;Jhon&quot;;&#125;s:3:&quot;job&quot;;N;&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">O:06:&quot;Person&quot;:4:&#123;s:4:&quot;name&quot;;s:3:&quot;Bob&quot;;s:11:&quot;Personage&quot;;i:20;s:10:&quot;*friends&quot;;a:2:&#123;i:0;s:5:&quot;Alice&quot;;i:1;s:4:&quot;Jhon&quot;;&#125;s:3:&quot;job&quot;;N;&#125;</div></pre></td></tr></table></figure>
+<p>以下是zval对应的类型和键对照表<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">数组中二次赋值(&amp;): R;   </div><div class="line">对象二次赋值 : r;   </div><div class="line">NULL : N;   </div><div class="line">true : b:1;   </div><div class="line">false : b:0;   </div><div class="line">Long : i;   </div><div class="line">Double : d;   </div><div class="line">String : s/S;   </div><div class="line">Class : C;   </div><div class="line">Array : a;   </div><div class="line">Object : O;</div></pre></td></tr></table></figure></p>
+<p>可以看出变量不同的属性也有着不同的格式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public : key;    </div><div class="line">protected : *key;    </div><div class="line">private : 对象名key;</div></pre></td></tr></table></figure>
+<h1 id="魔术方法"><a href="#魔术方法" class="headerlink" title="魔术方法"></a>魔术方法</h1><p>在PHP5中有两个魔术方法<code>__sleep()</code>方法和<code>__wakeup()</code>方法，在对象串行化的时候，会调用一个<strong>sleep()方法来完成一 些睡前的事情；而在重新醒来，即由二进制串重新组成一个对象的时候，则会自动调用PHP的另一个函数</strong>wakeup()，做一些对象醒来就要做的动作。<strong>sleep()函数不接受任何参数， 但返回一个数组，其中包含需要串行化的属性。末被包含的属性将在串行化时被忽略，如果没有</strong>sleep()方法，PHP将保存所有属性。当然，还有其他的<a href="https://my.oschina.net/kear/blog/74964" target="_blank" rel="external">魔术方法</a>。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">error_reporting(<span class="number">7</span>);</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">var</span> $name;</div><div class="line">	<span class="keyword">var</span> $age; </div><div class="line">	<span class="keyword">var</span> $friends;</div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($name = <span class="string">""</span>, $age = <span class="string">""</span>,$friends = array<span class="params">()</span>)</span> </span>&#123;</div><div class="line">		<span class="keyword">$this</span>-&gt;name = $name;</div><div class="line">		<span class="keyword">$this</span>-&gt;age = $age;</div><div class="line">		<span class="keyword">$this</span>-&gt;friends = $friends;</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">say</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">echo</span> <span class="string">"I am "</span> . <span class="keyword">$this</span>-&gt;name . <span class="string">",my age is "</span> . <span class="keyword">$this</span>-&gt;age . <span class="string">"my friends has "</span>;</div><div class="line">		<span class="keyword">foreach</span> (<span class="keyword">$this</span>-&gt;friends <span class="keyword">as</span> $friend)&#123;</div><div class="line">			<span class="keyword">echo</span> $friend.<span class="string">" "</span>;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">echo</span>  <span class="string">".&lt;br&gt;"</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">__sleep</span><span class="params">()</span> </span>&#123;  <span class="comment">// 此时，属性$age将被删除！！！</span></div><div class="line">		$arr = <span class="keyword">array</span>(<span class="string">"name"</span>, <span class="string">"friends"</span>); </div><div class="line">		<span class="keyword">return</span>($arr);</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">__wakeup</span><span class="params">()</span> </span>&#123;<span class="comment">//重新生成对象时，并重新赋值$age为40</span></div><div class="line">		<span class="keyword">$this</span>-&gt;name = <span class="string">"Orleven"</span>;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">$p1 = <span class="keyword">new</span> Person(<span class="string">"Bob"</span>, <span class="number">20</span>,<span class="keyword">array</span>(<span class="string">"Alice"</span>,<span class="string">"Jhon"</span>) );</div><div class="line">$p1_string = serialize($p1); <span class="comment">//把一个对象序列化，返一个字符串</span></div><div class="line"><span class="keyword">echo</span> $p1_string . <span class="string">"&lt;br&gt;"</span>; <span class="comment">//串行化的字符串我们通常不去解析</span></div><div class="line">$p2 = unserialize($p1_string); <span class="comment">//把一个序列化的字符串反序列化形成对象$p2</span></div><div class="line">$p2-&gt;say();</div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure>
+<p>具体输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">O:6:&quot;Person&quot;:2:&#123;s:4:&quot;name&quot;;s:3:&quot;Bob&quot;;s:7:&quot;friends&quot;;a:2:&#123;i:0;s:5:&quot;Alice&quot;;i:1;s:4:&quot;Jhon&quot;;&#125;&#125;    </div><div class="line">I am Orleven,my age is my friends has Alice Jhon .</div><div class="line">&#123;: .notice&#125;</div></pre></td></tr></table></figure>
+<p>不久之前刚出来的<a href="https://bugs.php.net/bug.php?id=72663" target="_blank" rel="external">__wakeup()引发的漏洞</a>。大意是指，当我们反序列化一个对象时，如果它的属性发生了变化，就会导致wakeup函数中不会执行，那么如果__wakeup()中存在一些重要的语句，就会导致不会被执行。   </p>
+<p>对于如下代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">error_reporting(<span class="number">7</span>);</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">var</span> $name;</div><div class="line">	<span class="keyword">var</span> $age; </div><div class="line">	<span class="keyword">var</span> $friends;</div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($name = <span class="string">""</span>, $age = <span class="string">""</span>,$friends = array<span class="params">()</span>)</span> </span>&#123;</div><div class="line">		<span class="keyword">$this</span>-&gt;name = $name;</div><div class="line">		<span class="keyword">$this</span>-&gt;age = $age;</div><div class="line">		<span class="keyword">$this</span>-&gt;friends = $friends;</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">say</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">echo</span> <span class="string">"I am "</span> . <span class="keyword">$this</span>-&gt;name . <span class="string">",my age is "</span> . <span class="keyword">$this</span>-&gt;age . <span class="string">",my friends has "</span>;</div><div class="line">		<span class="keyword">foreach</span> (<span class="keyword">$this</span>-&gt;friends <span class="keyword">as</span> $friend)&#123;</div><div class="line">			<span class="keyword">echo</span> $friend.<span class="string">" "</span>;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">echo</span>  <span class="string">".&lt;br&gt;"</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">__wakeup</span><span class="params">()</span> </span>&#123;<span class="comment">//重新生成对象时，并重新赋值$age为40</span></div><div class="line">		<span class="keyword">echo</span> <span class="string">"Wakeup...&lt;br/&gt;"</span>;</div><div class="line">		<span class="keyword">$this</span>-&gt;name = <span class="string">"Orleven"</span>;</div><div class="line">		<span class="keyword">echo</span> <span class="string">"Wakeuped&lt;br/&gt;"</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="comment">//Do something</span></div><div class="line">        <span class="keyword">$this</span>-&gt;say();</div><div class="line">        <span class="keyword">echo</span> <span class="string">"Destructed&lt;br/&gt;"</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果执行如下代码：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$p1_string = <span class="string">'O:6:"Person":3:&#123;s:4:"name";s:3:"Bob";s:3:"age";i:20;s:7:"friends";a:2:&#123;i:0;s:5:"Alice";i:1;s:4:"Jhon";&#125;&#125;'</span>; <span class="comment">//把一个对象序列化，返一个字符串</span></div><div class="line"><span class="keyword">echo</span> $p1_string.<span class="string">"&lt;br/&gt;"</span>;</div><div class="line">$p2 = unserialize($p1_string); <span class="comment">//把一个序列化的字符串反序列化形成对象$p2</span></div></pre></td></tr></table></figure></p>
+<p>具体输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">O:6:&quot;Person&quot;:3:&#123;s:4:&quot;name&quot;;s:3:&quot;Bob&quot;;s:3:&quot;age&quot;;i:20;s:7:&quot;friends&quot;;a:2:&#123;i:0;s:5:&quot;Alice&quot;;i:1;s:4:&quot;Jhon&quot;;&#125;&#125;  </div><div class="line">Wakeup...    </div><div class="line">Wakeuped     </div><div class="line">I am Orleven,my age is 20,my friends has Alice Jhon .   </div><div class="line">Destructed</div></pre></td></tr></table></figure>
+<p>如果执行如下代码：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$p3_string = <span class="string">'O:6:"Person":4:&#123;s:4:"name";s:3:"Bob";s:3:"age";i:20;s:7:"friends";a:2:&#123;i:0;s:5:"Alice";i:1;s:4:"Jhon";&#125;&#125;'</span>; <span class="comment">//把一个对象序列化，返一个字符串</span></div><div class="line"><span class="keyword">echo</span> $p3_string.<span class="string">"&lt;br/&gt;"</span>;</div><div class="line">$p4 = unserialize($p3_string); <span class="comment">//把一个序列化的字符串反序列化形成对象$p4</span></div></pre></td></tr></table></figure></p>
+<p>具体输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">O:6:&quot;Person&quot;:4:&#123;s:4:&quot;name&quot;;s:3:&quot;Bob&quot;;s:3:&quot;age&quot;;i:20;s:7:&quot;friends&quot;;a:2:&#123;i:0;s:5:&quot;Alice&quot;;i:1;s:4:&quot;Jhon&quot;;&#125;&#125;   </div><div class="line">I am Bob,my age is 20,my friends has Alice Jhon .   </div><div class="line">Destructed   </div><div class="line">&#123;: .notice&#125;</div></pre></td></tr></table></figure>
+<p>发现wakeup并没有执行。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/php/" rel="tag"># php</a>
+          
+            <a href="/tags/serialize/" rel="tag"># serialize</a>
+          
+            <a href="/tags/magic/" rel="tag"># magic</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/29/mysql-root-code-execution-CVE-2016-6662/" rel="next" title="Mysql 提权漏洞 CVE-2016-6662">
+                <i class="fa fa-chevron-left"></i> Mysql 提权漏洞 CVE-2016-6662
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/10/11/php-codeigniter-nodcms-audit/" rel="prev" title="php codeigniter nodcms 代码审计">
+                php codeigniter nodcms 代码审计 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/orleven.jpg"
+               alt="Orleven" />
+          <p class="site-author-name" itemprop="name">Orleven</p>
+           
+              <p class="site-description motion-element" itemprop="description">Life is full of ups and downs.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index-1.html">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/orleven" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.weibo.com/u/3846125587" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#详情"><span class="nav-number">2.</span> <span class="nav-text">详情</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#魔术方法"><span class="nav-number">3.</span> <span class="nav-text">魔术方法</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Orleven</span>
+</div>
+
+
+<div class="powered-by">
+    个人专属
+</div>
+
+<div class="theme-info">
+  Orleven Blog 
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

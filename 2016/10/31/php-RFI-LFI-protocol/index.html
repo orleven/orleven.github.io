@@ -1,0 +1,946 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="php,RFI,LFI,protocol," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="概述最近总是遇到有关文件包含的问题，所以觉得有必要学习整理下有关这方面的内容。php支持的协议可以查阅官方手册。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP文件包含以及部分封装协议的学习">
+<meta property="og:url" content="https://orleven.github.io/2016/10/31/php-RFI-LFI-protocol/index.html">
+<meta property="og:site_name" content="Orleven Blog">
+<meta property="og:description" content="概述最近总是遇到有关文件包含的问题，所以觉得有必要学习整理下有关这方面的内容。php支持的协议可以查阅官方手册。">
+<meta property="og:updated_time" content="2017-03-14T06:36:57.979Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP文件包含以及部分封装协议的学习">
+<meta name="twitter:description" content="概述最近总是遇到有关文件包含的问题，所以觉得有必要学习整理下有关这方面的内容。php支持的协议可以查阅官方手册。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://orleven.github.io/2016/10/31/php-RFI-LFI-protocol/"/>
+
+
+
+
+
+  <title> PHP文件包含以及部分封装协议的学习 | Orleven Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Orleven Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Orleven Blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://orleven.github.io/2016/10/31/php-RFI-LFI-protocol/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Orleven">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/orleven.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Orleven Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                PHP文件包含以及部分封装协议的学习
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-31T20:42:12+08:00">
+                2016-10-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/php/" itemprop="url" rel="index">
+                    <span itemprop="name">php</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>最近总是遇到有关文件包含的问题，所以觉得有必要学习整理下有关这方面的内容。<br>php支持的协议可以查阅<a href="https://secure.php.net/manual/zh/wrappers.php" target="_blank" rel="external">官方手册</a>。<br><a id="more"></a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">file:// — 访问本地文件系统</div><div class="line">http:// — 访问 HTTP(s) 网址</div><div class="line">ftp:// — 访问 FTP(s) URLs</div><div class="line">php:// — 访问各个输入/输出流（I/O streams）</div><div class="line">zlib:// — 压缩流</div><div class="line">data:// — 数据（RFC 2397）</div><div class="line">glob:// — 查找匹配的文件路径模式</div><div class="line">phar:// — PHP 归档</div><div class="line">ssh2:// — Secure Shell 2</div><div class="line">rar:// — RAR</div><div class="line">ogg:// — 音频流</div><div class="line">expect:// — 处理交互式的流</div></pre></td></tr></table></figure>
+<p>这里顺便记一下有关php文件包含的函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">fopen()</div><div class="line">file_get_contents()</div><div class="line">curl_exec()</div><div class="line">readfile()</div><div class="line">require()</div><div class="line">require_once()</div><div class="line">include()</div><div class="line">include_once()</div></pre></td></tr></table></figure>
+<h1 id="PHP部分封装协议"><a href="#PHP部分封装协议" class="headerlink" title="PHP部分封装协议"></a>PHP部分封装协议</h1><h2 id="file-协议"><a href="#file-协议" class="headerlink" title="file 协议"></a>file 协议</h2><p>文件系统 是 PHP 使用的默认封装协议，展现了本地文件系统。 当指定了一个相对路径（不以/、\、\或 Windows 盘符开头的路径）提供的路径将基于当前的工作目录。 在很多情况下是脚本所在的目录，除非被修改了。 使用 CLI 的时候，目录默认是脚本被调用时所在的目录。</p>
+<p>在某些函数里，例如 fopen() 和 file_get_contents()， include_path 会可选地搜索，也作为相对的路径。 </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span> </div><div class="line">$gfile = $_GET[<span class="string">'gfile'</span>];</div><div class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($gfile))&#123;</div><div class="line">    print_r(file_get_contents($gfile));</div><div class="line">&#125;<span class="keyword">else</span> &#123;</div><div class="line">    print_r(<span class="string">"Please input gfile !&lt;br /&gt;"</span>);</div><div class="line">&#125;</div><div class="line"><span class="comment">// ?gfile=file://C:\mySoft\xampp\htdocs\phpinfo.php</span></div><div class="line"><span class="comment">// ?gfile=file://C:/mySoft/xampp/htdocs/phpinfo.php</span></div></pre></td></tr></table></figure>
+<h2 id="http、https-协议"><a href="#http、https-协议" class="headerlink" title="http、https 协议"></a>http、https 协议</h2><p>允许通过 HTTP 1.0 的 GET方法，以只读访问文件或资源(需要allow_url_fopen=On并且 allow_url_include=On)。 HTTP请求会附带一个Host:头，用于兼容基于域名的虚拟主机。如果在你的 php.ini 文件中或字节流上下文（context）配置了user_agent字符串，它也会被包含在请求之中。<br>数据流允许读取资源的 body，而 headers 则储存在了 $http_response_header 变量里。<br>如果需要知道文档资源来自哪个 URL（经过所有重定向的处理后）， 需要处理数据流返回的系列响应报头（response headers）。 </p>
+<p>example: </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">$gfile = $_GET[<span class="string">'gfile'</span>];</div><div class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($gfile))&#123;</div><div class="line">    readfile($gfile);</div><div class="line">&#125;<span class="keyword">else</span> &#123;</div><div class="line">    print_r(<span class="string">"Please input gfile !&lt;br /&gt;"</span>);</div><div class="line">&#125;</div><div class="line"><span class="comment">// ?gfile=http://www.example.com</span></div></pre></td></tr></table></figure>
+<h2 id="php-协议"><a href="#php-协议" class="headerlink" title="php 协议"></a>php 协议</h2><h3 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h3><p>php://filter 是一种元封装器，设计用于数据流打开时的筛选过滤应用（需要allow_url_include=On）。 这对于一体式（all-in-one）的文件函数非常有用，类似 readfile()、file() 和 file_get_contents()， 在数据流内容读取之前没有机会应用其他过滤器。<br>php://filter 目标使用以下的参数作为它路径的一部分。 复合过滤链能够在一个路径上指定。</p>
+<p>php://filter 参数</p>
+<ol>
+<li>resource=&lt;要过滤的数据流&gt;     这个参数是必须的。它指定了你要筛选过滤的数据流。</li>
+<li>read=&lt;读链的筛选列表&gt;     该参数可选。可以设定一个或多个过滤器名称，以管道符（|）分隔。</li>
+<li>write=&lt;写链的筛选列表&gt;     该参数可选。可以设定一个或多个过滤器名称，以管道符（|）分隔。</li>
+</ol>
+<p>example: </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">$gfile = $_GET[<span class="string">'gfile'</span>];</div><div class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($gfile))&#123;</div><div class="line">    readfile($gfile);</div><div class="line">&#125;<span class="keyword">else</span> &#123;</div><div class="line">    print_r(<span class="string">"Please input gfile !&lt;br /&gt;"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// ?gfile=php://filter/read=string.toupper/resource=http://www.example.com</span></div><div class="line"><span class="comment">// ?gfile=php://filter/read=string.toupper|string.rot13/resource=http://www.example.com</span></div><div class="line"><span class="comment">// ?gfile=php://filter/read=convert.base64-encode/resource/resource=http://www.example.com</span></div></pre></td></tr></table></figure>
+<h3 id="input"><a href="#input" class="headerlink" title="input"></a>input</h3><p>php://input 是个可以访问请求的原始数据的只读流（需要allow_url_include=On）。POST 请求的情况下，最好使用 php://input 来代替 $HTTP_RAW_POST_DATA，因为它不依赖于特定的 php.ini 指令。而且，这样的情况下 $HTTP_RAW_POST_DATA 默认没有填充，比激活 always_populate_raw_post_data 潜在需要更少的内存。 enctype=”multipart/form-data”的时候 php://input 是无效的。</p>
+<p>example: </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">$content = file_get_contents(<span class="string">"php://input"</span>);</div><div class="line"><span class="keyword">echo</span> $content; <span class="comment">//输出name=tom&amp;age=22</span></div></pre></td></tr></table></figure>
+<h2 id="zlib"><a href="#zlib" class="headerlink" title="zlib"></a>zlib</h2><p>zlib: PHP 4.0.4 - PHP 4.2.3（仅支持带 fopencookie 的系统）<br>compress.zlib:// 和 compress.bzip2:// PHP 4.3.0 及以上</p>
+<p>用法：</p>
+<ol>
+<li>compress.zlib://file.gz</li>
+<li>compress.bzip2://file.bz2</li>
+<li>zip://archive.zip#dir/file.txt</li>
+</ol>
+<h2 id="data"><a href="#data" class="headerlink" title="data"></a>data</h2><p>自 PHP 5.2.0 起 data:（» RFC 2397）数据流封装器开始有效(需要allow_url_include=On)。 </p>
+<p>example :<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">$gfile = $_GET[<span class="string">'gfile'</span>];</div><div class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($gfile))&#123;</div><div class="line">    <span class="keyword">echo</span> <span class="keyword">include</span>($gfile);</div><div class="line">&#125;<span class="keyword">else</span> &#123;</div><div class="line">    print_r(<span class="string">"Please input gfile !&lt;br /&gt;"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// ?gfile=data://text/plain;base64,SSBsb3ZlIFBIUAo=</span></div><div class="line"><span class="comment">// ?gfile=data://text/plain;charset=unicode,(●'◡'●)</span></div><div class="line"><span class="comment">// ?gfile=data://text/plain;base64,PD9waHAgcGhwaW5mbygpOyA/Pg==</span></div><div class="line"><span class="comment">// ?gfile=data://text/plain,<span class="meta">&lt;?php</span> phpinfo(); <span class="meta">?&gt;</span></span></div></pre></td></tr></table></figure></p>
+<h2 id="glob"><a href="#glob" class="headerlink" title="glob"></a>glob</h2><p>glob:// — 查找匹配的文件路径模式。glob: 数据流包装器自 PHP 5.3.0 起开始有效，可绕过绕过open_basedir读写文件。 </p>
+<p>example :</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">$gfile = $_GET[<span class="string">'gfile'</span>];</div><div class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($gfile))&#123;</div><div class="line">    $it = <span class="keyword">new</span> DirectoryIterator($gfile);</div><div class="line">    <span class="keyword">foreach</span>($it <span class="keyword">as</span> $f) &#123;</div><div class="line">        printf(<span class="string">"%s: %.1FK&lt;br /&gt;"</span>, $f-&gt;getFilename(), $f-&gt;getSize()/<span class="number">1024</span>);</div><div class="line">    &#125;</div><div class="line">&#125;<span class="keyword">else</span> &#123;</div><div class="line">    print_r(<span class="string">"Please input gfile !&lt;br /&gt;"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// ?gfile=glob://C:\mySoft\xampp\htdocs\*.php</span></div><div class="line"><span class="comment">// ?gfile=glob://C:/mySoft/xampp/htdocs/*.php</span></div></pre></td></tr></table></figure>
+<h2 id="phar"><a href="#phar" class="headerlink" title="phar"></a>phar</h2><p>phar:// 数据流包装器自 PHP 5.3.0 起开始有效。PHP 归档。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">$gfile = $_GET[<span class="string">'gfile'</span>];</div><div class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($gfile))&#123;</div><div class="line">    <span class="keyword">include</span>($gfile);</div><div class="line">&#125;<span class="keyword">else</span> &#123;</div><div class="line">    print_r(<span class="string">"Please input gfile !&lt;br /&gt;"</span>);</div><div class="line">&#125;</div><div class="line"><span class="comment">// 把php代码写入phpinfo文件，然后压缩成zip，再改后缀为.jpg</span></div><div class="line"><span class="comment">// ?gfile=phar://phpinfo.jpg/phpinfo</span></div></pre></td></tr></table></figure>
+<p>大概就先这样把，下次有问题再添加。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/php/" rel="tag"># php</a>
+          
+            <a href="/tags/RFI/" rel="tag"># RFI</a>
+          
+            <a href="/tags/LFI/" rel="tag"># LFI</a>
+          
+            <a href="/tags/protocol/" rel="tag"># protocol</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/22/python-linux-daemon-windows-service/" rel="next" title="学习 python 版的守护进程和Windows服务">
+                <i class="fa fa-chevron-left"></i> 学习 python 版的守护进程和Windows服务
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/orleven.jpg"
+               alt="Orleven" />
+          <p class="site-author-name" itemprop="name">Orleven</p>
+           
+              <p class="site-description motion-element" itemprop="description">Life is full of ups and downs.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index-1.html">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/orleven" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.weibo.com/u/3846125587" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PHP部分封装协议"><span class="nav-number">2.</span> <span class="nav-text">PHP部分封装协议</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#file-协议"><span class="nav-number">2.1.</span> <span class="nav-text">file 协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#http、https-协议"><span class="nav-number">2.2.</span> <span class="nav-text">http、https 协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#php-协议"><span class="nav-number">2.3.</span> <span class="nav-text">php 协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#filter"><span class="nav-number">2.3.1.</span> <span class="nav-text">filter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#input"><span class="nav-number">2.3.2.</span> <span class="nav-text">input</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zlib"><span class="nav-number">2.4.</span> <span class="nav-text">zlib</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#data"><span class="nav-number">2.5.</span> <span class="nav-text">data</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#glob"><span class="nav-number">2.6.</span> <span class="nav-text">glob</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#phar"><span class="nav-number">2.7.</span> <span class="nav-text">phar</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Orleven</span>
+</div>
+
+
+<div class="powered-by">
+    个人专属
+</div>
+
+<div class="theme-info">
+  Orleven Blog 
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>
