@@ -1,0 +1,966 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="linux," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="常见目录12345678910111213141516171819202122232425262728/var (variable)：与系统运作过程有关。/var/log/   日志/dev    驱动    比要重要的档案有/dev/null, /dev/zero, /dev/tty, /dev/lp*, /dev/hd*, /dev/sd*等等/usr (软件放置处)/usr/local">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 基础知识">
+<meta property="og:url" content="http://orleven.com/2016/12/22/linux-base/index.html">
+<meta property="og:site_name" content="Orleven Blog">
+<meta property="og:description" content="常见目录12345678910111213141516171819202122232425262728/var (variable)：与系统运作过程有关。/var/log/   日志/dev    驱动    比要重要的档案有/dev/null, /dev/zero, /dev/tty, /dev/lp*, /dev/hd*, /dev/sd*等等/usr (软件放置处)/usr/local">
+<meta property="og:updated_time" content="2017-03-14T16:53:17.793Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux 基础知识">
+<meta name="twitter:description" content="常见目录12345678910111213141516171819202122232425262728/var (variable)：与系统运作过程有关。/var/log/   日志/dev    驱动    比要重要的档案有/dev/null, /dev/zero, /dev/tty, /dev/lp*, /dev/hd*, /dev/sd*等等/usr (软件放置处)/usr/local">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://orleven.com/2016/12/22/linux-base/"/>
+
+
+
+
+
+  <title> Linux 基础知识 | Orleven Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Orleven Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Orleven Blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://orleven.com/2016/12/22/linux-base/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Orleven">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/orleven.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Orleven Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Linux 基础知识
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-21T16:22:12Z">
+                2016-12-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="常见目录"><a href="#常见目录" class="headerlink" title="常见目录"></a>常见目录</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">/var (variable)：与系统运作过程有关。</div><div class="line">/var/log/   日志</div><div class="line">/dev    驱动</div><div class="line">    比要重要的档案有/dev/null, /dev/zero, /dev/tty, /dev/lp*, /dev/hd*, /dev/sd*等等</div><div class="line">/usr (软件放置处)</div><div class="line">/usr/local      系统管理员在本机自行安装自己下载的软件</div><div class="line">/usr/share/doc  说明文件档</div><div class="line">/opt (第三方协力软件)</div><div class="line">/etc (配置文件) </div><div class="line">/etc/init.d/：所有朋务的预设启动 script 都是放在这里的。</div><div class="line">    例如要启动或者关闭 iptables 的话：『 /etc/init.d/iptables start』、『/etc/init.d/iptables stop』</div><div class="line">/boot (开机与核心档)</div><div class="line">    Linux kernel常用的档名为：vmlinuz，如果使用的是grub这个开机管理程序， 则还会存在/boot/grub/这个目录喔！</div><div class="line">/bin    系统有很多放置执行文件的目录，但/bin比较特殊。</div><div class="line">    因为/bin放置的是在单人维护模式下还能够被操作的指令。在/bin底下的指令可以被root不一般账号所使用，主要有：cat, chmod, chown, date, mv, mkdir, cp, bash等等常用的指令。</div><div class="line">/home   这是系统默认的用户家目录(home directory)。</div><div class="line">/lib    系统的函式库</div><div class="line">/media  可移除的装置啦！ 包括软盘、光盘、DVD等等装置都暂时挂载在这。</div><div class="line">/mnt    如果你想要暂时挂载某些额外的装置，一般建议你可以放置到这个目录中。</div><div class="line">/srv    是一些网络朋务启动后，这些服务所需要取用的数据目录。</div><div class="line">/tmp    暂时放置档案的地方。</div><div class="line">/lost+found </div><div class="line">    这个目录是使用标准的ext2/ext3文件系统格式才会产生的一个目录，目的在二当文件系统发生错误时， 将一些遗失的片段放置到这个目录下。这个目录通常会在分割槽的最顶层存在， 例如你加装一颗硬盘于/disk中，那在这个系统下就会自动产生一个这样的目录『/disk/lost+found』</div><div class="line">/proc</div><div class="line">    他放置的数据都是在内存当中， 例如系统核心、行程信息(process)、周边装置的状态及网络状态等等。因为这个目录下的数据都是在内存当中， 所以本身不占任何硬盘空间啊！比较重要的档案例如：/proc/cpuinfo, /proc/dma, /proc/interrupts, /proc/ioports, /  proc/net/* 等等。</div><div class="line">/sys</div><div class="line">    这个目录其实跟/proc非常类似，也是一个虚拟的文件系统，主要也是记录不核心相关的信息。 包括目前已加载的核心模块不核心侦测到的硬件装置信息等等。这个目录同样不占硬盘容量喔！</div><div class="line">/sbin   重要的系统执行文件</div></pre></td></tr></table></figure>
+<h1 id="开机流程"><a href="#开机流程" class="headerlink" title="开机流程"></a>开机流程</h1><pre><code>简单的说，整个开机流程到操作系统之前的动作应该是这样的：
+1. BIOS：开机主劢执行的韧体，会讣识第一个可开机的装置；
+2. MBR：第一个可开机装置的第一个扂区内的主要启动记录区块，内吨开机管理程序；
+3. 开机管理程序(boot loader)：一支可读叏核心档案来执行的软件；
+4. 核心档案：开始操作系统的功能...
+</code></pre><h1 id="linux-文件属性"><a href="#linux-文件属性" class="headerlink" title="linux 文件属性"></a>linux 文件属性</h1><pre><code>drwxr-xr-x   16    root     root   4096     Aug  6 22:01 ImageMagick
+[ 权限 ]   [连结] [拥有者] [群组][档案容量] [ 修改日期 ]  [ 文件名 ]
+
+
+  d               rwx           r-x             r-x
+[ 文件类型 ] [ 文件拥有者 ] [ 文件所属组 ] [ 其他人权限 ]
+第
+一个字符代表这个档案是『目录、档案或链接文件等等』：
+    o 当为[ d ]则是目录，例如上表档名为『.gconf』的那一行；
+    o 当为[ - ]则是档案，例如上表档名为『install.log』那一行；
+    o 若是[ l ]则表示为连结档(link file)；
+    o 若是[ b ]则表示为装置文件里面的可供储存的接口讴备(可随机存取装置)；
+    o 若是[ c ]则表示为装置文件里面的串行端口讴备，例如键盘、鼠标(一次性读取装置)。
+
+
+权限对目录的重要性：
+可读：
+    表示具有读取目录结构列表的权限，所以当你具有读取(r)一个目录的权限时，表示你可以查询该目录下的文件名数据。 所以你就可以利用 ls 这个挃令将该目录的内容列表显示出来！
+可写：
+    这个可写入的权限对目录来说，是很里不起起的！ 因为他表示你具有移动该目录结构列表的权限，也就是底下这些权限：
+        o 建立新的档案与目录；
+        o 删除已经存在的档案与目录(不论该档案的权限为何！)
+        o 将已存在的档案或目录进行更名；
+        o 搬移该目录内的档案、目录位置。
+        总之，目录的w权限就与该目录底下的文件名异动有关就对了啦！
+执行：
+    目录只是记录文件名而已，总不能拿来执行吧？
+    没错！目录不可以被执行，目录的x代表的是用户能否迚入该目录成为工作目录的用途！
+    所谓的工作目录(work directory)就是你目前所在的目录啦！举例来说，当你登入Linux时， 你所在的家目录就
+    是你当下的工作目录。而变换目录的命令是『cd』(change directory)啰！
+
+工作目录对于指令的执行是非常重要的，如果你在某目录下不具有x的权限， 那么你就无法切换到该目录下，也就无法执行该目录下的任何指令，即使你具有该目录的r的权限。
+</code></pre><p>linux   文件名限制<br>    在Linux底下，使用预设的Ext2/Ext3文件系统时，针对档案的档名长度限制为：<br>     单一档案或目录的最大容许文件名为 255 个字符；<br>     包函完整路径名称及目录 (/) 的完整档名为 4096 个字符。</p>
+<pre><code>以及避免一些特殊字符比较好！例如底下这些：
+     * ? &gt; &lt; ; &amp; ! [ ] | \ &apos; &quot; ` ( ) { }
+</code></pre><h1 id="常用指令"><a href="#常用指令" class="headerlink" title="常用指令"></a>常用指令</h1><h2 id="基础指令"><a href="#基础指令" class="headerlink" title="基础指令"></a>基础指令</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">date 显示日期</div><div class="line">cal  显示日历</div><div class="line">bc   计算器</div><div class="line">[Ctrl]-c  中断目前程序</div><div class="line">[Ctrl]-d  取代exit的输入</div><div class="line">info  指令说明</div><div class="line">man  指令说明</div><div class="line">whatis  指令说明</div><div class="line">shutdown    关机</div><div class="line">reboot  重启</div><div class="line">halt    重启</div><div class="line">poweroff    重启</div><div class="line">init 系统运作的模式</div><div class="line">    init 0 关机</div><div class="line">chgrp   改变档案所属群组</div><div class="line">chown   改变档案拥有者</div><div class="line">chmod   改变档案的权限, SUID, SGID, SBIT等等的特权</div><div class="line">cd      变换目录</div><div class="line">pwd     显示弼前目录</div><div class="line">mkdir       建立一个新的目录</div><div class="line">rmdir       删除一个空的目录</div><div class="line">cp      (复制档案或目录)</div><div class="line">rm      (移除档案或目录)</div><div class="line">mv      (移动档案与目录，或更名)</div><div class="line">cat 由第一行开始显示档案内容</div><div class="line">tac 从最后一行开始显示，可以看出 tac 是 cat 的倒着写！</div><div class="line">nl 显示的时候，顺道输出行号！</div><div class="line">more 一页一页的显示档案内容</div><div class="line">less 不 more 类似，但是比 more 更好的是，他可以往前翻页！</div><div class="line">head 叧看头几行</div><div class="line">tail 叧看尾巳几行</div><div class="line">od 以二迚制的方式读取档案内容！</div><div class="line">touch       修改档案时间或建置新档</div><div class="line">umask       档案预设权限</div><div class="line">chattr      (配置文件案隐藏属性) </div><div class="line">lsattr      (显示档案隐藏属性) </div><div class="line">file        观察文件类型</div><div class="line">which       (寻找『执行档』)</div><div class="line">whereis     (寻找特定档案)</div><div class="line">locate      </div><div class="line">    这是因为 locate 寻找的数据是由『已建立的数据库 /var/lib/mlocate/』 里面大的数据所搜寻到的，所以不用直接在去硬盘弼中存取数据</div><div class="line">find    不过由亍 find 在寻找数据得时后相当的操硬盘</div><div class="line">tar</div><div class="line">    压 缩：tar -jcv -f filename.tar.bz2 要被压缩的档案或目录名称</div><div class="line">  查 询：tar -jtv -f filename.tar.bz2</div><div class="line">  解压缩：tar -jxv -f filename.tar.bz2 -C 欲解压缩的目录</div><div class="line">type    Bash shell 的内建命令</div><div class="line">grep    搜索指定字符串</div><div class="line">kill    杀死进程        </div><div class="line">ps      将某个时间点的程序运作情况撷取下来</div><div class="line">top     动态观察程序的变化</div><div class="line">pstree  查到程序相关性</div><div class="line">free    观察内存使用情况</div><div class="line">uname   查阅系统与核心相关信息</div><div class="line">uptime  观察系统启动时间与工作负载</div><div class="line">netstat     追踪网络或插槽文件</div><div class="line">vmstat  侦测系统资源变化</div><div class="line">lsof        列出被程序所开启的档案文件名</div><div class="line">pidof ：找出某支正在执行的程序的 PID</div></pre></td></tr></table></figure>
+<h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><h2 id="安全检查"><a href="#安全检查" class="headerlink" title="安全检查"></a>安全检查</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div></pre></td><td class="code"><pre><div class="line"># 查看指定端口的pid</div><div class="line">    netstat -antup | grep 5001</div><div class="line"># 杀死指定pid 进程</div><div class="line">    kill -9 12312</div><div class="line"></div><div class="line"># 创建新用户 orleven</div><div class="line">$ useradd orleven</div><div class="line"></div><div class="line"># 新用户允许使用sudo</div><div class="line">$ chmod u+w /etc/sudoers</div><div class="line">$ vi /etc/sudoers</div><div class="line">    找到这行 root ALL=(ALL:ALL) ALL,在他下面添加xxx ALL=(ALL) ALL (这里的xxx是你的用户名)</div><div class="line">$ chmod u-w /etc/sudoers</div><div class="line"></div><div class="line"># 生产机器禁止ROOT远程SSH登录：</div><div class="line">$ vi /etc/ssh/sshd_config</div><div class="line">    PermitRootLogin no</div><div class="line">$ service sshd restart</div><div class="line"></div><div class="line"># 设置允许远程登录</div><div class="line">$ vi /etc/ssh/sshd_config</div><div class="line">    AllowUsers orleven</div><div class="line">$ service sshd restart</div><div class="line"></div><div class="line"></div><div class="line"># 新增用户：</div><div class="line">    adduser orleven</div><div class="line"># xshell上传下载：</div><div class="line">    sudo apt-get instal  lrzsz</div><div class="line">    上传：rz -E</div><div class="line">    下载：sz</div><div class="line"># ssh 22：</div><div class="line">    sudo apt-get install openssh-server</div><div class="line">    开启：sudo /etc/init.d/ssh restart</div><div class="line"># 查看进程：</div><div class="line">    ps -e | grep ssh</div><div class="line">    ps -e   -o &apos;%C   : %p : %z : %a&apos;|sort -k5 -nr   按内存从大到小排列</div><div class="line">    ps -e   -o &apos;%C   : %p : %z : %a&apos;|sort   -nr  按cpu利用率从大到小排列</div><div class="line"># mysql开启远程连接：</div><div class="line">    mysql -u root -p</div><div class="line">    use mysql</div><div class="line">    GRANT ALL PRIVILEGES ON *.* TO &apos;root&apos;@&apos;%&apos; IDENTIFIED BY &apos;123456&apos; WITH GRANT OPTION;</div><div class="line">    flush privileges;</div><div class="line"># find 命令：</div><div class="line">    find .|xargs grep -ri &quot;IBM&quot;  查找目录下的所有文件中是否含有某个字符串,并且只打印出文件名</div><div class="line">    find /opt/  -name &quot;MyCProgram.c&quot;        用文件名查找文件</div><div class="line">    find /opt/  -iname &quot;MyCProgram.c&quot;        用文件名查找文件，忽略大小写</div><div class="line">    find /opt/ -maxdepth  3 -iname &quot;passwd&quot;    在opt目录下及其最大三层深度的子目录中查找passwd文件</div><div class="line">    find  /opt/ -maxdepth  3 -iname &quot;SBLF.php&quot; -exec cat  &#123;&#125; \  查找文件并查看</div><div class="line">    find /opt/  -not  -iname &quot;MyCProgram.c&quot;    相反匹配</div><div class="line">    find  /opt/ -perm 755  -type f  -exec ls -l &#123;&#125; \;  查找opt目录下755权限的文件并执行ls -l</div><div class="line">    find /opt/ -empty            查找所有的空文件</div><div class="line">    find /opt/lampp/htdocs/  -newer /opt/lampp/htdocs/Trojan/lqx.php    查找在指定文件时间之后做了修改的文件</div><div class="line">远程链接</div><div class="line">    1).linux</div><div class="line">        ssh ubuntu@115.159.50.234    密码:8KX3OuQkBhDRvE7</div><div class="line">    2).windows</div><div class="line">        rdesktop  115.159.100.36 -u Administrator -p 3GCGc7OoRn0kpMY7</div><div class="line"></div><div class="line"># 设置软连接</div><div class="line">    ln -s /usr/local/nginx/logs/access.log  nginx_access.log</div><div class="line"></div><div class="line"></div><div class="line"># 如果你想在当前目录下 查找&quot;hello,world!&quot;字符串,可以这样:</div><div class="line"></div><div class="line">grep -rn &quot;hello,world!&quot; *</div><div class="line">* : 表示当前目录所有文件，也可以是某个文件名</div><div class="line">-r 是递归查找</div><div class="line">-n 是显示行号</div><div class="line">-R 查找所有文件包含子目录</div><div class="line">-i 忽略大小写</div><div class="line"></div><div class="line">下面是一些有意思的命令行参数：</div><div class="line">grep -i pattern files ：不区分大小写地搜索。默认情况区分大小写，</div><div class="line">grep -l pattern files ：只列出匹配的文件名，</div><div class="line">grep -L pattern files ：列出不匹配的文件名，</div><div class="line">grep -w pattern files ：只匹配整个单词，而不是字符串的一部分（如匹配‘magic’，而不是‘magical’），</div><div class="line">grep -C number pattern files ：匹配的上下文分别显示[number]行，</div><div class="line">grep pattern1 | pattern2 files ：显示匹配 pattern1 或 pattern2 的行，</div><div class="line">grep pattern1 files | grep pattern2 ：显示既匹配 pattern1 又匹配 pattern2 的行。</div><div class="line">这里还有些用于搜索的特殊符号：</div><div class="line">\&lt; 和 \&gt; 分别标注单词的开始与结尾。</div><div class="line"></div><div class="line">例如：</div><div class="line">grep man * 会匹配 ‘Batman’、‘manic’、‘man’等，</div><div class="line">grep &apos;\&lt;man&apos; * 匹配‘manic’和‘man’，但不是‘Batman’，</div><div class="line">grep &apos;\&lt;man\&gt;&apos; 只匹配‘man’，而不是‘Batman’或‘manic’等其他的字符串。</div><div class="line">&apos;^&apos;：指匹配的字符串在行首，</div><div class="line">&apos;$&apos;：指匹配的字符串在行尾， </div><div class="line"></div><div class="line">xargs配合grep查找</div><div class="line">find -type f -name &apos;*.php&apos;|xargs grep &apos;GroupRecord&apos;</div></pre></td></tr></table></figure>
+<p>这里附上一个网传的<a href="/tools/linux_safe_shell.sh">Linux安全检查脚本</a></p>
+<h1 id="清除日志"><a href="#清除日志" class="headerlink" title="清除日志"></a>清除日志</h1><p>登录后执行下面命令,不记录历史命令(.bash_history)<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">unset</span> HISTORY HISTFILE HISTSAVE HISTZONE HISTORY HISTLOG; <span class="built_in">export</span> HISTFILE=/dev/null; <span class="built_in">export</span> HISTSIZE=0; <span class="built_in">export</span> HISTFILESIZE=0</div></pre></td></tr></table></figure></p>
+<p>last命令结果修改ip(如果修改用户什么的,自己修改下把)</p>
+<p>Centos</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">utmpdump /var/<span class="built_in">log</span>/wtmp |sed <span class="string">"s/8.8.8.8/1.1.1.1/g"</span> |utmpdump -r &gt;/tmp/wtmp1 &amp;&amp;\mv  /tmp/wtmp1 /var/<span class="built_in">log</span>/wtmp</div></pre></td></tr></table></figure>
+<p>unix<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/usr/lib/acct/fwtmp &lt; /var/adm/wtmpx | sed <span class="string">"s/192.168.8.88/localhost/g"</span> | /usr/lib/acct/fwtmp -ic &gt; /var/adm/wtmpx</div></pre></td></tr></table></figure></p>
+<p>lastlog 修改替换<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sed -i <span class="string">'s/192.168.1.1/8.8.8.8/'</span> /var/<span class="built_in">log</span>/lastlog</div></pre></td></tr></table></figure></p>
+<p>不记录ssh公钥在本地.ssh目录中</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh -o UserKnownHostsFile=/dev/null -T user@host /bin/bash –i</div></pre></td></tr></table></figure>
+<p>多次覆盖文件，使得即使是昂贵的硬件探测仪器也难以将数据复原 -n, –iterations=N    覆盖N 次，而非使用默认的3 次。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">shred -n 31337 -z -u filename</div><div class="line"></div><div class="line">-n, --iterations=N    覆盖N 次，而非使用默认的3 次</div><div class="line">-z, --zero         最后一次使用0 进行覆盖以隐藏覆盖动作</div><div class="line">-u, --remove        覆盖后截断并删除文件</div></pre></td></tr></table></figure></p>
+<p>登录账户 w下管理员是看不到的</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh -T somebody@8.8.8.8 /bin/bash –i</div></pre></td></tr></table></figure>
+<p>日志文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">/var/log/message 系统启动后的信息和错误日志，是Red Hat Linux中最常用的日志之一</div><div class="line">/var/log/secure 与安全相关的日志信息</div><div class="line">/var/log/maillog 与邮件相关的日志信息</div><div class="line">/var/log/cron 与定时任务相关的日志信息</div><div class="line">/var/log/spooler 与UUCP和news设备相关的日志信息</div><div class="line">/var/log/boot.log 守护进程启动和停止相关的日志消息</div><div class="line">/var/log/btmp – 记录所有失败登录信息  命令:lastb</div><div class="line">/var/log/auth.log 系统授权信息，包括用户登录和使用的权限机制等 (debian)</div></pre></td></tr></table></figure></p>
+<p>删除部分日志,比如以当天日期或者自己的登录ip</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sed  -i <span class="string">'/当前时间/'</span>d  /var/<span class="built_in">log</span>/messages</div></pre></td></tr></table></figure>
+<p>个人建议登录linux,使用winscp工具连接,选择sftp协议,执行命令或者操作目录文件,在history,lastlog,last,w下不会有记录,<br>但是在<code>/var/log/secure</code>会有<code>sftp</code>连接记录,只需要清理登录日志就可以了</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/01/imageMagick-linux-code-execution/" rel="next" title="Linux 安装 ImageMagick 以及命令执行漏洞复现">
+                <i class="fa fa-chevron-left"></i> Linux 安装 ImageMagick 以及命令执行漏洞复现
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/01/21/backdoor-base/" rel="prev" title="Backdoor 基础学习">
+                Backdoor 基础学习 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/orleven.jpg"
+               alt="Orleven" />
+          <p class="site-author-name" itemprop="name">Orleven</p>
+           
+              <p class="site-description motion-element" itemprop="description">Life is full of ups and downs.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index-1.html">
+                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/orleven" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.weibo.com/u/3846125587" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#常见目录"><span class="nav-number">1.</span> <span class="nav-text">常见目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#开机流程"><span class="nav-number">2.</span> <span class="nav-text">开机流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#linux-文件属性"><span class="nav-number">3.</span> <span class="nav-text">linux 文件属性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#常用指令"><span class="nav-number">4.</span> <span class="nav-text">常用指令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础指令"><span class="nav-number">4.1.</span> <span class="nav-text">基础指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#信息收集"><span class="nav-number">4.2.</span> <span class="nav-text">信息收集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安全检查"><span class="nav-number">4.3.</span> <span class="nav-text">安全检查</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#清除日志"><span class="nav-number">5.</span> <span class="nav-text">清除日志</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Orleven</span>
+</div>
+
+
+<div class="powered-by">
+    个人专属
+</div>
+
+<div class="theme-info">
+  Orleven Blog 
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>
