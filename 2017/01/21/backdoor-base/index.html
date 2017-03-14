@@ -83,7 +83,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="backdoor,linux,windows,iot,protocol," />
+  <meta name="keywords" content="linux,backdoor,windows,iot,protocol," />
 
 
 
@@ -111,7 +111,7 @@
 没有最好的后门，只有最合适的后门。
 
 在整体架构上，一个优秀的后门应该充分考虑其功能、触发方式和通信方式等方面。针对不同的方面，杀软也会根据其特征进行处理。为了进一步的持续性控制以及后渗透，后门越显复杂化。从后门的发展史中可看出，这是一场攻与防的持续性较量，简单来说，渗透测试拿下服务器后，怎么能不留后门呢。当然，这是玩笑话。">
-<meta property="og:updated_time" content="2017-03-14T14:35:41.669Z">
+<meta property="og:updated_time" content="2017-03-14T14:52:03.574Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Backdoor 基础学习">
 <meta name="twitter:description" content="概述
@@ -496,10 +496,8 @@
 <h3 id="apache"><a href="#apache" class="headerlink" title="apache"></a>apache</h3><p>将后门增加到apache模块目录中，攻击者只需要简单地发起一个请求就可拿到root权限的shell，并且没有任何日志记录。最出名的莫过于mod_rootme</p>
 <p>具体操作可<a href="http://bl4ck.in/index.php/penetration/apache-port-reuse-backdoor.html" target="_blank" rel="external">参考</a></p>
 <h3 id="ginx"><a href="#ginx" class="headerlink" title="ginx"></a>ginx</h3><p>nginx占有内存少，并发能力强，受到很多用户的喜爱。它可很方便地添加和升级模块，同理，pwnginx作为经典的后门也是应用了该原理，程序员只需将正常的功能稍微改动，就能达到另一面的效果。</p>
-<p>具体操作可<a href="http://www.hackdig.com/?07/hack-4762.htm" target="_blank" rel="external">参考</a></p>
 <h3 id="iis"><a href="#iis" class="headerlink" title="iis"></a>iis</h3><p>iis后门是用了iis本身的机制，当在http头里增加一字段即可触发后门，并执行发过来的命令。<br>具体原理和操作可<a href="http://esec-lab.sogeti.com/posts/2011/02/02/iis-backdoor.html" target="_blank" rel="external">参考</a><br>中间件的后门大多是以类似上述原理为基础的。</p>
 <h3 id="PHP扩展库"><a href="#PHP扩展库" class="headerlink" title="PHP扩展库"></a>PHP扩展库</h3><p>同理，将编译好的so文件添加到php.ini的extension中。当模块被初始化时，会去加载执行我们的代码。当发送特定参数的字符串过去时，即可触发后门。</p>
-<p>具体操作可<a href="http://cb.drops.wiki/wooyun/drops/tips-3003.html" target="_blank" rel="external">参考</a></p>
 <h2 id="后端语言型"><a href="#后端语言型" class="headerlink" title="后端语言型"></a>后端语言型</h2><p>这类后门在新型框架和语言的兴起下，影响力有些稍稍减弱。主要原因是现主流框架都采取路由的方式来映射url，有时攻击者即使上传完后门，也有可能无法找到对应的路由映射方式。站在不同人群的角度来看后门也别有一番风情。下面分为开发者后门和攻击者使用的后门，其中针对攻击者的后门是以PHP为例。</p>
 <h3 id="开发者后门"><a href="#开发者后门" class="headerlink" title="开发者后门"></a>开发者后门</h3><p>有时开发者也会在代码中留下后门，比如x博CMS。它通常是一些奇怪的代码，稍微动态调试下可分析出后门，这是属于比较低级的，更高级的的后门是逻辑和理论相关的漏洞，在defcon23上进行的“卑鄙密码竞赛”，曾经wooyun有介绍，有的参赛者将密码学的知识和PHP特性相结合，并以一定的逻辑性代码迷惑大多数人。虽然不难，但能想出这点子实在难能可贵。更为有趣的是，即使被发现了也可当作是个漏洞处理，舆论不会偏向于说这是开发者留下的后门。</p>
 <p>另外一方面，后门不一定直接出现在产品中，可能也会存在库中或编译好的文件里，比如nodesjs仓库或pyc后门。</p>
@@ -542,9 +540,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/backdoor/" rel="tag"># backdoor</a>
-          
             <a href="/tags/linux/" rel="tag"># linux</a>
+          
+            <a href="/tags/backdoor/" rel="tag"># backdoor</a>
           
             <a href="/tags/windows/" rel="tag"># windows</a>
           
@@ -572,6 +570,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/14/imageMagick-linux-code-execution/" rel="prev" title="Linux 安装 ImageMagick 以及命令执行漏洞复现">
+                Linux 安装 ImageMagick 以及命令执行漏洞复现 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -643,7 +645,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -654,7 +656,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -665,7 +667,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-count">29</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

