@@ -99,18 +99,18 @@
 
 
 
-<meta name="description" content="概述经常操作Linux的我却对Linux并不怎么熟悉，一遇到命令都得去网上查，太费力了，所以在这里记录下来，方便查询。
+<meta name="description" content="概述记录一下Linux的常用命令，方便查询。
 持续更新中。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux 基础知识">
 <meta property="og:url" content="http://orleven.orleven.com/2016/12/22/linux-base/index.html">
 <meta property="og:site_name" content="Orleven Blog">
-<meta property="og:description" content="概述经常操作Linux的我却对Linux并不怎么熟悉，一遇到命令都得去网上查，太费力了，所以在这里记录下来，方便查询。
+<meta property="og:description" content="概述记录一下Linux的常用命令，方便查询。
 持续更新中。">
-<meta property="og:updated_time" content="2017-03-15T02:07:13.279Z">
+<meta property="og:updated_time" content="2017-04-04T02:07:06.134Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux 基础知识">
-<meta name="twitter:description" content="概述经常操作Linux的我却对Linux并不怎么熟悉，一遇到命令都得去网上查，太费力了，所以在这里记录下来，方便查询。
+<meta name="twitter:description" content="概述记录一下Linux的常用命令，方便查询。
 持续更新中。">
 
 
@@ -412,7 +412,7 @@
       
 
       
-        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>经常操作Linux的我却对Linux并不怎么熟悉，一遇到命令都得去网上查，太费力了，所以在这里记录下来，方便查询。</p>
+        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>记录一下Linux的常用命令，方便查询。</p>
 <p>持续更新中。</p>
 <a id="more"></a>
 <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><h2 id="基本目录"><a href="#基本目录" class="headerlink" title="基本目录"></a>基本目录</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">/var (variable)：与系统运作过程有关。</div><div class="line">/var/<span class="built_in">log</span>/   日志</div><div class="line">/dev    驱动</div><div class="line">    比要重要的档案有/dev/null, /dev/zero, /dev/tty, /dev/lp*, /dev/hd*, /dev/sd*等等</div><div class="line">/usr (软件放置处)</div><div class="line">/usr/local      系统管理员在本机自行安装自己下载的软件</div><div class="line">/usr/share/doc  说明文件档</div><div class="line">/opt (第三方协力软件)</div><div class="line">/etc (配置文件) </div><div class="line">/etc/init.d/：所有朋务的预设启动 script 都是放在这里的。</div><div class="line">    例如要启动或者关闭 iptables 的话：『 /etc/init.d/iptables start』、『/etc/init.d/iptables stop』</div><div class="line">/boot (开机与核心档)</div><div class="line">    Linux kernel常用的档名为：vmlinuz，如果使用的是grub这个开机管理程序， 则还会存在/boot/grub/这个目录喔！</div><div class="line">/bin    系统有很多放置执行文件的目录，但/bin比较特殊。</div><div class="line">    因为/bin放置的是在单人维护模式下还能够被操作的指令。在/bin底下的指令可以被root不一般账号所使用，主要有：cat, chmod, chown, date, mv, mkdir, cp, bash等等常用的指令。</div><div class="line">/home   这是系统默认的用户家目录(home directory)。</div><div class="line">/lib    系统的函式库</div><div class="line">/media  可移除的装置啦！ 包括软盘、光盘、DVD等等装置都暂时挂载在这。</div><div class="line">/mnt    如果你想要暂时挂载某些额外的装置，一般建议你可以放置到这个目录中。</div><div class="line">/srv    是一些网络朋务启动后，这些服务所需要取用的数据目录。</div><div class="line">/tmp    暂时放置档案的地方。</div><div class="line">/lost+found </div><div class="line">    这个目录是使用标准的ext2/ext3文件系统格式才会产生的一个目录，目的在二当文件系统发生错误时， 将一些遗失的片段放置到这个目录下。这个目录通常会在分割槽的最顶层存在， 例如你加装一颗硬盘于/disk中，那在这个系统下就会自动产生一个这样的目录『/disk/lost+found』</div><div class="line">/proc</div><div class="line">    他放置的数据都是在内存当中， 例如系统核心、行程信息(process)、周边装置的状态及网络状态等等。因为这个目录下的数据都是在内存当中， 所以本身不占任何硬盘空间啊！比较重要的档案例如：/proc/cpuinfo, /proc/dma, /proc/interrupts, /proc/ioports, /  proc/net<span class="comment">/* 等等。</span></div><div class="line">/sys</div><div class="line">    这个目录其实跟/proc非常类似，也是一个虚拟的文件系统，主要也是记录不核心相关的信息。 包括目前已加载的核心模块不核心侦测到的硬件装置信息等等。这个目录同样不占硬盘容量喔！</div><div class="line">/sbin   重要的系统执行文件</div></pre></td></tr></table></figure>
@@ -500,8 +500,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/01/21/backdoor-base/" rel="prev" title="Backdoor 基础学习">
-                Backdoor 基础学习 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/01/21/backdoor-base/" rel="prev" title="Backdoor 基础">
+                Backdoor 基础 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -634,6 +634,24 @@
         
 
         
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://www.warmeng.com/" title="warmeng" target="_blank">warmeng</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://blog.0kami.cn/" title="0kimi" target="_blank">0kimi</a>
+                </li>
+              
+            </ul>
+          </div>
         
 
         
