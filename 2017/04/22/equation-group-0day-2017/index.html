@@ -101,7 +101,7 @@
 
 <meta name="description" content="概述Shadow Brokers黑客组织上周泄露了NSA方程式组织的一些工具，其中某些工具客直接拿下Windows服务器 。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="2017 Equation Group 0day">
+<meta property="og:title" content="2017 Equation Group 0day Tools">
 <meta property="og:url" content="http://orleven.orleven.com/2017/04/22/equation-group-0day-2017/index.html">
 <meta property="og:site_name" content="Orleven Blog">
 <meta property="og:description" content="概述Shadow Brokers黑客组织上周泄露了NSA方程式组织的一些工具，其中某些工具客直接拿下Windows服务器 。">
@@ -121,9 +121,9 @@
 <meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE-14.png">
 <meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE-15.png">
 <meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE-16.png">
-<meta property="og:updated_time" content="2017-04-27T04:09:31.796Z">
+<meta property="og:updated_time" content="2017-04-27T05:47:39.244Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="2017 Equation Group 0day">
+<meta name="twitter:title" content="2017 Equation Group 0day Tools">
 <meta name="twitter:description" content="概述Shadow Brokers黑客组织上周泄露了NSA方程式组织的一些工具，其中某些工具客直接拿下Windows服务器 。">
 <meta name="twitter:image" content="http://orleven.orleven.com/images/ETERNALBLUE-1.png">
 
@@ -159,7 +159,7 @@
 
 
 
-  <title> 2017 Equation Group 0day | Orleven Blog </title>
+  <title> 2017 Equation Group 0day Tools | Orleven Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -353,7 +353,7 @@
             
             
               
-                2017 Equation Group 0day
+                2017 Equation Group 0day Tools
               
             
           </h1>
@@ -428,11 +428,111 @@
       
         <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>Shadow Brokers黑客组织上周泄露了NSA方程式组织的一些工具，其中某些工具客直接拿下<code>Windows</code>服务器 。</p>
 <a id="more"></a>
-<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><ol>
+<h1 id="工具包安装"><a href="#工具包安装" class="headerlink" title="工具包安装"></a>工具包安装</h1><ol>
 <li>下载安装 <a href="https://www.python.org/download/releases/2.6.6/" target="_blank" rel="external">python-2.6.6.msi</a> ,<a href="https://sourceforge.net/projects/pywin32/files/pywin32/Build%20221/" target="_blank" rel="external">pywin32-221.win32-py2.6.exe</a> 。</li>
 <li>下载解压 <a href="https://github.com/misterch0c/shadowbroker" target="_blank" rel="external">shadowbroker</a> 。</li>
 <li>在 <code>shadowbroker</code> 的 <code>windows</code> 目录下新建 <code>listeningposts</code> 目录。</li>
 </ol>
+<h1 id="工具包简介"><a href="#工具包简介" class="headerlink" title="工具包简介"></a>工具包简介</h1><ul>
+<li><code>swift</code> 银行攻击的证据</li>
+<li><code>oddjob</code> 植入后门等相关文档</li>
+<li><code>windows</code> 包含了各种漏洞利用工具</li>
+</ul>
+<p>最主要还是Windows目录，其包含了各种漏洞利用工具，在exploits中包含了丰富的漏洞利用工具，可影响windows多个平台。</p>
+<h2 id="Exploits"><a href="#Exploits" class="headerlink" title="Exploits"></a>Exploits</h2><p>包含了很多漏洞利用工具，经过大佬们的初步梳理，重点关注对win server有影响的几个工具。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Tables</th>
+<th style="text-align:left">Service Port</th>
+<th style="text-align:left">Describe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Explodingcan</td>
+<td style="text-align:left">IIS</td>
+<td style="text-align:left">IIS漏洞利用工具，只对Windows 2003有影响</td>
+</tr>
+<tr>
+<td style="text-align:left">Eternalromance</td>
+<td style="text-align:left">139和445</td>
+<td style="text-align:left">SMB 和 NBT漏洞利用工具</td>
+</tr>
+<tr>
+<td style="text-align:left">Emphasismine</td>
+<td style="text-align:left">143</td>
+<td style="text-align:left">通过ICMP漏洞工具</td>
+</tr>
+<tr>
+<td style="text-align:left">Englishmansdentist</td>
+<td style="text-align:left">SMTP(25)</td>
+<td style="text-align:left">通过SMTP漏洞工具</td>
+</tr>
+<tr>
+<td style="text-align:left">Erraticgopher</td>
+<td style="text-align:left">RPC(445)</td>
+<td style="text-align:left">通过RPC漏洞工具</td>
+</tr>
+<tr>
+<td style="text-align:left">Eskimoroll</td>
+<td style="text-align:left">88</td>
+<td style="text-align:left">通过kerberos漏洞进行工具</td>
+</tr>
+<tr>
+<td style="text-align:left">Eclipsedwing</td>
+<td style="text-align:left">SMB(445)</td>
+<td style="text-align:left">MS08-67漏洞利用工具</td>
+</tr>
+<tr>
+<td style="text-align:left">Educatedscholar</td>
+<td style="text-align:left">SMB(445)</td>
+<td style="text-align:left">MS09-050漏洞利用工具</td>
+</tr>
+<tr>
+<td style="text-align:left">Emeraldthread</td>
+<td style="text-align:left">139和445</td>
+<td style="text-align:left">MB和 Netbios 漏洞利用工具</td>
+</tr>
+<tr>
+<td style="text-align:left">Zippybeer</td>
+<td style="text-align:left">SMB(445)</td>
+<td style="text-align:left">SMTP漏洞利用工具</td>
+</tr>
+<tr>
+<td style="text-align:left">Eternalsynergy</td>
+<td style="text-align:left">SMB(445)</td>
+<td style="text-align:left">SMB漏洞利用工具</td>
+</tr>
+<tr>
+<td style="text-align:left">Esteemaudit</td>
+<td style="text-align:left">RDP(3389)</td>
+<td style="text-align:left">RDP漏洞利用工具</td>
+</tr>
+</tbody>
+</table>
+<h2 id="FUZZBUNCH"><a href="#FUZZBUNCH" class="headerlink" title="FUZZBUNCH"></a>FUZZBUNCH</h2><p>是一个类似 MSF的漏洞利用平台工具，python编写。</p>
+<h2 id="Specials"><a href="#Specials" class="headerlink" title="Specials"></a>Specials</h2><table>
+<thead>
+<tr>
+<th style="text-align:left">Tables</th>
+<th style="text-align:left">Service Port</th>
+<th style="text-align:left">Describe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">ETERNALBLUE</td>
+<td style="text-align:left">SMB(445)</td>
+<td style="text-align:left">SMB漏洞利用工具，xp、2003、2008、7均有部分覆盖</td>
+</tr>
+<tr>
+<td style="text-align:left">ETERNALCHAMPION</td>
+<td style="text-align:left">SMB(445)</td>
+<td style="text-align:left">SMB漏洞利用工具，xp、2003、2008、7均有部分覆盖</td>
+</tr>
+</tbody>
+</table>
 <h1 id="ETERNALBLUE"><a href="#ETERNALBLUE" class="headerlink" title="ETERNALBLUE"></a>ETERNALBLUE</h1><h2 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h2><h3 id="攻击机1"><a href="#攻击机1" class="headerlink" title="攻击机1"></a>攻击机1</h3><ul>
 <li>win7 64 旗舰版</li>
 <li><a href="https://www.python.org/download/releases/2.6.6/" target="_blank" rel="external">python-2.6.6.msi</a> </li>
@@ -476,7 +576,8 @@
 <p><img src="/images/ETERNALBLUE-15.png" alt="ETERNALBLUE-15"></p>
 <p>kali 收到反弹的shell 。</p>
 <p><img src="/images/ETERNALBLUE-16.png" alt="ETERNALBLUE-16"></p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>当然，还有其他的攻击模块，下次在更新。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>当然，还有其他的攻击模块，下次继续更新。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://po.baidu.com/feed/share?context=%7B%2522nid%2522%3A%2522news_10421100930874351826%2522%7D" target="_blank" rel="external">参考1</a><br><a href="http://mp.weixin.qq.com/s?__biz=MzIyNTA1NzAxOA==&amp;mid=502990295&amp;idx=1&amp;sn=181c1e9b01854b87d3d4752c593c4dd4&amp;chksm=700a2442477dad54b542427edad3ec16df8cde9f470ee4e6f4597d4866d64b405801baf3d799&amp;mpshare=1&amp;scene=23&amp;srcid=0415zAW8ITp4RRkubgmCNYRI#rd" target="_blank" rel="external">参考2</a></p>
 
       
     </div>
@@ -704,7 +805,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装"><span class="nav-number">2.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ETERNALBLUE"><span class="nav-number">3.</span> <span class="nav-text">ETERNALBLUE</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#实验环境"><span class="nav-number">3.1.</span> <span class="nav-text">实验环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#攻击机1"><span class="nav-number">3.1.1.</span> <span class="nav-text">攻击机1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#攻击机2"><span class="nav-number">3.1.2.</span> <span class="nav-text">攻击机2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#靶机"><span class="nav-number">3.1.3.</span> <span class="nav-text">靶机</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#复现过程"><span class="nav-number">3.2.</span> <span class="nav-text">复现过程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#工具包安装"><span class="nav-number">2.</span> <span class="nav-text">工具包安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#工具包简介"><span class="nav-number">3.</span> <span class="nav-text">工具包简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Exploits"><span class="nav-number">3.1.</span> <span class="nav-text">Exploits</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FUZZBUNCH"><span class="nav-number">3.2.</span> <span class="nav-text">FUZZBUNCH</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Specials"><span class="nav-number">3.3.</span> <span class="nav-text">Specials</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ETERNALBLUE"><span class="nav-number">4.</span> <span class="nav-text">ETERNALBLUE</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#实验环境"><span class="nav-number">4.1.</span> <span class="nav-text">实验环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#攻击机1"><span class="nav-number">4.1.1.</span> <span class="nav-text">攻击机1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#攻击机2"><span class="nav-number">4.1.2.</span> <span class="nav-text">攻击机2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#靶机"><span class="nav-number">4.1.3.</span> <span class="nav-text">靶机</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#复现过程"><span class="nav-number">4.2.</span> <span class="nav-text">复现过程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
