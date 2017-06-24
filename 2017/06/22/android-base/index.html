@@ -1,0 +1,1074 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="android," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="概述自从毕业了之后就少了很多杂七杂八的事，可以好好的学习下Android以及Android渗透测试。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 渗透测试基础入门">
+<meta property="og:url" content="http://orleven.orleven.com/2017/06/22/android-base/index.html">
+<meta property="og:site_name" content="Orleven Blog">
+<meta property="og:description" content="概述自从毕业了之后就少了很多杂七杂八的事，可以好好的学习下Android以及Android渗透测试。">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-base/android-base-android.jpg">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-base/android-base-activity-live.jpg">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-base/android-base-activity-func.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-base/android-base-classes.dex.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-base/android-base-drozer-1.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-base/android-base-drozer-2.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-base/android-base-tool-androapkinfo-1.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-base/android-base-tool-androlyze-1.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-base/android-base-tool-androlyze-2.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-base/android-base-tool-androlyze-3.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-base/android-base-keytool-1.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-base/android-base-jarsigner-1.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-base/android-base-keytool-2.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-base/android-base-jarsigner-2.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-base/android-base-apktool-1.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-base/android-base-jd-gui-1.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-base/android-base-dong-AndroidManifest-1.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-base/android-base-dong-AndroidManifest-2.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-base/android-base-dong-smali-1.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-base/android-base-dong-lookps-1.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-base/android-base-dong-duan-1.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-base/android-base-dong-duan-2.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-base/android-base-pentest-1.png">
+<meta property="og:updated_time" content="2017-06-24T15:23:01.729Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android 渗透测试基础入门">
+<meta name="twitter:description" content="概述自从毕业了之后就少了很多杂七杂八的事，可以好好的学习下Android以及Android渗透测试。">
+<meta name="twitter:image" content="http://orleven.orleven.com/images/android-base/android-base-android.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://orleven.orleven.com/2017/06/22/android-base/"/>
+
+
+
+
+
+  <title> Android 渗透测试基础入门 | Orleven Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Orleven Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Orleven Blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://orleven.orleven.com/2017/06/22/android-base/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Orleven">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/orleven.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Orleven Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android 渗透测试基础入门
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-22T03:22:12+08:00">
+                2017-06-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/android/" itemprop="url" rel="index">
+                    <span itemprop="name">android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>自从毕业了之后就少了很多杂七杂八的事，可以好好的学习下Android以及Android渗透测试。</p>
+<a id="more"></a>
+<h1 id="基本结构"><a href="#基本结构" class="headerlink" title="基本结构"></a>基本结构</h1><h2 id="Android"><a href="#Android" class="headerlink" title="Android"></a>Android</h2><h3 id="Android-架构"><a href="#Android-架构" class="headerlink" title="Android 架构"></a>Android 架构</h3><p>Android 是基于 Linux 平台的操作系统。Android的系统架构和其操作系统一样，采用了分层的架构。<br>从架构图看，Android分为四个层，从高层到低层分别是应用程序层、应用程序框架层、系统运行库层和Linux内核层。</p>
+<p><img src="/images/android-base/android-base-android.jpg" alt="android-base-android.dex"></p>
+<p>Android使用Dalvik虚拟机的概念，可以高效的运行多个虚拟机。Android操作系统使用这些虚拟机将各个应用程序运行为自己的进程。</p>
+<p>安装的应用程序会因各种目的保存到如下目录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">/system/app/应用名.apk          // 保存系统应用程序</div><div class="line">/data/app/应用名.apk            // 保存已注册的用户应用程序</div><div class="line">/data/app/应用名-1.apk          // 保存用户下载的应用程序</div><div class="line">/mnt/secure/asec/应用名-1.asec  // 保存移动到SD卡的应用程序</div><div class="line">/data/data/应用名               // 保存应用程序的重要信息</div><div class="line">/mnt/sdcard                     // 保存应用程序的一般信息</div></pre></td></tr></table></figure>
+<p>其中<code>/data/data/应用名</code>保存的信息最为重要：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">/data/data/应用名</div><div class="line">├─files                         // 保存内部使用的文件（so、data、ini文件等）</div><div class="line">├─lib                           // 保存应用程序请求的库文件（存在so文件）</div><div class="line">├─databases                     // 保存设置文件、内容文件等的查询信息的SQLite数据库文件（存在db文件）</div><div class="line">├─cache                         // 有读写权限，包括浏览器缓存和用户临时状态信息</div><div class="line">└─shared_prefs                  // 保存为XML文件，是应用程序共享的设置文件</div></pre></td></tr></table></figure>
+<p>其中 <code>shared_prefs</code> 目录内的<code>preferences.xml</code>文件包含应用程序的设置文件。因为包括升级、版本信息等内容，所以恶意访问时，此处会包含API密钥的盗用、认证密钥值等信息。</p>
+<h3 id="Android-重要组件以及生命周期"><a href="#Android-重要组件以及生命周期" class="headerlink" title="Android 重要组件以及生命周期"></a>Android 重要组件以及生命周期</h3><p>Android 由Activity，Service（服务）,Content Provider（内容提供者），BroadCastReceiver（广播接收器）四大基本组件组成。</p>
+<h4 id="Activity"><a href="#Activity" class="headerlink" title="Activity"></a>Activity</h4><p>Android 应用程序中，一个Activity通常就是一个单独的屏幕，它上面可以显示一些控件也可以监听并处理用户的事件做出响应。</p>
+<p>Activity的生命周期如下图所示：</p>
+<p><img src="/images/android-base/android-base-activity-live.jpg" alt="android-base-activity-live"></p>
+<p>途中涉及到的各类方法：</p>
+<p><img src="/images/android-base/android-base-activity-func.png" alt="android-base-activity-func"></p>
+<h4 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h4><p>Service 不会显示给用户，其运行过程与Activity相似。听音乐或者录音都在后台运行，与其他软件的运行是同时的，这些都属于Service的功能。 Activity与Service都以名为UI线程的相同应用线程执行。</p>
+<h4 id="Content-Provider"><a href="#Content-Provider" class="headerlink" title="Content Provider"></a>Content Provider</h4><p>Content Provider 是应用程序之间共享数据的界面。Android的每个应用程序都默认在Sandbox中运行，所以与系统中的其他应用程序相互分隔，不能直接访问数据。Content Provider遵守CURD（Create、Update、Read、Delete）原则。应用程序通过Inter共享小数据。Content Provider 适合共享音乐文件、图片文件等大容量文件。</p>
+<h4 id="BroadCastReceiver"><a href="#BroadCastReceiver" class="headerlink" title="BroadCastReceiver"></a>BroadCastReceiver</h4><p>你的应用可以使用它对外部事件进行过滤只对感兴趣的外部事件(如当电话呼入时，或者数据网络可用时)进行接收并做出响应。广播接收器没有用户界面。然而，它们可以启动一个activity或serice 来响应它们收到的信息，或者用NotificationManager 来通知用户。通知可以用很多种方式来吸引用户的注意力──闪动背灯、震动、播放声音等。一般来说是在状态栏上放一个持久的图标，用户可以打开它并获取消息。</p>
+<h3 id="四大组件的注册"><a href="#四大组件的注册" class="headerlink" title="四大组件的注册"></a>四大组件的注册</h3><p>四大基本组件都需要注册才能使用，每个Activity、service、Content Provider内容提供者都需要在AndroidManifest文件中进行配置，AndroidManifest文件中未进行声明的activity、服务以及内容提供者将不为系统所见，从而也就不可用，而BroadcastReceive广播接收者的注册分静态注册（在AndroidManifest文件中进行配置）和通过代码动态创建并以调用Context.registerReceiver()的方式注册至系统。需要注意的是在AndroidManifest文件中进行配置的广播接收者会随系统的启动而一直处于活跃状态,只要接收到感兴趣的广播就会触发（即使程序未运行）。</p>
+<p>AndroidManifest文件中进行注册格式如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;activity&gt; 元素的name 属性指定了实现了这个activity 的Activity 的子类。icon 和label 属性指向了包含展示给用户的此activity 的图标和标签的资源文件。</div><div class="line">&lt;service&gt; 元素用于声明服务</div><div class="line">&lt;receiver&gt; 元素用于声明广播接收器</div><div class="line">&lt;provider&gt; 元素用于声明内容提供者</div></pre></td></tr></table></figure></p>
+<h2 id="APK"><a href="#APK" class="headerlink" title="APK"></a>APK</h2><p>APK 文件其实是一个 Zip 的压缩包，解压了此文件可以看到如下目录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">APK</div><div class="line">├─META-INF                      // 主要存放证书，没有证书无法安装程序  </div><div class="line">│  ├─CERT.RSA                   // 公钥证书</div><div class="line">│  ├─CERT.SF                    // 包含APP的所用资源，负责对APP进行签名</div><div class="line">│  └─MANIFEST.MF                // 声明了资源，与CERT.SF相似</div><div class="line">├─res                           // 存放资源文件的目录</div><div class="line">├─libs                          // 如果存在的话，存放的是 ndk 编出来的 so 库</div><div class="line">├─resources.arsc                // 编译后的二进制资源文件</div><div class="line">├─classes.dex                   // 最终生成的 dalvik 字节码</div><div class="line">└─AndroidManifest.xml           // 程序全局配置文件</div></pre></td></tr></table></figure>
+<h3 id="classes-dex"><a href="#classes-dex" class="headerlink" title="classes.dex"></a>classes.dex</h3><p>Dex是Android系统中可以在Dalvik虚拟机上直接运行的文件格式。java源代码经过ADT的复杂编译后转换成Dex文件，这是一个逐步优化的过程。Dex文件的指令码就是Dalvik虚拟机专有的一套指令集，专门为嵌入式系统优化过，相比标准java的.class文件，它体积小，运行效率高。</p>
+<p>classes.dex 文件头的格式如下：<br><img src="/images/android-base/android-base-classes.dex.png" alt="android-base-classes.dex"></p>
+<h3 id="androidManifest-xml"><a href="#androidManifest-xml" class="headerlink" title="androidManifest.xml"></a>androidManifest.xml</h3><p>androidManifest.xml 是每个Android程序中必须的文件，它位于整个项目的根目录。我们每天都在使用这个文件，往里面配置程序运行所必要的组件，权限，以及一些相关信息。</p>
+<p>AndroidManifest.xml是Android应用的入口文件，它描述了package中暴露的组件（activities, services, 等等），他们各自的实现类，各种能被处理的数据和启动位置。 除了能声明程序中的Activities, ContentProviders, Services, 和Intent Receivers,还能指定permissions和instrumentation（安全控制和测试）。</p>
+<h1 id="常用工具"><a href="#常用工具" class="headerlink" title="常用工具"></a>常用工具</h1><h2 id="ADB"><a href="#ADB" class="headerlink" title="ADB"></a>ADB</h2><p>adb的全称为Android Debug Bridge，就是起到调试桥的作用。通过adb我们可以在Eclipse中方面通过DDMS来调试Android程序，说白了就是debug工具。adb的工作方式比较特殊，采用监听Socket TCP 5554等端口的方式让IDE和Qemu通讯，默认情况下adb会daemon相关的网络端口，所以当我们运行Eclipse时adb进程就会自动运行。</p>
+<p>借助adb工具，可以管理设备或手机模拟器的状态。还可以进行很多手机操作，如安装软件、系统升级、运行shell命令等等。其实简而言说，adb就是连接Android手机与PC端的桥梁，可以让用户在电脑上对手机进行全面的操作</p>
+<h3 id="命令介绍"><a href="#命令介绍" class="headerlink" title="命令介绍"></a>命令介绍</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 查看设备</span></div><div class="line">$ adb devices</div><div class="line"></div><div class="line"><span class="comment"># 连接设备（夜神模拟器端口 62001）</span></div><div class="line">$ adb connect ip:port </div><div class="line"></div><div class="line"><span class="comment"># 安装软件</span></div><div class="line">$ adb install [apk文件路径]</div><div class="line"></div><div class="line"><span class="comment"># 卸载软件</span></div><div class="line">$ adb uninstall [软件名]</div><div class="line">$ adb uninstall -k [软件名] // 如果加 -k 参数,为卸载软件但是保留配置和缓存文件.</div><div class="line"></div><div class="line"><span class="comment"># 进入设备或模拟器的shell</span></div><div class="line">$ adb shell</div><div class="line"></div><div class="line"><span class="comment"># 运行单条命令</span></div><div class="line">$ adb shell [<span class="built_in">command</span>]</div><div class="line"></div><div class="line"><span class="comment"># 端口转发</span></div><div class="line">$ adb forward [PC] [设备]</div><div class="line">$ adb forward tcp:6100 tcp:7100 // PC上所有6100端口通信数据将被重定向到手机端7100端口server上</div><div class="line">$ adb forward tcp:6100 <span class="built_in">local</span>:logd // PC上所有6100端口通信数据将被重定向到手机端UNIX类型socket上</div><div class="line">$ adb forward tcp:62002  jdwp:17304  //在本地62002端口被重定向到手机17304进程上</div><div class="line"></div><div class="line"><span class="comment"># 从电脑上发送文件到设备</span></div><div class="line">$ adb push [本地路径] [远程路径]</div><div class="line"></div><div class="line"><span class="comment"># 从设备上下载文件到电脑</span></div><div class="line">$ adb pull [远程路径] [本地路径]</div><div class="line"></div><div class="line"><span class="comment"># 查看bug报告</span></div><div class="line">$ adb bugreport</div><div class="line"></div><div class="line"><span class="comment"># 查看log</span></div><div class="line">$ adb logcat</div></pre></td></tr></table></figure>
+<h2 id="drozer"><a href="#drozer" class="headerlink" title="drozer"></a>drozer</h2><p>Drozer原名mercury,是一款不错的Android APP安全评估工具。现在有社区版/专业版两个版本。</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>安装其实比较简单，这里不进行描述，只是记录下安装过程中遇到的问题以及解决方案。</p>
+<p>一、修复连接时java路径找不到问题</p>
+<p>解决方案：</p>
+<p>1、创建如下文件并命名为：1.txt （如果为winXP，则可以直接命名为.drozer_config<br>2、写入内容如下几行内容：此处为java.exe文件的安装位置，具体情况具体处理。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[executables]</div><div class="line">java =C:\rogram Files\Java\jdk1.7.0_40\bin\java.exe</div><div class="line">javac =C:\Program Files\Java\jdk1.7.0_04\bin\javac.exe</div></pre></td></tr></table></figure>
+<p>3、把此文件放入个人目录下文件夹：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">英文：C:\Users\&lt;youruser name&gt;\</div><div class="line">中文：C:\用户\&lt;你的用户名名称&gt;\</div></pre></td></tr></table></figure>
+<p>4、通过cmd命令重命名此文件为：.drozer_config</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rename  C:\Users\d00218136\1.txt .drozer_config</div></pre></td></tr></table></figure>
+<h3 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ adb connect 127.0.0.1:62001         // 连接设备</div><div class="line">$ adb forward tcp:31415 tcp:31415     // 开启端口转发</div></pre></td></tr></table></figure>
+<p>开启移动设备中的agent.apk</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ drozer console  connect</div></pre></td></tr></table></figure>
+<h3 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 列出设备中安装的包</span></div><div class="line">$ run app.package.list</div><div class="line">$ run app.package.list <span class="_">-f</span> 【app名称】 // 搜索包</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 获取安装的包的信息</span></div><div class="line">$ run app.package.info</div><div class="line">$ run app.package.info  <span class="_">-a</span> com.zjhcsoft.android.eip     // 列举指定包的信息</div><div class="line">$ run app.package.info  -p android.permission.INTERNET  // 根据权限来列举包</div></pre></td></tr></table></figure>
+<p><img src="/images/android-base/android-base-drozer-1.png" alt="android-base-drozer-1"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 列举设备上所有的activity</span></div><div class="line">$ run app.activity.info</div><div class="line">$ run app.activity.info <span class="_">-f</span> 【包名】 搜索包的activity</div></pre></td></tr></table></figure>
+<p><img src="/images/android-base/android-base-drozer-2.png" alt="android-base-drozer-2"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 列举设备上所有的provider</span></div><div class="line">$ run app.provider.info</div><div class="line"></div><div class="line"><span class="comment"># 列举设备上所有的service</span></div><div class="line">$ run app.service.info</div><div class="line"></div><div class="line"><span class="comment"># 列举设备上所有的broadcast</span></div><div class="line">$ run app.broadcast.info</div><div class="line"></div><div class="line"><span class="comment"># 查看某包的受攻击面</span></div><div class="line">$ run app.package.attacksurface com.zjhcsoft.android.eip</div><div class="line"></div><div class="line"><span class="comment"># 运行activity</span></div><div class="line">$ run app.activity.info <span class="_">-a</span>  【包】  </div><div class="line">$ run app.activity.start --action 【activity 设置的intent filter的action属性】 --category 【activity 设置的intent filter的category 属性】--component 【package 名字】 【component 属性】</div><div class="line">$ run app.activity.start --action android.intent.action.MAIN --category android.intent.category.LAUNCHER --component com.android.browser com.android.browser.BrowserActivity</div><div class="line"></div><div class="line"><span class="comment"># 根据指定的intent action和intent category来查看activity</span></div><div class="line">$ run app.activity.forintent --action 【intent action】 --category 【intent category】</div><div class="line">$ run app.activity.forintent --action android.intent.action.VIEW --category android.intent.category.DEFAULT</div></pre></td></tr></table></figure>
+<p>其他用法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line">Dex是Android系统中可以在Dalvik虚拟机上直接运行的文件格式。java源代码经过ADT的复杂编译后转换成Dex文件，这是一个逐步优化的过程。Dex文件的指$ run 令码就是Dalvik虚拟机专有的一套指令集，专门为嵌入式系统优化过，相比标准jav// a的.class文件，它体积小，运行效率高。</div><div class="line">$ run app.activity.forintent                   // Find activities that can handle the given intent                               </div><div class="line">$ run app.activity.info                        // Gets information about exported activities.                                   </div><div class="line">$ run app.activity.start                       // Start an Activity                                                             </div><div class="line">$ run app.broadcast.info                       // Get information about broadcast receivers                                     </div><div class="line">$ run app.broadcast.send                       // Send broadcast using an intent                                                 </div><div class="line">$ run app.broadcast.sniff                      // Register a broadcast receiver that can sniff particular intents               </div><div class="line">$ run app.package.attacksurface                // Get attack surface of package                                                 </div><div class="line">$ run app.package.backup                       // Lists packages that use the backup API (returns <span class="literal">true</span> on FLAG_ALLOW_BACKUP)     </div><div class="line">$ run app.package.debuggable                   // Find debuggable packages                                                       </div><div class="line">$ run app.package.info                         // Get information about installed packages                                       </div><div class="line">$ run app.package.launchintent                 // Get launch intent of package                                                   </div><div class="line">$ run app.package.list                         // List Packages                                                                 </div><div class="line">$ run app.package.manifest                     // Get AndroidManifest.xml of package                                             </div><div class="line">$ run app.package.native                       // Find Native libraries embedded <span class="keyword">in</span> the application.                             </div><div class="line">$ run app.package.shareduid                    // Look <span class="keyword">for</span> packages with shared UIDs                                             </div><div class="line">$ run app.provider.columns                     // List columns <span class="keyword">in</span> content provider                                               </div><div class="line">$ run app.provider.delete                      // Delete from a content provider                                                 </div><div class="line">$ run app.provider.download                    // Download a file from a content provider that supports files                   </div><div class="line">$ run app.provider.finduri                     // Find referenced content URIs <span class="keyword">in</span> a package                                     </div><div class="line">$ run app.provider.info                        // Get information about exported content providers                               </div><div class="line">$ run app.provider.insert                      // Insert into a Content Provider                                                 </div><div class="line">$ run app.provider.query                       // Query a content provider                                                       </div><div class="line">$ run app.provider.read                        // Read from a content provider that supports files                               </div><div class="line">$ run app.provider.update                      // Update a record <span class="keyword">in</span> a content provider                                         </div><div class="line">$ run app.service.info                         // Get information about exported services                                       </div><div class="line">$ run app.service.send                         // Send a Message to a service, and display the reply                             </div><div class="line">$ run app.service.start                        // Start Service                                                                 </div><div class="line">$ run app.service.stop                         // Stop Service                                                                   </div><div class="line">$ run auxiliary.webcontentresolver             // Start a web service interface to content providers.                           </div><div class="line">$ run exploit.jdwp.check                       // Open @jdwp-control and see <span class="built_in">which</span> apps connect                                 </div><div class="line">$ run exploit.pilfer.general.apnprovider       // Reads APN content provider                                                     </div><div class="line">$ run exploit.pilfer.general.settingsprovider  // Reads Settings content provider                                               </div><div class="line">$ run information.datetime                     // Print Date/Time                                                               </div><div class="line">$ run information.deviceinfo                   // Get verbose device information                                                 </div><div class="line">$ run information.permissions                  // Get a list of all permissions used by packages on the device                   </div><div class="line">$ run scanner.activity.browsable               // Get all BROWSABLE activities that can be invoked from the web browser         </div><div class="line">$ run scanner.misc.native                      // Find native components included <span class="keyword">in</span> packages                                   </div><div class="line">$ run scanner.misc.readablefiles               // Find world-readable files <span class="keyword">in</span> the given folder                                 </div><div class="line">$ run scanner.misc.secretcodes                 // Search <span class="keyword">for</span> secret codes that can be used from the dialer                       </div><div class="line">$ run scanner.misc.sflagbinaries               // Find suid/sgid binaries <span class="keyword">in</span> the given folder (default is /system).             </div><div class="line">$ run scanner.misc.writablefiles               // Find world-writable files <span class="keyword">in</span> the given folder                                 </div><div class="line">$ run scanner.provider.finduris                // Search <span class="keyword">for</span> content providers that can be queried from our context.             </div><div class="line">$ run scanner.provider.injection               // Test content providers <span class="keyword">for</span> SQL injection vulnerabilities.                     </div><div class="line">$ run scanner.provider.sqltables               // Find tables accessible through SQL injection vulnerabilities.                 </div><div class="line">$ run scanner.provider.traversal               // Test content providers <span class="keyword">for</span> basic directory traversal vulnerabilities.         </div><div class="line">$ run shell.exec                               // Execute a single Linux command.                                               </div><div class="line">$ run shell.send                               // Send an ASH shell to a remote listener.                                       </div><div class="line">$ run shell.start                              // Enter into an interactive Linux shell.                                         </div><div class="line">$ run tools.file.download                      // Download a File                                                               </div><div class="line">$ run tools.file.md5sum                        // Get md5 Checksum of file                                                       </div><div class="line">$ run tools.file.size                          // Get size of file                                                               </div><div class="line">$ run tools.file.upload                        // Upload a File                                                                 </div><div class="line">$ run tools.setup.busybox                      // Install Busybox.                                                               </div><div class="line">$ run tools.setup.minimalsu                    // Prepare <span class="string">'minimal-su'</span> binary installation on the device.</div></pre></td></tr></table></figure>
+<h2 id="androguard"><a href="#androguard" class="headerlink" title="androguard"></a>androguard</h2><p>androguard (Android guard) 是 Android 应用程序的逆向工程，提供恶意软件分析等等功能，androguard 主要由 Python 编写。</p>
+<p>androguard 主要有以下功能：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">androrisk.py                // 该模块用于分析apk危险级别</div><div class="line">androapkinfo.py             // 该模块分析apk列出其中的文件类型、权限、4大组件、是否NDK反射等信息</div><div class="line">androaxml.py                // 该模块用于展示apk androidmanifest.xml</div><div class="line">androgexf.py                // 该模块生成函数调用图</div><div class="line">apkviewer.py                // 该模块生成指令级别的调用图</div><div class="line">androlyze.py                // 该模块为交互分析环境</div><div class="line">androdiff.py                // 分析2个apk的不同之处,检测app是否遭到修改</div></pre></td></tr></table></figure>
+<h3 id="androapkinfo-py"><a href="#androapkinfo-py" class="headerlink" title="androapkinfo.py"></a>androapkinfo.py</h3><p>该模块分析apk列出其中的文件类型、权限、4大组件、是否NDK反射等信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ python androapkinfo.py -i  app-release.apk</div></pre></td></tr></table></figure>
+<p><img src="/images/android-base/android-base-tool-androapkinfo-1.png" alt="android-base-tool-androapkinfo-1"></p>
+<h3 id="androlyze-py"><a href="#androlyze-py" class="headerlink" title="androlyze.py"></a>androlyze.py</h3><p>该模块为交互分析环境</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ python androlyze.py  -i  app-release.apk -x</div></pre></td></tr></table></figure>
+<p><img src="/images/android-base/android-base-tool-androlyze-1.png" alt="android-base-tool-androlyze-1"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ python androlyze.py  <span class="_">-s</span></div><div class="line">$ a,d,dx = AnalyzeAPK(<span class="string">"Desktop/app-release.apk"</span>)</div><div class="line">$ <span class="built_in">print</span> a,d,dx</div></pre></td></tr></table></figure>
+<p><img src="/images/android-base/android-base-tool-androlyze-2.png" alt="android-base-tool-androlyze-2"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ d,dx = AnalyzeDex(<span class="string">"Desktop/classes.dex"</span>)</div><div class="line">$ <span class="built_in">print</span> d,dx</div></pre></td></tr></table></figure>
+<p><img src="/images/android-base/android-base-tool-androlyze-3.png" alt="android-base-tool-androlyze-3"></p>
+<p>等等，可以使用tab键</p>
+<h3 id="androdd-py"><a href="#androdd-py" class="headerlink" title="androdd.py"></a>androdd.py</h3><p>查看apk文件结构 按照指定格式显示androidapk的所有类和子方法的信息流</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ python androdd.py -i app-release.apk  -o out <span class="_">-f</span> png</div></pre></td></tr></table></figure>
+<h3 id="androgexf-py"><a href="#androgexf-py" class="headerlink" title="androgexf.py"></a>androgexf.py</h3><p>androgexf.py 将方法信息之间的连接状态转换成gexf格式</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ androgexf.py -i app-release.apk -o apk.gexf</div></pre></td></tr></table></figure>
+<h3 id="androdiff-py"><a href="#androdiff-py" class="headerlink" title="androdiff.py"></a>androdiff.py</h3><p>androdiff.py 分析2个apk的不同之处,检测app是否遭到修改</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ python androdiff.py -i  app-release1.apk  app-release2.apk</div></pre></td></tr></table></figure>
+<h2 id="工具集"><a href="#工具集" class="headerlink" title="工具集"></a>工具集</h2><p>一、<code>santoku</code> 操作系统</p>
+<p>santoku 实质是一款定制的 Ubuntu 12.04 系统镜像，类似于KALI，与其它Ubuntu系统相比，它具有如下特点：</p>
+<p>1.集成了大量主流的Android程序分析工具，为分析人员节省分析环境配置所需的时间。<br>2.集成移动设备取证工具。支持Android、IPhone 等移动设备的取证工作。<br>3.集成渗透测试工具。<br>4.集成网络数据分析工具。在分析 Android病毒、木马等程序时，这些工具特别有用。<br>5.采用 LXDE 作为系统的桌面环境，界面与 Windows XP非常相似，符合中国人使用习惯。<br>6.正处于beta 阶段，但整个项目显得很有活力，相信将来的更新和维护也会不错。</p>
+<p>二、APKIDE</p>
+<p>APKIDE这是一个大佬们集成的一个APK的测试工具集，包含了常用的大部分工具，例如adb、apktool等。</p>
+<h1 id="基础操作"><a href="#基础操作" class="headerlink" title="基础操作"></a>基础操作</h1><h2 id="签名"><a href="#签名" class="headerlink" title="签名"></a>签名</h2><p>前面介绍过，<code>META-INF</code>这个文件主要与签名、证书有关。</p>
+<h3 id="对APP进行签名"><a href="#对APP进行签名" class="headerlink" title="对APP进行签名"></a>对APP进行签名</h3><p>一、删除apk中的META-INF文件夹，然后重新zip压缩成apk<br>二、创建密钥存储器（已经有的可以跳过）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ keytool -genkey -v -keystore 【keystore名称】 -alias 【密钥别名】 -keyalg RSA -keysize 2048 -validity 【有效天数】</div></pre></td></tr></table></figure>
+<p><img src="/images/android-base/android-base-keytool-1.png" alt="android-base-keytool-1"></p>
+<p>三、使用密钥存储器对app进行签名</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ jarsigner -verbose -sigalg MD5withRSA -digestalg SHA1 -keystore 【keystore名称】 【apk文件】 【密钥别名】</div></pre></td></tr></table></figure>
+<p><img src="/images/android-base/android-base-jarsigner-1.png" alt="android-base-jarsigner-1"></p>
+<p>签名成功后会重新出现META-INF文件夹</p>
+<h3 id="查看APP的签名"><a href="#查看APP的签名" class="headerlink" title="查看APP的签名"></a>查看APP的签名</h3><p>解压APK文件，使用JDK的keytool来查看META-INF/CERT.RSA文件内容</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ keytool -printcert -file 【证书】</div></pre></td></tr></table></figure>
+<p><img src="/images/android-base/android-base-keytool-2.png" alt="android-base-keytool-2"></p>
+<h3 id="验证APP的签名"><a href="#验证APP的签名" class="headerlink" title="验证APP的签名"></a>验证APP的签名</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ jarsigner -verify -verbose  【apk存放路径】</div></pre></td></tr></table></figure>
+<p><img src="/images/android-base/android-base-jarsigner-2.png" alt="android-base-jarsigner-2"></p>
+<h2 id="查看AndroidManifest-xml文件"><a href="#查看AndroidManifest-xml文件" class="headerlink" title="查看AndroidManifest.xml文件"></a>查看AndroidManifest.xml文件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ java -jar apktool.jar d <span class="_">-f</span> s 【APK地址】</div></pre></td></tr></table></figure>
+<p><img src="/images/android-base/android-base-apktool-1.png" alt="android-base-apktool-1"></p>
+<h2 id="静态调试"><a href="#静态调试" class="headerlink" title="静态调试"></a>静态调试</h2><p>一、将apk文件转化为jar文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ dex-jar.bat 【apk】</div></pre></td></tr></table></figure>
+<p>二、jd-gui.exe 可反编译jar文件</p>
+<p><img src="/images/android-base/android-base-jd-gui-1.png" alt="android-base-jd-gui-1"></p>
+<h2 id="动态调试"><a href="#动态调试" class="headerlink" title="动态调试"></a>动态调试</h2><p>一、将apk转换成smali代码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ java -jar apktool.jar d 【APK地址】 -o out</div></pre></td></tr></table></figure>
+<p>二、修改AndroidManifest.xml中的Android:debuggable=”true”</p>
+<p><img src="/images/android-base/android-base-dong-AndroidManifest-1.png" alt="android-base-dong-AndroidManifest-1"></p>
+<p>三、在入口处添加waitForDebugger代码进行调试等待</p>
+<p>这里说的入口处，就是程序启动的地方，就是我们一般的入口Activity，查找这个Activity的话，方法太多了，比如我们这里直接从上面得到的AndroidManifest.xml中找到，因为入口Activity的action和category是固定的。</p>
+<p><img src="/images/android-base/android-base-dong-AndroidManifest-2.png" alt="android-base-dong-AndroidManifest-2"></p>
+<p>找到入口Activity之后，我们直接在他的onCreate方法的第一行加上waitForDebugger代码即可，找到对应的MainActivity的smali源码：<br>然后添加一行代码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">invoke-static &#123;&#125;, Landroid/os/Debug;-&gt;<span class="built_in">wait</span>ForDebugger()V    // 相当于java的 android.os.Debug.waitForDebugger();</div></pre></td></tr></table></figure>
+<p><img src="/images/android-base/android-base-dong-smali-1.png" alt="android-base-dong-smali-1"></p>
+<p>四、将smali 转换成apk</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ java -jar apktool.jar b 【路径】 【目标路径】</div></pre></td></tr></table></figure>
+<p>五、重新签名</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ jarsigner -verbose -sigalg MD5withRSA -digestalg SHA1 -keystore 【keystore名称】 【apk文件】 【密钥别名】</div></pre></td></tr></table></figure>
+<p>六、安装apk</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ adb install 【apk】</div></pre></td></tr></table></figure>
+<p>七、android studio 导入此项目，需要配置gradle，可参考<a href="http://blog.csdn.net/wzy_1988/article/details/48652747" target="_blank" rel="external">文章</a></p>
+<p>路径一般为 <code>home\.gradle\wrapper\dists\gradle-x.x-all\xxxxxxxxxxxxx\gradle-x.x</code></p>
+<p>八、配置android studio调试配置，Run-&gt;Edit configurations，点击+号，新建remote类型调试器，设置Name， 修改端口号，可以选择被占用的任意端口，本次设置为<code>62002</code></p>
+<p>九、运行指定的Activity </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ adb shell am start -D -n com.zjhcsoft.android.eip/.MainActivity</div></pre></td></tr></table></figure>
+<p>十、查找相应的apk进程</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ adb shell ps | findstr eip</div></pre></td></tr></table></figure>
+<p><img src="/images/android-base/android-base-dong-lookps-1.png" alt="android-base-dong-lookps-1"></p>
+<p>十一、设置端口转发</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ adb forward tcp:62002  jdwp:17304</div></pre></td></tr></table></figure>
+<p>这条命令的含义可以认为是在本地62002端口与手机17304进程之间建立一条通道，当开始调试时，AS连接本地的8800端口，通过这条通道控制程序的运行</p>
+<p>十二、设置断点</p>
+<p><img src="/images/android-base/android-base-dong-duan-1.png" alt="android-base-dong-duan-1"></p>
+<p>十三、调试 run-&gt;debug选择刚才新增的调试器，此时程序会断在设置的断点的行，调试器解密如下</p>
+<p><img src="/images/android-base/android-base-dong-duan-2.png" alt="android-base-dong-duan-2"></p>
+<h1 id="渗透测试中注意的点"><a href="#渗透测试中注意的点" class="headerlink" title="渗透测试中注意的点"></a>渗透测试中注意的点</h1><p>废话不说，直接上图好了。</p>
+<p><img src="/images/android-base/android-base-pentest-1.png" alt="android-base-pentest-1"></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>毕竟还只是刚入门，学的时间也不是很久，就先总结到这，之后在进行渗透测试方面的练习以及案例的补充。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag"># android</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/22/equation-group-0day-2017/" rel="next" title="2017 Equation Group 0day Tools">
+                <i class="fa fa-chevron-left"></i> 2017 Equation Group 0day Tools
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/orleven.jpg"
+               alt="Orleven" />
+          <p class="site-author-name" itemprop="name">Orleven</p>
+           
+              <p class="site-description motion-element" itemprop="description">Life is full of ups and downs.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index-1.html">
+                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/orleven" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.weibo.com/u/3846125587" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://www.warmeng.com/" title="warmeng" target="_blank">warmeng</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://blog.0kami.cn/" title="0kimi" target="_blank">0kimi</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基本结构"><span class="nav-number">2.</span> <span class="nav-text">基本结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Android"><span class="nav-number">2.1.</span> <span class="nav-text">Android</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Android-架构"><span class="nav-number">2.1.1.</span> <span class="nav-text">Android 架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android-重要组件以及生命周期"><span class="nav-number">2.1.2.</span> <span class="nav-text">Android 重要组件以及生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Activity"><span class="nav-number">2.1.2.1.</span> <span class="nav-text">Activity</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Service"><span class="nav-number">2.1.2.2.</span> <span class="nav-text">Service</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Content-Provider"><span class="nav-number">2.1.2.3.</span> <span class="nav-text">Content Provider</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BroadCastReceiver"><span class="nav-number">2.1.2.4.</span> <span class="nav-text">BroadCastReceiver</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四大组件的注册"><span class="nav-number">2.1.3.</span> <span class="nav-text">四大组件的注册</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#APK"><span class="nav-number">2.2.</span> <span class="nav-text">APK</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#classes-dex"><span class="nav-number">2.2.1.</span> <span class="nav-text">classes.dex</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#androidManifest-xml"><span class="nav-number">2.2.2.</span> <span class="nav-text">androidManifest.xml</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#常用工具"><span class="nav-number">3.</span> <span class="nav-text">常用工具</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ADB"><span class="nav-number">3.1.</span> <span class="nav-text">ADB</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#命令介绍"><span class="nav-number">3.1.1.</span> <span class="nav-text">命令介绍</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#drozer"><span class="nav-number">3.2.</span> <span class="nav-text">drozer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装"><span class="nav-number">3.2.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行"><span class="nav-number">3.2.2.</span> <span class="nav-text">运行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用法"><span class="nav-number">3.2.3.</span> <span class="nav-text">用法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#androguard"><span class="nav-number">3.3.</span> <span class="nav-text">androguard</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#androapkinfo-py"><span class="nav-number">3.3.1.</span> <span class="nav-text">androapkinfo.py</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#androlyze-py"><span class="nav-number">3.3.2.</span> <span class="nav-text">androlyze.py</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#androdd-py"><span class="nav-number">3.3.3.</span> <span class="nav-text">androdd.py</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#androgexf-py"><span class="nav-number">3.3.4.</span> <span class="nav-text">androgexf.py</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#androdiff-py"><span class="nav-number">3.3.5.</span> <span class="nav-text">androdiff.py</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工具集"><span class="nav-number">3.4.</span> <span class="nav-text">工具集</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基础操作"><span class="nav-number">4.</span> <span class="nav-text">基础操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#签名"><span class="nav-number">4.1.</span> <span class="nav-text">签名</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#对APP进行签名"><span class="nav-number">4.1.1.</span> <span class="nav-text">对APP进行签名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看APP的签名"><span class="nav-number">4.1.2.</span> <span class="nav-text">查看APP的签名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#验证APP的签名"><span class="nav-number">4.1.3.</span> <span class="nav-text">验证APP的签名</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看AndroidManifest-xml文件"><span class="nav-number">4.2.</span> <span class="nav-text">查看AndroidManifest.xml文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#静态调试"><span class="nav-number">4.3.</span> <span class="nav-text">静态调试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态调试"><span class="nav-number">4.4.</span> <span class="nav-text">动态调试</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#渗透测试中注意的点"><span class="nav-number">5.</span> <span class="nav-text">渗透测试中注意的点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Orleven</span>
+</div>
+
+
+<div class="powered-by">
+    个人专属
+</div>
+
+<div class="theme-info">
+  Orleven Blog 
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>
