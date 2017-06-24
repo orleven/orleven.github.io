@@ -128,7 +128,7 @@
 <meta property="og:image" content="http://orleven.orleven.com/images/android-base/android-base-dong-duan-1.png">
 <meta property="og:image" content="http://orleven.orleven.com/images/android-base/android-base-dong-duan-2.png">
 <meta property="og:image" content="http://orleven.orleven.com/images/android-base/android-base-pentest-1.png">
-<meta property="og:updated_time" content="2017-06-24T15:23:01.729Z">
+<meta property="og:updated_time" content="2017-06-24T15:43:06.795Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android 渗透测试基础入门">
 <meta name="twitter:description" content="概述自从毕业了之后就少了很多杂七杂八的事，可以好好的学习下Android以及Android渗透测试。">
@@ -455,7 +455,7 @@
 <h3 id="四大组件的注册"><a href="#四大组件的注册" class="headerlink" title="四大组件的注册"></a>四大组件的注册</h3><p>四大基本组件都需要注册才能使用，每个Activity、service、Content Provider内容提供者都需要在AndroidManifest文件中进行配置，AndroidManifest文件中未进行声明的activity、服务以及内容提供者将不为系统所见，从而也就不可用，而BroadcastReceive广播接收者的注册分静态注册（在AndroidManifest文件中进行配置）和通过代码动态创建并以调用Context.registerReceiver()的方式注册至系统。需要注意的是在AndroidManifest文件中进行配置的广播接收者会随系统的启动而一直处于活跃状态,只要接收到感兴趣的广播就会触发（即使程序未运行）。</p>
 <p>AndroidManifest文件中进行注册格式如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;activity&gt; 元素的name 属性指定了实现了这个activity 的Activity 的子类。icon 和label 属性指向了包含展示给用户的此activity 的图标和标签的资源文件。</div><div class="line">&lt;service&gt; 元素用于声明服务</div><div class="line">&lt;receiver&gt; 元素用于声明广播接收器</div><div class="line">&lt;provider&gt; 元素用于声明内容提供者</div></pre></td></tr></table></figure></p>
 <h2 id="APK"><a href="#APK" class="headerlink" title="APK"></a>APK</h2><p>APK 文件其实是一个 Zip 的压缩包，解压了此文件可以看到如下目录：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">APK</div><div class="line">├─META-INF                      // 主要存放证书，没有证书无法安装程序  </div><div class="line">│  ├─CERT.RSA                   // 公钥证书</div><div class="line">│  ├─CERT.SF                    // 包含APP的所用资源，负责对APP进行签名</div><div class="line">│  └─MANIFEST.MF                // 声明了资源，与CERT.SF相似</div><div class="line">├─res                           // 存放资源文件的目录</div><div class="line">├─libs                          // 如果存在的话，存放的是 ndk 编出来的 so 库</div><div class="line">├─resources.arsc                // 编译后的二进制资源文件</div><div class="line">├─classes.dex                   // 最终生成的 dalvik 字节码</div><div class="line">└─AndroidManifest.xml           // 程序全局配置文件</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">APK</div><div class="line">├─META-INF                      // 主要存放证书，没有证书无法安装程序  </div><div class="line">│  ├─CERT.RSA                   // 公钥证书</div><div class="line">│  ├─CERT.SF                    // 包含APP的所用资源，负责对APP进行签名</div><div class="line">│  └─MANIFEST.MF                // 声明了资源，与CERT.SF相似</div><div class="line">├─res                           // 存放资源文件的目录</div><div class="line">├─lib                           // 如果存在的话，存放的是 ndk 编出来的 so 库</div><div class="line">├─resources.arsc                // 编译后的二进制资源文件</div><div class="line">├─classes.dex                   // 最终生成的 dalvik 字节码</div><div class="line">└─AndroidManifest.xml           // 程序全局配置文件</div></pre></td></tr></table></figure>
 <h3 id="classes-dex"><a href="#classes-dex" class="headerlink" title="classes.dex"></a>classes.dex</h3><p>Dex是Android系统中可以在Dalvik虚拟机上直接运行的文件格式。java源代码经过ADT的复杂编译后转换成Dex文件，这是一个逐步优化的过程。Dex文件的指令码就是Dalvik虚拟机专有的一套指令集，专门为嵌入式系统优化过，相比标准java的.class文件，它体积小，运行效率高。</p>
 <p>classes.dex 文件头的格式如下：<br><img src="/images/android-base/android-base-classes.dex.png" alt="android-base-classes.dex"></p>
 <h3 id="androidManifest-xml"><a href="#androidManifest-xml" class="headerlink" title="androidManifest.xml"></a>androidManifest.xml</h3><p>androidManifest.xml 是每个Android程序中必须的文件，它位于整个项目的根目录。我们每天都在使用这个文件，往里面配置程序运行所必要的组件，权限，以及一些相关信息。</p>
@@ -467,7 +467,7 @@
 <h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>安装其实比较简单，这里不进行描述，只是记录下安装过程中遇到的问题以及解决方案。</p>
 <p>一、修复连接时java路径找不到问题</p>
 <p>解决方案：</p>
-<p>1、创建如下文件并命名为：1.txt （如果为winXP，则可以直接命名为.drozer_config<br>2、写入内容如下几行内容：此处为java.exe文件的安装位置，具体情况具体处理。</p>
+<p>1、创建如下文件并命名为：1.txt （如果为winXP，则可以直接命名为.drozer_config）<br>2、写入内容如下几行内容：此处为java.exe文件的安装位置，具体情况具体处理。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[executables]</div><div class="line">java =C:\rogram Files\Java\jdk1.7.0_40\bin\java.exe</div><div class="line">javac =C:\Program Files\Java\jdk1.7.0_04\bin\javac.exe</div></pre></td></tr></table></figure>
 <p>3、把此文件放入个人目录下文件夹：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">英文：C:\Users\&lt;youruser name&gt;\</div><div class="line">中文：C:\用户\&lt;你的用户名名称&gt;\</div></pre></td></tr></table></figure>
@@ -614,6 +614,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2017/06/25/android-codeengn/" rel="prev" title="Android CodeEngn 练习">
+                Android CodeEngn 练习 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -684,7 +688,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-count">19</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -695,7 +699,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
