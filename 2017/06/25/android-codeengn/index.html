@@ -83,7 +83,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="android," />
+  <meta name="keywords" content="android,ctf," />
 
 
 
@@ -110,7 +110,23 @@
 <meta property="og:image" content="http://orleven.orleven.com/images/android-codeengn/android-codeengn-smartapp02-1.png">
 <meta property="og:image" content="http://orleven.orleven.com/images/android-codeengn/android-codeengn-smartapp02-2.png">
 <meta property="og:image" content="http://orleven.orleven.com/images/android-codeengn/android-codeengn-smartapp02-3.jpg">
-<meta property="og:updated_time" content="2017-06-24T16:55:57.391Z">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-codeengn/android-codeengn-smartapp03-1.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-codeengn/android-codeengn-smartapp03-2.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-codeengn/android-codeengn-smartapp03-3.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-codeengn/android-codeengn-smartapp03-4.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-codeengn/android-codeengn-smartapp03-5.jpg">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-codeengn/android-codeengn-smartapp04-1.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-codeengn/android-codeengn-smartapp04-2.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-codeengn/android-codeengn-smartapp04-3.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-codeengn/android-codeengn-smartapp04-4.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-codeengn/android-codeengn-smartapp04-5.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-codeengn/android-codeengn-smartapp04-6.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-codeengn/android-codeengn-smartapp04-7.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-codeengn/android-codeengn-smartapp04-8.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-codeengn/android-codeengn-smartapp04-9.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-codeengn/android-codeengn-smartapp04-10.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/android-codeengn/android-codeengn-smartapp04-11.png">
+<meta property="og:updated_time" content="2017-06-25T08:26:29.706Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android CodeEngn 练习">
 <meta name="twitter:description" content="概述为了让初学者能够更好的学习基于android的渗透测试，CodeEngn开发了很多的android app供大伙学习。">
@@ -387,17 +403,6 @@
 
                 
                 
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/android/ctf/" itemprop="url" rel="index">
-                    <span itemprop="name">ctf</span>
-                  </a>
-                </span>
-
-                
-                
               
             </span>
           
@@ -445,6 +450,40 @@
 <p>于是修改smali代码：</p>
 <p><img src="/images/android-codeengn/android-codeengn-smartapp02-3.jpg" alt="android-codeengn-smartapp02-3"></p>
 <p>重新编译下程序，然后再进行一次签名，然后安装到手机上，key就出来了： <code>The Key is November Rain</code>。</p>
+<h2 id="SmartApp-03"><a href="#SmartApp-03" class="headerlink" title="SmartApp 03"></a>SmartApp 03</h2><h3 id="题目地址-2"><a href="#题目地址-2" class="headerlink" title="题目地址"></a>题目地址</h3><p><a href="http://codeengn.com/challenges/smartapp/03" target="_blank" rel="external">SmartApp 03</a></p>
+<h3 id="解题步骤-2"><a href="#解题步骤-2" class="headerlink" title="解题步骤"></a>解题步骤</h3><p>发现程序不能直接安装到手机上。</p>
+<p>解压apk文件后发现缺少<code>META-INF</code>文件，签名成功后安装到移动设备上，打开启动app就可以看到如下界面：</p>
+<p><img src="/images/android-codeengn/android-codeengn-smartapp03-1.png" alt="android-codeengn-smartapp03-1"></p>
+<p>用androidlyze.py分析了下代码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ a, d, dx=AnalyzeAPK(<span class="string">'Desktop/SmartAppL03.apk'</span>, decompiler=<span class="string">"dad"</span>)</div><div class="line">$ d.CLASS_Lcom_Namdaehyeon_findekey3_MainActivity.source()</div><div class="line">$ d.CLASS_Lcom_Namdaehyeon_findekey3_MainActivity_1.source()</div></pre></td></tr></table></figure>
+<p>看了代码之后，发现模拟器界面没有显示全，少了几个按钮，而且看到了判断的条件：</p>
+<p><img src="/images/android-codeengn/android-codeengn-smartapp03-2.png" alt="android-codeengn-smartapp03-2"></p>
+<p><img src="/images/android-codeengn/android-codeengn-smartapp03-3.png" alt="android-codeengn-smartapp03-3"></p>
+<p>首先修改判定条件，如下图：</p>
+<p><img src="/images/android-codeengn/android-codeengn-smartapp03-4.png" alt="android-codeengn-smartapp03-4"></p>
+<p>然后进行签名。<br>既然模拟器运行不全，应该是android的版本有问题，换到手机试下：</p>
+<p><img src="/images/android-codeengn/android-codeengn-smartapp03-5.jpg" alt="android-codeengn-smartapp03-5"></p>
+<h2 id="SmartApp-04"><a href="#SmartApp-04" class="headerlink" title="SmartApp 04"></a>SmartApp 04</h2><h3 id="题目地址-3"><a href="#题目地址-3" class="headerlink" title="题目地址"></a>题目地址</h3><p><a href="http://codeengn.com/challenges/smartapp/04" target="_blank" rel="external">SmartApp 04</a></p>
+<h3 id="解题步骤-3"><a href="#解题步骤-3" class="headerlink" title="解题步骤"></a>解题步骤</h3><p>直接反编译一下，发现这里有个条件判断，输入key后才能显示答案正确：</p>
+<p><img src="/images/android-codeengn/android-codeengn-smartapp04-1.png" alt="android-codeengn-smartapp04-1"></p>
+<p>先看下dex的字符串：</p>
+<p><img src="/images/android-codeengn/android-codeengn-smartapp04-2.png" alt="android-codeengn-smartapp04-2"></p>
+<p>找到了一个比较可疑的地方，这里有一个helloWorldD函数，而直接还原成java代码，并不能找到：</p>
+<p><img src="/images/android-codeengn/android-codeengn-smartapp04-3.png" alt="android-codeengn-smartapp04-3"><br><img src="/images/android-codeengn/android-codeengn-smartapp04-4.png" alt="android-codeengn-smartapp04-4"></p>
+<p>通过010编辑器查看确实有一个helloWorldD函数，应该是被隐藏掉了：</p>
+<p><img src="/images/android-codeengn/android-codeengn-smartapp04-5.png" alt="android-codeengn-smartapp04-5"><br><img src="/images/android-codeengn/android-codeengn-smartapp04-6.png" alt="android-codeengn-smartapp04-6"></p>
+<p>找到原先的helloWorldC函数，它后面应该是helloWorldD函数，记下地址：0x0cd0</p>
+<p><img src="/images/android-codeengn/android-codeengn-smartapp04-7.png" alt="android-codeengn-smartapp04-7"></p>
+<p>找到如下图所示的地方，根据前几个函数相应的规则，修改：</p>
+<p><img src="/images/android-codeengn/android-codeengn-smartapp04-8.png" alt="android-codeengn-smartapp04-8"></p>
+<p>用androidlyze.py分析了下代码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ d,dx = AnalyzeDex(<span class="string">"Desktop/classes.dex"</span>,decompiler=<span class="string">"dad"</span>)</div><div class="line">$ d.CLASS_Lcom_namdaehyeon_zfinekey4_zFindKey.source()</div></pre></td></tr></table></figure>
+<p><img src="/images/android-codeengn/android-codeengn-smartapp04-9.png" alt="android-codeengn-smartapp04-9"></p>
+<p>可以看到就是每个位置和 240(0xf0) 异或了下：</p>
+<p><img src="/images/android-codeengn/android-codeengn-smartapp04-10.png" alt="android-codeengn-smartapp04-10"></p>
+<p>解出来就是：</p>
+<p>The Key is BoanprojectZZang</p>
+<p><img src="/images/android-codeengn/android-codeengn-smartapp04-11.png" alt="android-codeengn-smartapp04-11"></p>
 
       
     </div>
@@ -475,6 +514,8 @@
         <div class="post-tags">
           
             <a href="/tags/android/" rel="tag"># android</a>
+          
+            <a href="/tags/ctf/" rel="tag"># ctf</a>
           
         </div>
       
@@ -578,7 +619,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -588,8 +629,8 @@
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/tags/index-1.html">
-                <span class="site-state-item-count">39</span>
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">40</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -662,7 +703,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SmartApp-Analysis"><span class="nav-number">2.</span> <span class="nav-text">SmartApp Analysis</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SmartApp-01"><span class="nav-number">2.1.</span> <span class="nav-text">SmartApp 01</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目地址"><span class="nav-number">2.1.1.</span> <span class="nav-text">题目地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题步骤"><span class="nav-number">2.1.2.</span> <span class="nav-text">解题步骤</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SmartApp-02"><span class="nav-number">2.2.</span> <span class="nav-text">SmartApp 02</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目地址-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">题目地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题步骤-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">解题步骤</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SmartApp-Analysis"><span class="nav-number">2.</span> <span class="nav-text">SmartApp Analysis</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SmartApp-01"><span class="nav-number">2.1.</span> <span class="nav-text">SmartApp 01</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目地址"><span class="nav-number">2.1.1.</span> <span class="nav-text">题目地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题步骤"><span class="nav-number">2.1.2.</span> <span class="nav-text">解题步骤</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SmartApp-02"><span class="nav-number">2.2.</span> <span class="nav-text">SmartApp 02</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目地址-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">题目地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题步骤-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">解题步骤</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SmartApp-03"><span class="nav-number">2.3.</span> <span class="nav-text">SmartApp 03</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目地址-2"><span class="nav-number">2.3.1.</span> <span class="nav-text">题目地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题步骤-2"><span class="nav-number">2.3.2.</span> <span class="nav-text">解题步骤</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SmartApp-04"><span class="nav-number">2.4.</span> <span class="nav-text">SmartApp 04</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目地址-3"><span class="nav-number">2.4.1.</span> <span class="nav-text">题目地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题步骤-3"><span class="nav-number">2.4.2.</span> <span class="nav-text">解题步骤</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
