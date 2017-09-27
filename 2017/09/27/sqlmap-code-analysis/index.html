@@ -124,7 +124,7 @@
 <meta property="og:image" content="http://orleven.orleven.com/images/sqlmap-code-analysis/sqlmap-webshell-php-exec.png">
 <meta property="og:image" content="http://orleven.orleven.com/images/sqlmap-code-analysis/sqlmap-api.png">
 <meta property="og:image" content="http://orleven.orleven.com/images/sqlmap-code-analysis/sqlmap-update.png">
-<meta property="og:updated_time" content="2017-09-26T15:39:14.780Z">
+<meta property="og:updated_time" content="2017-09-27T01:07:33.100Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Sqlmap Code Analysis">
 <meta name="twitter:description" content="概述不得不承认，Sqlmap是目前使用人数最多，功能最复杂的SQL注入工具。作为一款开源工具，开发者有意的让我们自行去阅读并对其进行扩充，从Github可以看出一直在更新的。对于渗透人员来说，阅读sqlmap源码是很有必要的，我们可以从它的源码之中学习到一些优秀的代码编写思维以及方式，应用到平时的渗透中去。">
@@ -394,8 +394,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Tool/" itemprop="url" rel="index">
-                    <span itemprop="name">Tool</span>
+                  <a href="/categories/tool/" itemprop="url" rel="index">
+                    <span itemprop="name">tool</span>
                   </a>
                 </span>
 
@@ -509,7 +509,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">createGithubIssue</span><span class="params">(errMsg, excMsg)</span>:</span></div><div class="line">    ......</div><div class="line"></div><div class="line">    <span class="keyword">if</span> choice:</div><div class="line">        ex = <span class="keyword">None</span></div><div class="line">        errMsg = errMsg[errMsg.find(<span class="string">"\n"</span>):]</div><div class="line"></div><div class="line">        req = urllib2.Request(url=<span class="string">"https://api.github.com/search/issues?q=%s"</span> % urllib.quote(<span class="string">"repo:sqlmapproject/sqlmap Unhandled exception (#%s)"</span> % key))</div><div class="line"></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            content = urllib2.urlopen(req).read()</div><div class="line">            _ = json.loads(content)</div><div class="line">            duplicate = _[<span class="string">"total_count"</span>] &gt; <span class="number">0</span></div><div class="line">            closed = duplicate <span class="keyword">and</span> _[<span class="string">"items"</span>][<span class="number">0</span>][<span class="string">"state"</span>] == <span class="string">"closed"</span></div><div class="line">            <span class="keyword">if</span> duplicate:</div><div class="line">                warnMsg = <span class="string">"issue seems to be already reported"</span></div><div class="line">                <span class="keyword">if</span> closed:</div><div class="line">                    warnMsg += <span class="string">" and resolved. Please update to the latest "</span></div><div class="line">                    warnMsg += <span class="string">"development version from official GitHub repository at '%s'"</span> % GIT_PAGE</div><div class="line">                logger.warn(warnMsg)</div><div class="line">                <span class="keyword">return</span></div><div class="line">        <span class="keyword">except</span>:</div><div class="line">            <span class="keyword">pass</span></div></pre></td></tr></table></figure>
 <h2 id="自动更新"><a href="#自动更新" class="headerlink" title="自动更新"></a>自动更新</h2><p>这部分就不便多展开了，主要就是指sqlmap支持一键升级的功能：</p>
 <p><img src="/images/sqlmap-code-analysis/sqlmap-update.png" alt="sqlmap-update"></p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这几天大致阅读了Sqlmap的源码，才明白了Sqlmap的强大之处不仅仅在于它的注射功能，更在于它那优秀的代码编码方式、优秀的设计理念、Pythonic 的技巧、各种Python内置模块以及第三方模块的调用等等。也因此学习到了很多新的知识，比如临时文件的粉碎级别删除等等，看了它那优秀的编码后才明白自己平时渗透测试时写的脚本看上去狗爬一般。开来平时还得多抽空看看那些有些的渗透框架、工具，这样才可以尽量避免闭门造车，省去很多很多精力。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这几天大致阅读了Sqlmap的源码，才明白了Sqlmap的强大之处不仅仅在于它的注射功能，更在于它那优秀的代码编码方式、优秀的设计理念、Pythonic 的技巧、各种Python内置模块以及第三方模块的调用等等。也因此学习到了很多新的知识，比如临时文件的粉碎级别删除等等，看了它那优秀的编码后才明白自己平时渗透测试时写的脚本看上去狗爬一般。看来平时还得多抽空看看那些有些的渗透框架、工具，这样才可以尽量避免闭门造车，省去很多很多精力。</p>
 
       
     </div>
@@ -647,7 +647,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -657,7 +657,7 @@
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/tags/index-1.html">
+              <a href="/tags/index.html">
                 <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">标签</span>
               </a>
