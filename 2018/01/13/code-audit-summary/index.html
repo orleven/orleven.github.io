@@ -106,7 +106,7 @@
 
 
 
-  <meta name="keywords" content="code audit,java,php,python," />
+  <meta name="keywords" content="python,code audit,java,php," />
 
 
 
@@ -118,7 +118,7 @@
 
 
 <meta name="description" content="概述代码审计是企业安全运营以及安全从业者必备的安全基础能力。代码审计在很多时候都需要用到，比如渗透测试、漏洞研究、安全运营等等，它以开放的形式从代码层面寻找漏洞、验证漏洞、修复漏洞。 源代码审计工作利用一定的编程规范和标准，针对应用程序源代码，从结构、脆弱性以及缺陷等方面进行审查，来发现当前应用程序中存在的安全缺陷以及代码的规范性缺陷。">
-<meta name="keywords" content="code audit,java,php,python">
+<meta name="keywords" content="python,code audit,java,php">
 <meta property="og:type" content="article">
 <meta property="og:title" content="代码审计总结">
 <meta property="og:url" content="http://orleven.orleven.com/2018/01/13/code-audit-summary/index.html">
@@ -134,7 +134,7 @@
 <meta property="og:image" content="http://orleven.orleven.com/images/code-audit/strcmp.png">
 <meta property="og:image" content="http://orleven.orleven.com/images/code-audit/phpcms1.png">
 <meta property="og:image" content="http://orleven.orleven.com/images/code-audit/phpcms-z.png">
-<meta property="og:updated_time" content="2018-02-05T13:40:12.044Z">
+<meta property="og:updated_time" content="2018-02-08T07:55:27.818Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="代码审计总结">
 <meta name="twitter:description" content="概述代码审计是企业安全运营以及安全从业者必备的安全基础能力。代码审计在很多时候都需要用到，比如渗透测试、漏洞研究、安全运营等等，它以开放的形式从代码层面寻找漏洞、验证漏洞、修复漏洞。 源代码审计工作利用一定的编程规范和标准，针对应用程序源代码，从结构、脆弱性以及缺陷等方面进行审查，来发现当前应用程序中存在的安全缺陷以及代码的规范性缺陷。">
@@ -474,7 +474,8 @@
 <p>Java可查看全局文件web.xml</p>
 <p>下面是一个过滤器的函数代码：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">// Java</div><div class="line">public class RequestEncodingFilter implements Filter &#123;</div><div class="line">    ...</div><div class="line">    try&#123;</div><div class="line">        invalidInputPattern = myComplier.complie(&quot;&lt;[\\s\\x00]*SCRIPT|SELECT\\s|INSERT\\s|DELETE\\s|UPDATE\\s|DROP\\s|&lt;!--|--&gt;|&lt;FRAME|&lt;IFRAME|&lt;FRAMESET|&lt;NOFRAME|&lt;PLAINTEXT|&lt;A\\s|&lt;LINK|&lt;MAP|&lt;BGSOUND|&lt;IMG|&lt;FORM|&lt;INPUT|&lt;SELECT|&lt;OPTION|&lt;TEXTAREA|&lt;APPLET|&lt;OBJECT|&lt;EMBED|&lt;NOSCRIPT|&lt;STYLE|ALERT[\\s\\x00]*\\(|&lt;|&gt;|\&quot;&quot;);</div><div class="line">    &#125; catch(Exception err)&#123;</div><div class="line">        invalidInputPattern = null;</div><div class="line">    &#125;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>可以看到，如果存在SQL注入漏洞，可用/<strong>/代替空格的方式绕过，例如：SELECT/</strong>/id/<strong>/From/</strong>/table的方式绕过，另外对于标签内利用on事件进行XSS 也没有拦截作用，例如’ onclick=confirm<code>1</code> xx=’等。</p>
+<p>可以看到，如果存在SQL注入漏洞，可用<code>/**/</code>代替空格的方式绕过，例如：SELECT<code>/**/id/**/From/**/table</code>的方式绕过，另外对于标签内利用on事件进行XSS 也没有拦截作用，例如:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">’ onclick=confirm`1` xx=’</div></pre></td></tr></table></figure>
 <h2 id="查看敏感函数，回溯变量，判断变量是否在调用前进行过严格的安全过滤。"><a href="#查看敏感函数，回溯变量，判断变量是否在调用前进行过严格的安全过滤。" class="headerlink" title="查看敏感函数，回溯变量，判断变量是否在调用前进行过严格的安全过滤。"></a>查看敏感函数，回溯变量，判断变量是否在调用前进行过严格的安全过滤。</h2><p>根据敏感函数来逆向追踪参数的传递过程，这是目前来说最为常用的一种方式。因为大多是的漏洞都是因为函数的使用不当或者在函数使用前安全处理不够所造成的。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">// PHP</div><div class="line">......</div><div class="line">$str = @(string)$_GET[&apos;str&apos;];</div><div class="line">eval(&apos;$str=&quot;&apos;.addslashes($str).&apos;&quot;;&apos;);</div><div class="line">......</div></pre></td></tr></table></figure>
 <p>虽然这里用addslashes()函数进行了过滤，但是提交的php代码可以这样在双引号中被执行：</p>
@@ -842,13 +843,13 @@
       
         <div class="post-tags">
           
+            <a href="/tags/python/" rel="tag"># python</a>
+          
             <a href="/tags/code-audit/" rel="tag"># code audit</a>
           
             <a href="/tags/java/" rel="tag"># java</a>
           
             <a href="/tags/php/" rel="tag"># php</a>
-          
-            <a href="/tags/python/" rel="tag"># python</a>
           
         </div>
       
@@ -973,8 +974,8 @@
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/tags/index.html">
-                <span class="site-state-item-count">49</span>
+              <a href="/tags/index-1.html">
+                <span class="site-state-item-count">50</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
