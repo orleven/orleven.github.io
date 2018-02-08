@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 
 
 
@@ -10,11 +10,19 @@
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
 
 
 
 <meta http-equiv="Cache-Control" content="no-transform" />
 <meta http-equiv="Cache-Control" content="no-siteapp" />
+
 
 
 
@@ -70,7 +78,7 @@
   
     
     
-    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
   
 
 
@@ -80,33 +88,43 @@
 
 <link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="code audit,java,python,php," />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
 
 
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
 
 
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.jpg?v=5.1.4">
 
 
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
-
-
-
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
 
 
 
-<meta name="description" content="概述代码审计是企业安全运营以及安全从业者必备的安全基础能力。代码审计在很多时候都需要用到，比如渗透测试、漏洞研究、安全运营等等，它以开放的形式从代码层面寻找漏洞、验证漏洞、修复漏洞。
-源代码审计工作利用一定的编程规范和标准，针对应用程序源代码，从结构、脆弱性以及缺陷等方面进行审查，来发现当前应用程序中存在的安全缺陷以及代码的规范性缺陷。">
+
+
+  <meta name="keywords" content="python,code audit,java,php," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="概述代码审计是企业安全运营以及安全从业者必备的安全基础能力。代码审计在很多时候都需要用到，比如渗透测试、漏洞研究、安全运营等等，它以开放的形式从代码层面寻找漏洞、验证漏洞、修复漏洞。 源代码审计工作利用一定的编程规范和标准，针对应用程序源代码，从结构、脆弱性以及缺陷等方面进行审查，来发现当前应用程序中存在的安全缺陷以及代码的规范性缺陷。">
+<meta name="keywords" content="python,code audit,java,php">
 <meta property="og:type" content="article">
 <meta property="og:title" content="代码审计总结">
 <meta property="og:url" content="http://orleven.orleven.com/2018/01/13/code-audit-summary/index.html">
 <meta property="og:site_name" content="Orleven Blog">
-<meta property="og:description" content="概述代码审计是企业安全运营以及安全从业者必备的安全基础能力。代码审计在很多时候都需要用到，比如渗透测试、漏洞研究、安全运营等等，它以开放的形式从代码层面寻找漏洞、验证漏洞、修复漏洞。
-源代码审计工作利用一定的编程规范和标准，针对应用程序源代码，从结构、脆弱性以及缺陷等方面进行审查，来发现当前应用程序中存在的安全缺陷以及代码的规范性缺陷。">
+<meta property="og:description" content="概述代码审计是企业安全运营以及安全从业者必备的安全基础能力。代码审计在很多时候都需要用到，比如渗透测试、漏洞研究、安全运营等等，它以开放的形式从代码层面寻找漏洞、验证漏洞、修复漏洞。 源代码审计工作利用一定的编程规范和标准，针对应用程序源代码，从结构、脆弱性以及缺陷等方面进行审查，来发现当前应用程序中存在的安全缺陷以及代码的规范性缺陷。">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://orleven.orleven.com/images/code-audit/tool.png">
 <meta property="og:image" content="http://orleven.orleven.com/images/code-audit/fold.png">
 <meta property="og:image" content="http://orleven.orleven.com/images/code-audit/phpinfo.png">
@@ -119,8 +137,7 @@
 <meta property="og:updated_time" content="2018-02-05T13:40:12.044Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="代码审计总结">
-<meta name="twitter:description" content="概述代码审计是企业安全运营以及安全从业者必备的安全基础能力。代码审计在很多时候都需要用到，比如渗透测试、漏洞研究、安全运营等等，它以开放的形式从代码层面寻找漏洞、验证漏洞、修复漏洞。
-源代码审计工作利用一定的编程规范和标准，针对应用程序源代码，从结构、脆弱性以及缺陷等方面进行审查，来发现当前应用程序中存在的安全缺陷以及代码的规范性缺陷。">
+<meta name="twitter:description" content="概述代码审计是企业安全运营以及安全从业者必备的安全基础能力。代码审计在很多时候都需要用到，比如渗透测试、漏洞研究、安全运营等等，它以开放的形式从代码层面寻找漏洞、验证漏洞、修复漏洞。 源代码审计工作利用一定的编程规范和标准，针对应用程序源代码，从结构、脆弱性以及缺陷等方面进行审查，来发现当前应用程序中存在的安全缺陷以及代码的规范性缺陷。">
 <meta name="twitter:image" content="http://orleven.orleven.com/images/code-audit/tool.png">
 
 
@@ -130,9 +147,11 @@
   var CONFIG = {
     root: '/',
     scheme: 'Mist',
-    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
-    motion: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     duoshuo: {
       userId: '0',
       author: '博主'
@@ -155,11 +174,7 @@
 
 
 
-  <title> 代码审计总结 | Orleven Blog </title>
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
-
+  <title>代码审计总结 | Orleven Blog</title>
   
 
 
@@ -169,18 +184,16 @@
 
 
 
+</head>
 
-
-
-
-
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
   
   
     
   
 
-  <div class="container one-collumn sidebar-position-left page-post-detail ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -226,18 +239,8 @@
         </li>
       
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
-            
-            分类
-          </a>
-        </li>
-      
-        
         <li class="menu-item menu-item-about">
-          <a href="/about" rel="section">
+          <a href="/about/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
             
@@ -246,22 +249,32 @@
         </li>
       
         
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
-        
         <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
+          <a href="/tags/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
             标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
           </a>
         </li>
       
@@ -293,7 +306,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocapitalize="off" autocomplete="off" autocorrect="off"
+      <input autocomplete="off"
              placeholder="搜索..." spellcheck="false"
              type="text" id="local-search-input">
     </div>
@@ -327,13 +340,17 @@
   
   
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://orleven.orleven.com/2018/01/13/code-audit-summary/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Orleven">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/orleven.jpg">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -345,14 +362,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                代码审计总结
-              
-            
-          </h1>
+          <h1 class="post-title" itemprop="name headline">代码审计总结</h1>
         
 
         <div class="post-meta">
@@ -410,7 +420,7 @@
                  <i class="fa fa-eye"></i>
                </span>
                
-                 <span class="post-meta-item-text">阅读次数 </span>
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
                
                  <span class="leancloud-visitors-count"></span>
              </span>
@@ -426,7 +436,9 @@
       </header>
     
 
-
+    
+    
+    
     <div class="post-body" itemprop="articleBody">
 
       
@@ -472,7 +484,7 @@
 <p><img src="/images/code-audit/string.png" alt="string"></p>
 <p>找到关键点后然后一步一步逆向查看关键变量是否可控。</p>
 <h2 id="查看敏感功能点，正向追踪变量传递过程。"><a href="#查看敏感功能点，正向追踪变量传递过程。" class="headerlink" title="查看敏感功能点，正向追踪变量传递过程。"></a>查看敏感功能点，正向追踪变量传递过程。</h2><p>有了一定的渗透、代码审计经验之后，就会知道哪些功能点会存在哪些问题。 </p>
-<p>例如：<a href="http://www.anquan.us/static/bugs/wooyun-2016-0173130.html" target="_blank" rel="external">PHPCMS任意前台用户密码重置漏洞</a></p>
+<p>例如：<a href="http://www.anquan.us/static/bugs/wooyun-2016-0173130.html" target="_blank" rel="noopener">PHPCMS任意前台用户密码重置漏洞</a></p>
 <h1 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h1><h2 id="Web框架"><a href="#Web框架" class="headerlink" title="Web框架"></a>Web框架</h2><p>Web 应用框架，是一种开发框架，主要用来支持动态网站、网络应用程序以及网络服务的开发。</p>
 <p>常见的框架如下所示：</p>
 <p>Java: Struts、Spring<br>PHP: ThinkPHP、CodeIgniter、Yii<br>Python: Django、Tornado</p>
@@ -494,7 +506,7 @@
 <p>用户可控变量包括用户所在的客户端能够提交的变量：例如GET、POST、COOKIE、Referer、Content-Type、User-Agent、Host以及X-FORWARDED-FOR、Proxy等等。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">POST /storage/1.5/499041/storage/tabs?batch=true&amp;commit=true HTTP/1.1</div><div class="line">Host: xxx.xxx.com</div><div class="line">User-Agent: Firefox/54.0.1 (Windows NT 10.0; WOW64) FxSync/1.56.0.20170628075643.desktop</div><div class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</div><div class="line">Accept-Language: zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3</div><div class="line">Content-Type: text/plain</div><div class="line">Connection: close</div><div class="line">Pragma: no-cache</div><div class="line">Cache-Control: no-cache</div><div class="line"></div><div class="line">[&#123;&quot;payload&quot;:&quot;&#123;\&quot;ciphertext\&quot;:\&quot;JLIhhuoBa4AkbFGxBTSfltZD+xy95wdQzq5nPPxZqWs4bpuYxmG1tmX8GXxd3eGS8U3cf6qilhRwqbnxGyfTwFXLnW8uVjzaHpnijtkIkS6zJltyKCDVUKz/JHiHHcOAJ0SVT2VXsJBjl2LiCDTR+A==\&quot;,\&quot;IV\&quot;:\&quot;nOnwHS0aT7EPa+6CQip9HQ==\&quot;,\&quot;hmac\&quot;:\&quot;33f54d9e80834afecd1e05966c9aafb27ab72b2c8a80e87769bb328f43446229\&quot;&#125;&quot;,&quot;id&quot;:&quot;5FXzEHRBZX2y&quot;,&quot;ttl&quot;:1814400&#125;]</div></pre></td></tr></table></figure>
 <p>正因为用户可以控制JS，所以所有的安全过滤均要在服务器端完成。</p>
-<h2 id="PHP"><a href="#PHP" class="headerlink" title="PHP"></a>PHP</h2><h3 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h3><p>对于PHP，在代码审计之前需要了解<a href="http://www.php.net/manual/zh/ini.list.php" target="_blank" rel="external">PHP官方配置说明</a>。</p>
+<h2 id="PHP"><a href="#PHP" class="headerlink" title="PHP"></a>PHP</h2><h3 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h3><p>对于PHP，在代码审计之前需要了解<a href="http://www.php.net/manual/zh/ini.list.php" target="_blank" rel="noopener">PHP官方配置说明</a>。</p>
 <p>这些模式决定着一个 PHP 的指令在何时何地，是否能够被设定。手册中的每个指令都有其所属的模式。例如有些指令可以在 PHP 脚本中用 ini_set() 来设定，而有些则只能在 php.ini 或 httpd.conf 中。</p>
 <p>例如 output_buffering 指令是属于 PHP_INI_PERDIR，因而就不能用 ini_set() 来设定。但是 display_errors 指令是属于 PHP_INI_ALL 因而就可以在任何地方被设定，包括 ini_set()。</p>
 <p>PHP<em>INI</em>* 模式的定义：</p>
@@ -525,14 +537,14 @@
 </tbody>
 </table>
 <p>具体可以根据首页文件<code>index.php</code> ,了解程序运作时调用哪些函数和文件 以index.php文件作为标线，一层一层去扩展阅读所包含的文件，了解其功能，之后进入其功能文件夹的首页文件，进扩展阅读。</p>
-<h3 id="PHP版本姿势"><a href="#PHP版本姿势" class="headerlink" title="PHP版本姿势"></a>PHP版本姿势</h3><p><a href="http://php.net/manual/zh/appendices.php" target="_blank" rel="external">官方版本变更说明</a></p>
+<h3 id="PHP版本姿势"><a href="#PHP版本姿势" class="headerlink" title="PHP版本姿势"></a>PHP版本姿势</h3><p><a href="http://php.net/manual/zh/appendices.php" target="_blank" rel="noopener">官方版本变更说明</a></p>
 <p>php5.2以前：</p>
 <ol>
 <li>__autoload加载类文件，但只能调用一次这个函数，所以可以用spl_autoload_register加载类</li>
 </ol>
 <p>php5.3:</p>
 <ol>
-<li>新增了glob://和phar://流包装<br><a href="http://php.net/manual/zh/wrappers.phar.php" target="_blank" rel="external">glob</a>用来列目录，绕过open_baedir<br><a href="http://php.net/manual/zh/wrappers.phar.php" target="_blank" rel="external">phar</a>在文件包含中可以用来绕过一些后缀的限制</li>
+<li>新增了glob://和phar://流包装<br><a href="http://php.net/manual/zh/wrappers.phar.php" target="_blank" rel="noopener">glob</a>用来列目录，绕过open_baedir<br><a href="http://php.net/manual/zh/wrappers.phar.php" target="_blank" rel="noopener">phar</a>在文件包含中可以用来绕过一些后缀的限制</li>
 <li>新的全局变量<strong>DIR</strong></li>
 <li>默认开启<code>&lt;?= $xxoo;?&gt;</code>，     5.4也可用</li>
 </ol>
@@ -540,15 +552,15 @@
 <ol>
 <li>移除安全模式、魔术引号</li>
 <li>register_globals 和 register_long_arrays php.ini 指令被移除。</li>
-<li>php.ini新增<a href="http://php.net/manual/zh/session.configuration.php" target="_blank" rel="external">session</a>.<a href="http://php.net/manual/zh/session.upload-progress.php" target="_blank" rel="external">upload_progress.enabled</a>，默认为1，可用来文件包含</li>
+<li>php.ini新增<a href="http://php.net/manual/zh/session.configuration.php" target="_blank" rel="noopener">session</a>.<a href="http://php.net/manual/zh/session.upload-progress.php" target="_blank" rel="noopener">upload_progress.enabled</a>，默认为1，可用来文件包含</li>
 </ol>
 <p>php5.5:</p>
 <ol>
-<li>废除<a href="http://php.net/manual/zh/function.preg-replace.php" target="_blank" rel="external">preg_replace</a>的/e模式(不是移除)<br>当使用被弃用的 e 修饰符时, 这个函数会转义一些字符(即：’、”、 \ 和 NULL) 然后进行后向引用替换。</li>
+<li>废除<a href="http://php.net/manual/zh/function.preg-replace.php" target="_blank" rel="noopener">preg_replace</a>的/e模式(不是移除)<br>当使用被弃用的 e 修饰符时, 这个函数会转义一些字符(即：’、”、 \ 和 NULL) 然后进行后向引用替换。</li>
 </ol>
 <p>php5.6:</p>
 <ol>
-<li>使用 <a href="http://php.net/manual/zh/functions.arguments.php#functions.variable-arg-list" target="_blank" rel="external">…</a> 运算符定义变长参数函数</li>
+<li>使用 <a href="http://php.net/manual/zh/functions.arguments.php#functions.variable-arg-list" target="_blank" rel="noopener">…</a> 运算符定义变长参数函数</li>
 </ol>
 <p>php7.0:</p>
 <ol>
@@ -556,7 +568,7 @@
 <li>移除asp和script php标签<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;% %&gt;&lt;%= %&gt;&lt;script language=&quot;php&quot;&gt;&lt;/script&gt;</div></pre></td></tr></table></figure>
 </li>
 </ol>
-<p>php7.1:<br>1、废除<a href="http://php.net/manual/zh/migration71.new-features.php" target="_blank" rel="external"><code>mb_ereg_replace()</code></a>和<a href="http://php.net/manual/zh/migration71.new-features.php" target="_blank" rel="external"><code>mb_eregi_replace()</code></a>的Eval选项</p>
+<p>php7.1:<br>1、废除<a href="http://php.net/manual/zh/migration71.new-features.php" target="_blank" rel="noopener"><code>mb_ereg_replace()</code></a>和<a href="http://php.net/manual/zh/migration71.new-features.php" target="_blank" rel="noopener"><code>mb_eregi_replace()</code></a>的Eval选项</p>
 <h3 id="PHP-其他注意点"><a href="#PHP-其他注意点" class="headerlink" title="PHP 其他注意点"></a>PHP 其他注意点</h3><ol>
 <li>php可以解析的文件后缀：php php4 php5 php6 phtml pht phps（部分要配置过）</li>
 <li>当.或者[]之类的符号作为参数的key值时，会被php改写为_符号，但是QUERY_STRING为用户提交的内容，所以不能修改</li>
@@ -616,7 +628,7 @@
 </ol>
 <h3 id="文件读取"><a href="#文件读取" class="headerlink" title="文件读取"></a>文件读取</h3><p>关键词/接口/类包：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">// PHP</div><div class="line">hightlight_file($filename);</div><div class="line">show_source($filename);</div><div class="line">print_r(php_strip_whitespace($filename));</div><div class="line">print_r(file_get_contents($filename));</div><div class="line">readfile($filename);</div><div class="line">print_r(file($filename)); // var_dump</div><div class="line">fread(fopen(filename,&quot;r&quot;),filename,&quot;r&quot;),size);</div><div class="line">include($filename); // 非php代码</div><div class="line">include_once($filename); // 非php代码</div><div class="line">require($filename); // 非php代码</div><div class="line">require_once($filename); // 非php代码</div><div class="line">print_r(fread(popen(&quot;cat flag&quot;, &quot;r&quot;), $size));</div><div class="line">print_r(fgets(fopen($filename, &quot;r&quot;))); // 读取一行</div><div class="line">fpassthru(fopen($filename, &quot;r&quot;)); // 从当前位置一直读取到 EOF</div><div class="line">print_r(fgetcsv(fopen(filename,&quot;r&quot;),filename,&quot;r&quot;),size));</div><div class="line">print_r(fgetss(fopen($filename, &quot;r&quot;))); // 从文件指针中读取一行并过滤掉 HTML 标记</div><div class="line">print_r(fscanf(fopen(&quot;flag&quot;, &quot;r&quot;),&quot;%s&quot;));</div><div class="line">print_r(parse_ini_file($filename)); // 失败时返回 false , 成功返回配置数组</div></pre></td></tr></table></figure>
-<h3 id="文件包含"><a href="#文件包含" class="headerlink" title="文件包含"></a>文件包含</h3><p>php支持的协议可以查阅<a href="https://secure.php.net/manual/zh/wrappers.php" target="_blank" rel="external">官方手册</a></p>
+<h3 id="文件包含"><a href="#文件包含" class="headerlink" title="文件包含"></a>文件包含</h3><p>php支持的协议可以查阅<a href="https://secure.php.net/manual/zh/wrappers.php" target="_blank" rel="noopener">官方手册</a></p>
 <p>漏洞代码示例-1：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// PHP</div><div class="line">12345</div><div class="line">&lt;?php</div><div class="line">include($_GET[&apos;file&apos;].&apos;.php&apos;);</div><div class="line"></div><div class="line">//?file=2.txt%00  【PHP版本小于5.3】</div></pre></td></tr></table></figure>
 <p>漏洞代码示例-2：</p>
@@ -686,7 +698,7 @@
 <p>关键词/接口/类包：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">// Java</div><div class="line">javax.xml.parsers.DocumentBuilder</div><div class="line">javax.xml.stream.XMLStreamReader</div><div class="line">org.jdom.input.SAXBuilder</div><div class="line">org.jdom2.input.SAXBuilder</div><div class="line">javax.xml.parsers.SAXParser</div><div class="line">org.dom4j.io.SAXReader </div><div class="line">org.xml.sax.XMLReader</div><div class="line">javax.xml.transform.sax.SAXSource </div><div class="line">javax.xml.transform.TransformerFactory </div><div class="line">javax.xml.transform.sax.SAXTransformerFactory </div><div class="line">javax.xml.validation.SchemaFactory</div><div class="line">javax.xml.bind.Unmarshaller</div><div class="line">javax.xml.xpath.XPathExpression</div><div class="line">...</div></pre></td></tr></table></figure>
 <p>修复方案：</p>
-<p>使用XML解析器时需要设置其属性，禁止使用外部实体，XML解析器的安全使用可参考<a href="https://www.owasp.org/index.php/XML_External_Entity_(XXE" target="_blank" rel="external">文章</a>_Prevention_Cheat_Sheet ) </p>
+<p>使用XML解析器时需要设置其属性，禁止使用外部实体，XML解析器的安全使用可参考<a href="https://www.owasp.org/index.php/XML_External_Entity_(XXE" target="_blank" rel="noopener">文章</a>_Prevention_Cheat_Sheet ) </p>
 <h2 id="变量覆盖漏洞"><a href="#变量覆盖漏洞" class="headerlink" title="变量覆盖漏洞"></a>变量覆盖漏洞</h2><p>漏洞代码示例-1：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">// PHP $$ 变量覆盖</div><div class="line">&lt;?php</div><div class="line">show_source(__FILE__);</div><div class="line">include &quot;flag.php&quot;;</div><div class="line">$_403 = &quot;Access Denied&quot;;</div><div class="line">$_200 = &quot;Welcome Admin&quot;;</div><div class="line">if ($_SERVER[&quot;REQUEST_METHOD&quot;] != &quot;POST&quot;)</div><div class="line">   die(&quot;BugsBunnyCTF is here :p…&quot;);</div><div class="line">if ( !isset($_POST[&quot;flag&quot;]) )</div><div class="line">   die($_403);</div><div class="line">foreach ($_GET as $key =&gt; $value)</div><div class="line">    $$key = $$value;</div><div class="line">foreach ($_POST as $key =&gt; $value)</div><div class="line">    $$key = $value;</div><div class="line">if ( $_POST[&quot;flag&quot;] !== $flag )</div><div class="line">    die($_403);</div><div class="line">echo &quot;This is your flag : &quot;. $flag . &quot;\n&quot;;</div><div class="line">die($_200);</div><div class="line">?&gt;</div></pre></td></tr></table></figure>
 <p>由于2个foreach的代码会将$flag的值给覆盖掉，所以只能利用第一个foreach先将 <code>$flag</code>的值赋给<code>$_200</code>，然后利用<code>die($_200)</code>将原本的flag值打印出来。</p>
@@ -710,8 +722,8 @@
 <p>漏洞代码示例-1：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">// PHP</div><div class="line">&lt;?PHP</div><div class="line">if(check_money($price))&#123;</div><div class="line">    ... // 数据库取出数据</div><div class="line">    // 花费几秒</div><div class="line">    $money = $money - $price</div><div class="line">    ... // 数据库存入数据</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>修复方案：完善逻辑。</p>
-<h3 id="其他逻辑漏洞"><a href="#其他逻辑漏洞" class="headerlink" title="其他逻辑漏洞"></a>其他逻辑漏洞</h3><p>这里就要根据业务功能具体问题具体分析了，可以参考下<a href="http://blkstone.github.io/2017/10/14/common-web-vulns/" target="_blank" rel="external">各行业漏洞点</a>。</p>
-<p>找回密码 token <a href="http://foreversong.cn/archives/899" target="_blank" rel="external">http://foreversong.cn/archives/899</a></p>
+<h3 id="其他逻辑漏洞"><a href="#其他逻辑漏洞" class="headerlink" title="其他逻辑漏洞"></a>其他逻辑漏洞</h3><p>这里就要根据业务功能具体问题具体分析了，可以参考下<a href="http://blkstone.github.io/2017/10/14/common-web-vulns/" target="_blank" rel="noopener">各行业漏洞点</a>。</p>
+<p>找回密码 token <a href="http://foreversong.cn/archives/899" target="_blank" rel="noopener">http://foreversong.cn/archives/899</a></p>
 <h2 id="SSRF"><a href="#SSRF" class="headerlink" title="SSRF"></a>SSRF</h2><p>SSRF形成的原因大都是由于代码中提供了从其他服务器应用获取数据的功能但没有对目标地址做过滤与限制。比如从指定URL链接获取图片、下载等。</p>
 <p>应用场景：程序中发起HTTP请求操作一般在获取远程图片、页面分享收藏等业务场景,在代码审计时可重点关注一些HTTP请求操作函数。</p>
 <p>关键词/接口/类包：</p>
@@ -729,7 +741,7 @@
 <li>Object injection: PHP(对象注入、反序列化漏洞)</li>
 </ol>
 <p>软件框架有时允许开发人员自动将HTTP请求参数绑定到程序代码变量或对象中，从而使开发人员更容易地使用该框架。这里攻击者就可以利用这种方法通过构造http请求，将请求参数绑定到对象上，当代码逻辑使用该对象参数时就可能产生一些不可预料的结果。</p>
-<p><a href="https://github.com/Cryin/JavaID/blob/master/JAVA%E5%AE%89%E5%85%A8%E7%BC%96%E7%A0%81%E4%B8%8E%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1.md" target="_blank" rel="external">具体参考</a></p>
+<p><a href="https://github.com/Cryin/JavaID/blob/master/JAVA%E5%AE%89%E5%85%A8%E7%BC%96%E7%A0%81%E4%B8%8E%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1.md" target="_blank" rel="noopener">具体参考</a></p>
 <h2 id="URL重定向"><a href="#URL重定向" class="headerlink" title="URL重定向"></a>URL重定向</h2><p>由于Web站点有时需要根据不同的逻辑将用户引向到不同的页面，如典型的登录接口就经常需要在认证成功之后将用户引导到登录之前的页面，整个过程中如果实现不好就可能导致URL重定向问题，攻击者构造恶意跳转的链接，可以向用户发起钓鱼攻击。</p>
 <p>应用场景：登录接口等</p>
 <p>关键词/接口/类包：</p>
@@ -774,11 +786,11 @@
 <h1 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h1><p>对于代码审计的入门，可先实践一遍Damn Vulnerable Web App（DVWA）和Sibria Exploit Kit的漏洞发掘与利用。</p>
 <p>DVWA是基于PHP并汇总了各类漏洞的一套测试环境，在其中能够看到Web应用中许多常见的错误。Siberia Exploit Kit是一个被许多犯罪份子用来完成大量攻击的”犯罪套件”，它包括了一个浏览器利用包和一个用来管理受害主机的控制面板。Siberia包含的几种基于POST的身份认证漏洞允许攻击者获得管理员权限并接管服务器所在的主机。</p>
 <ol>
-<li><a href="https://code.google.com/p/owaspbwa/" target="_blank" rel="external">OWASP Broken Web Apps</a></li>
-<li><a href="https://trailofbits.github.io/ctf/web/workshop/siberia.zip" target="_blank" rel="external">Siberia Crimeware Pack</a>口令: infected</li>
+<li><a href="https://code.google.com/p/owaspbwa/" target="_blank" rel="noopener">OWASP Broken Web Apps</a></li>
+<li><a href="https://trailofbits.github.io/ctf/web/workshop/siberia.zip" target="_blank" rel="noopener">Siberia Crimeware Pack</a>口令: infected</li>
 </ol>
 <p>之后便可去网上寻找下载CMS等进行进一步的学习。</p>
-<h1 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h1><p>这里附一个大佬们挖出的漏洞<a href="https://segmentfault.com/a/1190000009279116" target="_blank" rel="external">phpcms v9.6.1任意文件读取漏洞</a></p>
+<h1 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h1><p>这里附一个大佬们挖出的漏洞<a href="https://segmentfault.com/a/1190000009279116" target="_blank" rel="noopener">phpcms v9.6.1任意文件读取漏洞</a></p>
 <p>在phpcms中，有一个file_down函数用来下载文件的，该函数位于<code>/phpcms/libs/functions/global.func.php</code>:</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">file_down</span><span class="params">($filepath, $filename = <span class="string">''</span>)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span>(!$filename) $filename = basename($filepath);</div><div class="line">    <span class="keyword">if</span>(is_ie()) $filename = rawurlencode($filename);</div><div class="line">    $filetype = fileext($filename);</div><div class="line">    $filesize = sprintf(<span class="string">"%u"</span>, filesize($filepath));</div><div class="line">    <span class="keyword">if</span>(ob_get_length() !== <span class="keyword">false</span>) @ob_end_clean();</div><div class="line">    header(<span class="string">'Pragma: public'</span>);</div><div class="line">    header(<span class="string">'Last-Modified: '</span>.gmdate(<span class="string">'D, d M Y H:i:s'</span>) . <span class="string">' GMT'</span>);</div><div class="line">    header(<span class="string">'Cache-Control: no-store, no-cache, must-revalidate'</span>);</div><div class="line">    header(<span class="string">'Cache-Control: pre-check=0, post-check=0, max-age=0'</span>);</div><div class="line">    header(<span class="string">'Content-Transfer-Encoding: binary'</span>);</div><div class="line">    header(<span class="string">'Content-Encoding: none'</span>);</div><div class="line">    header(<span class="string">'Content-type: '</span>.$filetype);</div><div class="line">    header(<span class="string">'Content-Disposition: attachment; filename="'</span>.$filename.<span class="string">'"'</span>);</div><div class="line">    header(<span class="string">'Content-length: '</span>.$filesize);</div><div class="line">    readfile($filepath);</div><div class="line">    <span class="keyword">exit</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>而调用他的地方是：</p>
@@ -811,42 +823,30 @@
 </ol>
 <p>请求<code>http://127.0.0.1:80/phpcms/index.php?m=content&amp;c=down&amp;a=init&amp;a_k=</code> +  <code>_att_json</code></p>
 <p><img src="/images/code-audit/phpcms-z.png" alt="phpcms-z"></p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>随着开发人员的安全意识的不断提高，Web应用的安全机制也不断的增加，从代码上一眼就能看出的漏洞已经越来越少了，想要找出漏洞更需要对代码、框架的进一步理解，分析，例如：<a href="https://pockr.org/activity/detail?activity_no=act_e9d06c0896a87368c1#sp_b06b412993e6f531cc" target="_blank" rel="external">文章</a><br>总的来说，不管是什么漏洞，在哪里出现，它们都有一个共同点，那就是危险函数中使用了可控参数，这些参数可被恶意用户直接或者间接控制，从函数中传进来，或者经过简单的编码，截断等处理直接进入危险函数，导致了危险行为。如果在执行危险函数前对这些可控参数进行一定判断，如必须是数字，路径必须存在，去掉某些特殊符号等则避免了问题的出现。</p>
-<p><a href="http://wooyun.jozxing.cc/search?keywords=%E6%94%BB%E5%87%BBJavaWeb%E5%BA%94%E7%94%A8&amp;content_search_by=by_drops" target="_blank" rel="external">参考文章-1</a><br><a href="https://github.com/Cryin/JavaID/blob/master/JAVA%E5%AE%89%E5%85%A8%E7%BC%96%E7%A0%81%E4%B8%8E%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1.md" target="_blank" rel="external">参考文章-2</a><br><a href="https://www.owasp.org/index.php/OWASP_Cheat_Sheet_Series" target="_blank" rel="external">参考文章-3</a><br><a href="https://chybeta.github.io/2017/07/14/php%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%B0%8F%E6%80%BB%E7%BB%93/" target="_blank" rel="external">参考文章-4</a><br><a href="http://www.freebuf.com/column/157228.html" target="_blank" rel="external">参考文章-5</a><br><a href="http://www.cnblogs.com/hellojava/archive/2012/12/28/2835730.html" target="_blank" rel="external">参考文章-6</a><br><a href="http://www.freebuf.com/articles/web/73669.html" target="_blank" rel="external">参考文章-7</a><br><a href="https://pockr.org/activity/detail?activity_no=act_e9d06c0896a87368c1#sp_b06b412993e6f531cc" target="_blank" rel="external">参考文章-8</a><br><a href="http://www.freebuf.com/articles/web/80528.html" target="_blank" rel="external">参考文章-9</a></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>随着开发人员的安全意识的不断提高，Web应用的安全机制也不断的增加，从代码上一眼就能看出的漏洞已经越来越少了，想要找出漏洞更需要对代码、框架的进一步理解，分析，例如：<a href="https://pockr.org/activity/detail?activity_no=act_e9d06c0896a87368c1#sp_b06b412993e6f531cc" target="_blank" rel="noopener">文章</a><br>总的来说，不管是什么漏洞，在哪里出现，它们都有一个共同点，那就是危险函数中使用了可控参数，这些参数可被恶意用户直接或者间接控制，从函数中传进来，或者经过简单的编码，截断等处理直接进入危险函数，导致了危险行为。如果在执行危险函数前对这些可控参数进行一定判断，如必须是数字，路径必须存在，去掉某些特殊符号等则避免了问题的出现。</p>
+<p><a href="http://wooyun.jozxing.cc/search?keywords=%E6%94%BB%E5%87%BBJavaWeb%E5%BA%94%E7%94%A8&amp;content_search_by=by_drops" target="_blank" rel="noopener">参考文章-1</a><br><a href="https://github.com/Cryin/JavaID/blob/master/JAVA%E5%AE%89%E5%85%A8%E7%BC%96%E7%A0%81%E4%B8%8E%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1.md" target="_blank" rel="noopener">参考文章-2</a><br><a href="https://www.owasp.org/index.php/OWASP_Cheat_Sheet_Series" target="_blank" rel="noopener">参考文章-3</a><br><a href="https://chybeta.github.io/2017/07/14/php%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%B0%8F%E6%80%BB%E7%BB%93/" target="_blank" rel="noopener">参考文章-4</a><br><a href="http://www.freebuf.com/column/157228.html" target="_blank" rel="noopener">参考文章-5</a><br><a href="http://www.cnblogs.com/hellojava/archive/2012/12/28/2835730.html" target="_blank" rel="noopener">参考文章-6</a><br><a href="http://www.freebuf.com/articles/web/73669.html" target="_blank" rel="noopener">参考文章-7</a><br><a href="https://pockr.org/activity/detail?activity_no=act_e9d06c0896a87368c1#sp_b06b412993e6f531cc" target="_blank" rel="noopener">参考文章-8</a><br><a href="http://www.freebuf.com/articles/web/80528.html" target="_blank" rel="noopener">参考文章-9</a></p>
 
       
     </div>
+    
+    
+    
 
-    <div>
-      
-        
+    
 
-      
-    </div>
+    
 
-    <div>
-      
-        
-
-      
-    </div>
-
-    <div>
-      
-        
-
-      
-    </div>
+    
 
     <footer class="post-footer">
       
         <div class="post-tags">
           
+            <a href="/tags/python/" rel="tag"># python</a>
+          
             <a href="/tags/code-audit/" rel="tag"># code audit</a>
           
             <a href="/tags/java/" rel="tag"># java</a>
-          
-            <a href="/tags/python/" rel="tag"># python</a>
           
             <a href="/tags/php/" rel="tag"># php</a>
           
@@ -854,7 +854,7 @@
       
 
       
-        
+      
       
 
       
@@ -871,6 +871,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2018/02/08/port-pentest/" rel="prev" title="端口渗透总结">
+                端口渗透总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -878,6 +882,10 @@
       
       
     </footer>
+  </div>
+  
+  
+  
   </article>
 
 
@@ -887,15 +895,15 @@
     </div>
   </div>
 
-          
+
           </div>
           
 
 
           
-  <div class="comments" id="comments">
-    
-  </div>
+
+  
+
 
 
         </div>
@@ -911,119 +919,102 @@
   </div>
 
   <aside id="sidebar" class="sidebar">
+    
     <div class="sidebar-inner">
 
       
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
             站点概览
           </li>
         </ul>
       
 
-      <section class="site-overview sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/orleven.jpg"
-               alt="Orleven" />
-          <p class="site-author-name" itemprop="name">Orleven</p>
-           
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Orleven" />
+            
+              <p class="site-author-name" itemprop="name">Orleven</p>
               <p class="site-description motion-element" itemprop="description">Life is full of ups and downs.</p>
-          
-        </div>
-        <nav class="site-state motion-element">
-
-          
-            <div class="site-state-item site-state-posts">
-              <a href="/archives">
-                <span class="site-state-item-count">24</span>
-                <span class="site-state-item-name">日志</span>
-              </a>
-            </div>
-          
-
-          
-            
-            
-            <div class="site-state-item site-state-categories">
-              <a href="/categories/index.html">
-                <span class="site-state-item-count">14</span>
-                <span class="site-state-item-name">分类</span>
-              </a>
-            </div>
-          
-
-          
-            
-            
-            <div class="site-state-item site-state-tags">
-              <a href="/tags/index-1.html">
-                <span class="site-state-item-count">47</span>
-                <span class="site-state-item-name">标签</span>
-              </a>
-            </div>
-          
-
-        </nav>
-
-        
-
-        <div class="links-of-author motion-element">
-          
-            
-              <span class="links-of-author-item">
-                <a href="https://github.com/orleven" target="_blank" title="GitHub">
-                  
-                    <i class="fa fa-fw fa-github"></i>
-                  
-                  GitHub
-                </a>
-              </span>
-            
-              <span class="links-of-author-item">
-                <a href="http://www.weibo.com/u/3846125587" target="_blank" title="Weibo">
-                  
-                    <i class="fa fa-fw fa-weibo"></i>
-                  
-                  Weibo
-                </a>
-              </span>
-            
-          
-        </div>
-
-        
-        
-
-        
-        
-          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
-            <div class="links-of-blogroll-title">
-              <i class="fa  fa-fw fa-globe"></i>
-              
-            </div>
-            <ul class="links-of-blogroll-list">
-              
-                <li class="links-of-blogroll-item">
-                  <a href="https://www.warmeng.com/" title="warmeng" target="_blank">warmeng</a>
-                </li>
-              
-                <li class="links-of-blogroll-item">
-                  <a href="https://blog.0kami.cn/" title="0kimi" target="_blank">0kimi</a>
-                </li>
-              
-            </ul>
           </div>
-        
 
-        
+          <nav class="site-state motion-element">
 
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
 
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index-1.html">
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.warmeng.com/" title="warmeng" target="_blank">warmeng</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.0kami.cn/" title="0kimi" target="_blank">0kimi</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
       </section>
 
       
@@ -1036,7 +1027,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#工具"><span class="nav-number">2.</span> <span class="nav-text">工具</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#事前工作"><span class="nav-number">3.</span> <span class="nav-text">事前工作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思路"><span class="nav-number">4.</span> <span class="nav-text">思路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#查看Web应用所采用的框架、第三方库是否存在安全漏洞。"><span class="nav-number">4.1.</span> <span class="nav-text">查看Web应用所采用的框架、第三方库是否存在安全漏洞。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看公共函数、拦截函数是否存在安全漏洞或者可以绕过的风险。"><span class="nav-number">4.2.</span> <span class="nav-text">查看公共函数、拦截函数是否存在安全漏洞或者可以绕过的风险。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看敏感函数，回溯变量，判断变量是否在调用前进行过严格的安全过滤。"><span class="nav-number">4.3.</span> <span class="nav-text">查看敏感函数，回溯变量，判断变量是否在调用前进行过严格的安全过滤。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看敏感功能点，正向追踪变量传递过程。"><span class="nav-number">4.4.</span> <span class="nav-text">查看敏感功能点，正向追踪变量传递过程。</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基础知识"><span class="nav-number">5.</span> <span class="nav-text">基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Web框架"><span class="nav-number">5.1.</span> <span class="nav-text">Web框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编码"><span class="nav-number">5.2.</span> <span class="nav-text">编码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用户可控变量"><span class="nav-number">5.3.</span> <span class="nav-text">用户可控变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PHP"><span class="nav-number">5.4.</span> <span class="nav-text">PHP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置文件"><span class="nav-number">5.4.1.</span> <span class="nav-text">配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP版本姿势"><span class="nav-number">5.4.2.</span> <span class="nav-text">PHP版本姿势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP-其他注意点"><span class="nav-number">5.4.3.</span> <span class="nav-text">PHP 其他注意点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#变量"><span class="nav-number">5.4.4.</span> <span class="nav-text">变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java"><span class="nav-number">5.5.</span> <span class="nav-text">Java</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lt-context-param-gt-上下文参数"><span class="nav-number">5.5.1.</span> <span class="nav-text"><context-param>上下文参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lt-filter-gt-过滤器"><span class="nav-number">5.5.2.</span> <span class="nav-text"><filter>过滤器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lt-listener-gt-监听器"><span class="nav-number">5.5.3.</span> <span class="nav-text"><listener>监听器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lt-servlet-gt"><span class="nav-number">5.5.4.</span> <span class="nav-text"><servlet></span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置jsp"><span class="nav-number">5.5.5.</span> <span class="nav-text">设置jsp</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python"><span class="nav-number">5.6.</span> <span class="nav-text">Python</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#漏洞"><span class="nav-number">6.</span> <span class="nav-text">漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#文件操作漏洞"><span class="nav-number">6.1.</span> <span class="nav-text">文件操作漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文件上传"><span class="nav-number">6.1.1.</span> <span class="nav-text">文件上传</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件读取"><span class="nav-number">6.1.2.</span> <span class="nav-text">文件读取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件包含"><span class="nav-number">6.1.3.</span> <span class="nav-text">文件包含</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件删除"><span class="nav-number">6.1.4.</span> <span class="nav-text">文件删除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#目录列举"><span class="nav-number">6.1.5.</span> <span class="nav-text">目录列举</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码-命令执行"><span class="nav-number">6.2.</span> <span class="nav-text">代码/命令执行</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码执行函数"><span class="nav-number">6.2.1.</span> <span class="nav-text">代码执行函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#命令执行漏洞"><span class="nav-number">6.2.2.</span> <span class="nav-text">命令执行漏洞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#序列化与反序列化"><span class="nav-number">6.2.3.</span> <span class="nav-text">序列化与反序列化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL注入漏洞"><span class="nav-number">6.3.</span> <span class="nav-text">SQL注入漏洞</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XSS"><span class="nav-number">6.4.</span> <span class="nav-text">XSS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XML漏洞"><span class="nav-number">6.5.</span> <span class="nav-text">XML漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#XML注入"><span class="nav-number">6.5.1.</span> <span class="nav-text">XML注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#XXE"><span class="nav-number">6.5.2.</span> <span class="nav-text">XXE</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变量覆盖漏洞"><span class="nav-number">6.6.</span> <span class="nav-text">变量覆盖漏洞</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#逻辑漏洞"><span class="nav-number">6.7.</span> <span class="nav-text">逻辑漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#水平-垂直越权"><span class="nav-number">6.7.1.</span> <span class="nav-text">水平/垂直越权</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#批量请求"><span class="nav-number">6.7.2.</span> <span class="nav-text">批量请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#支付漏洞"><span class="nav-number">6.7.3.</span> <span class="nav-text">支付漏洞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他逻辑漏洞"><span class="nav-number">6.7.4.</span> <span class="nav-text">其他逻辑漏洞</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF"><span class="nav-number">6.8.</span> <span class="nav-text">SSRF</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Autobinding"><span class="nav-number">6.9.</span> <span class="nav-text">Autobinding</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#URL重定向"><span class="nav-number">6.10.</span> <span class="nav-text">URL重定向</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CSRF"><span class="nav-number">6.11.</span> <span class="nav-text">CSRF</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二次漏洞"><span class="nav-number">6.12.</span> <span class="nav-text">二次漏洞</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第三方组件安全"><span class="nav-number">6.13.</span> <span class="nav-text">第三方组件安全</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#弱类型"><span class="nav-number">6.14.</span> <span class="nav-text">弱类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他"><span class="nav-number">6.15.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#练习"><span class="nav-number">7.</span> <span class="nav-text">练习</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#案例"><span class="nav-number">8.</span> <span class="nav-text">案例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">9.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#工具"><span class="nav-number">2.</span> <span class="nav-text">工具</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#事前工作"><span class="nav-number">3.</span> <span class="nav-text">事前工作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思路"><span class="nav-number">4.</span> <span class="nav-text">思路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#查看Web应用所采用的框架、第三方库是否存在安全漏洞。"><span class="nav-number">4.1.</span> <span class="nav-text">查看Web应用所采用的框架、第三方库是否存在安全漏洞。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看公共函数、拦截函数是否存在安全漏洞或者可以绕过的风险。"><span class="nav-number">4.2.</span> <span class="nav-text">查看公共函数、拦截函数是否存在安全漏洞或者可以绕过的风险。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看敏感函数，回溯变量，判断变量是否在调用前进行过严格的安全过滤。"><span class="nav-number">4.3.</span> <span class="nav-text">查看敏感函数，回溯变量，判断变量是否在调用前进行过严格的安全过滤。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看敏感功能点，正向追踪变量传递过程。"><span class="nav-number">4.4.</span> <span class="nav-text">查看敏感功能点，正向追踪变量传递过程。</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基础知识"><span class="nav-number">5.</span> <span class="nav-text">基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Web框架"><span class="nav-number">5.1.</span> <span class="nav-text">Web框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编码"><span class="nav-number">5.2.</span> <span class="nav-text">编码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用户可控变量"><span class="nav-number">5.3.</span> <span class="nav-text">用户可控变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PHP"><span class="nav-number">5.4.</span> <span class="nav-text">PHP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置文件"><span class="nav-number">5.4.1.</span> <span class="nav-text">配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP版本姿势"><span class="nav-number">5.4.2.</span> <span class="nav-text">PHP版本姿势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP-其他注意点"><span class="nav-number">5.4.3.</span> <span class="nav-text">PHP 其他注意点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#变量"><span class="nav-number">5.4.4.</span> <span class="nav-text">变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java"><span class="nav-number">5.5.</span> <span class="nav-text">Java</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lt-context-param-gt-上下文参数"><span class="nav-number">5.5.1.</span> <span class="nav-text">&lt;context-param&gt;上下文参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lt-filter-gt-过滤器"><span class="nav-number">5.5.2.</span> <span class="nav-text">&lt;filter&gt;过滤器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lt-listener-gt-监听器"><span class="nav-number">5.5.3.</span> <span class="nav-text">&lt;listener&gt;监听器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lt-servlet-gt"><span class="nav-number">5.5.4.</span> <span class="nav-text">&lt;servlet&gt;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置jsp"><span class="nav-number">5.5.5.</span> <span class="nav-text">设置jsp</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python"><span class="nav-number">5.6.</span> <span class="nav-text">Python</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#漏洞"><span class="nav-number">6.</span> <span class="nav-text">漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#文件操作漏洞"><span class="nav-number">6.1.</span> <span class="nav-text">文件操作漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文件上传"><span class="nav-number">6.1.1.</span> <span class="nav-text">文件上传</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件读取"><span class="nav-number">6.1.2.</span> <span class="nav-text">文件读取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件包含"><span class="nav-number">6.1.3.</span> <span class="nav-text">文件包含</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件删除"><span class="nav-number">6.1.4.</span> <span class="nav-text">文件删除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#目录列举"><span class="nav-number">6.1.5.</span> <span class="nav-text">目录列举</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码-命令执行"><span class="nav-number">6.2.</span> <span class="nav-text">代码/命令执行</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码执行函数"><span class="nav-number">6.2.1.</span> <span class="nav-text">代码执行函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#命令执行漏洞"><span class="nav-number">6.2.2.</span> <span class="nav-text">命令执行漏洞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#序列化与反序列化"><span class="nav-number">6.2.3.</span> <span class="nav-text">序列化与反序列化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL注入漏洞"><span class="nav-number">6.3.</span> <span class="nav-text">SQL注入漏洞</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XSS"><span class="nav-number">6.4.</span> <span class="nav-text">XSS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XML漏洞"><span class="nav-number">6.5.</span> <span class="nav-text">XML漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#XML注入"><span class="nav-number">6.5.1.</span> <span class="nav-text">XML注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#XXE"><span class="nav-number">6.5.2.</span> <span class="nav-text">XXE</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变量覆盖漏洞"><span class="nav-number">6.6.</span> <span class="nav-text">变量覆盖漏洞</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#逻辑漏洞"><span class="nav-number">6.7.</span> <span class="nav-text">逻辑漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#水平-垂直越权"><span class="nav-number">6.7.1.</span> <span class="nav-text">水平/垂直越权</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#批量请求"><span class="nav-number">6.7.2.</span> <span class="nav-text">批量请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#支付漏洞"><span class="nav-number">6.7.3.</span> <span class="nav-text">支付漏洞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他逻辑漏洞"><span class="nav-number">6.7.4.</span> <span class="nav-text">其他逻辑漏洞</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF"><span class="nav-number">6.8.</span> <span class="nav-text">SSRF</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Autobinding"><span class="nav-number">6.9.</span> <span class="nav-text">Autobinding</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#URL重定向"><span class="nav-number">6.10.</span> <span class="nav-text">URL重定向</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CSRF"><span class="nav-number">6.11.</span> <span class="nav-text">CSRF</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二次漏洞"><span class="nav-number">6.12.</span> <span class="nav-text">二次漏洞</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第三方组件安全"><span class="nav-number">6.13.</span> <span class="nav-text">第三方组件安全</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#弱类型"><span class="nav-number">6.14.</span> <span class="nav-text">弱类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他"><span class="nav-number">6.15.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#练习"><span class="nav-number">7.</span> <span class="nav-text">练习</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#案例"><span class="nav-number">8.</span> <span class="nav-text">案例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">9.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>
@@ -1056,27 +1047,37 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
-  
-  &copy;  2016 - 
-  <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
-    <i class="fa fa-heart"></i>
+    <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Orleven</span>
+
+  
 </div>
 
 
-<div class="powered-by">
-    个人专属
-</div>
-
-<div class="theme-info">
-  Orleven Blog 
-</div>
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">orleven.com</a> 强力驱动</div>
 
 
+
+  <span class="post-meta-divider">|</span>
+
+
+
+
+  <div class="theme-info">  <a class="theme-link" target="_blank" href="https://blog.orleven.com">My blog</a> version 1.1 </div>
+
+
+
+  
         
+
+
+
+
+
+
 
         
       </div>
@@ -1088,7 +1089,9 @@
         
       </div>
     
+
     
+
   </div>
 
   
@@ -1110,54 +1113,80 @@
   
 
 
-
-
-  
-  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-
-  
-  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  
-  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-
-
   
 
 
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
 
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+
+
 
 
 
   
   
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
-
-
-
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
   
 
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
 
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
 
 
 
   
 
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
 
 
   
@@ -1183,145 +1212,340 @@
 
 
 
-  
 
 
 
+
+
+
+
   
-  
+
   <script type="text/javascript">
     // Popup Window;
     var isfetched = false;
+    var isXml = true;
     // Search DB path;
     var search_path = "search.xml";
-    if (search_path.length == 0) {
+    if (search_path.length === 0) {
       search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
     }
     var path = "/" + search_path;
     // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
 
     function proceedsearch() {
       $("body")
         .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
         .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
       $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
     }
+
     // search function;
     var searchFunc = function(path, search_id, content_id) {
       'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
       $.ajax({
         url: path,
-        dataType: "xml",
+        dataType: isXml ? "xml" : "json",
         async: true,
-        success: function( xmlResponse ) {
+        success: function(res) {
           // get the contents from search data
           isfetched = true;
           $('.popup').detach().appendTo('.header-inner');
-          var datas = $( "entry", xmlResponse ).map(function() {
+          var datas = isXml ? $("entry", res).map(function() {
             return {
-              title: $( "title", this ).text(),
+              title: $("title", this).text(),
               content: $("content",this).text(),
-              url: $( "url" , this).text()
+              url: $("url" , this).text()
             };
-          }).get();
-          var $input = document.getElementById(search_id);
-          var $resultContent = document.getElementById(content_id);
-          $input.addEventListener('input', function(){
-            var matchcounts = 0;
-            var str='<ul class=\"search-result-list\">';
-            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
-            $resultContent.innerHTML = "";
-            if (this.value.trim().length > 1) {
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
               // perform local searching
               datas.forEach(function(data) {
                 var isMatch = false;
-                var content_index = [];
-                var data_title = data.title.trim().toLowerCase();
-                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
-                var data_url = decodeURIComponent(data.url);
-                var index_title = -1;
-                var index_content = -1;
-                var first_occur = -1;
-                // only match artiles with not empty titles and contents
-                if(data_title != '') {
-                  keywords.forEach(function(keyword, i) {
-                    index_title = data_title.indexOf(keyword);
-                    index_content = data_content.indexOf(keyword);
-                    if( index_title >= 0 || index_content >= 0 ){
-                      isMatch = true;
-                      if (i == 0) {
-                        first_occur = index_content;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
                       }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
                     }
 
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
                   });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
                 }
+
                 // show search results
+
                 if (isMatch) {
-                  matchcounts += 1;
-                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
-                  var content = data.content.trim().replace(/<[^>]+>/g,"");
-                  if (first_occur >= 0) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
                     // cut out 100 characters
-                    var start = first_occur - 20;
-                    var end = first_occur + 80;
+                    var start = position - 20;
+                    var end = position + 80;
                     if(start < 0){
                       start = 0;
                     }
-                    if(start == 0){
-                      end = 50;
+                    if (end < position + word.length) {
+                      end = position + word.length;
                     }
                     if(end > content.length){
                       end = content.length;
                     }
-                    var match_content = content.substring(start, end);
-                    // highlight all keywords
-                    keywords.forEach(function(keyword){
-                      var regS = new RegExp(keyword, "gi");
-                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
-                    });
-
-                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
                   }
-                  str += "</li>";
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
                 }
-              })};
-            str += "</ul>";
-            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
-            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
-            $resultContent.innerHTML = str;
-          });
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
           proceedsearch();
         }
-      });}
+      });
+    }
 
     // handle and trigger popup window;
     $('.popup-trigger').click(function(e) {
       e.stopPropagation();
-      if (isfetched == false) {
+      if (isfetched === false) {
         searchFunc(path, 'local-search-input', 'local-search-result');
       } else {
         proceedsearch();
       };
     });
 
-    $('.popup-btn-close').click(function(e){
-      $('.popup').hide();
-      $(".local-search-pop-overlay").remove();
-      $('body').css('overflow', '');
-    });
+    $('.popup-btn-close').click(onPopupClose);
     $('.popup').click(function(e){
       e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
     });
   </script>
 
 
-  
+
+
 
   
 
   
-  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
   <script>AV.initialize("EdyobKaxPz3ofLTPlxfLIN1V-gzGzoHsz", "3hpzfKGL11zsIHV0ONyWgUgW");</script>
   <script>
     function showTime(Counter) {
@@ -1431,6 +1655,12 @@
 
   
 
+  
+  
+
+  
+
+  
 
   
 
