@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="python,sqlmap,code," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="概述不得不承认，Sqlmap是目前使用人数最多，功能最复杂的SQL注入工具。作为一款开源工具，开发者有意的让我们自行去阅读并对其进行扩充，从Github可以看出一直在更新的。对于渗透人员来说，阅读sqlmap源码是很有必要的，我们可以从它的源码之中学习到一些优秀的代码编写思维以及方式，应用到平时的渗透中去。">
+<meta name="keywords" content="python,sqlmap,code">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sqlmap Code Analysis">
+<meta property="og:url" content="http://orleven.orleven.com/2017/09/27/sqlmap-code-analysis/index.html">
+<meta property="og:site_name" content="Orleven Blog">
+<meta property="og:description" content="概述不得不承认，Sqlmap是目前使用人数最多，功能最复杂的SQL注入工具。作为一款开源工具，开发者有意的让我们自行去阅读并对其进行扩充，从Github可以看出一直在更新的。对于渗透人员来说，阅读sqlmap源码是很有必要的，我们可以从它的源码之中学习到一些优秀的代码编写思维以及方式，应用到平时的渗透中去。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://orleven.orleven.com/images/sqlmap-code-analysis/sqlmap-dir.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/sqlmap-code-analysis/sqlmap-process.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/sqlmap-code-analysis/sqlmap-help.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/sqlmap-code-analysis/sqlmap-direct.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/sqlmap-code-analysis/sqlmap-sqlite.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/sqlmap-code-analysis/sqlmap-attribdict.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/sqlmap-code-analysis/sqlmap-waf.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/sqlmap-code-analysis/sqlmap-xml.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/sqlmap-code-analysis/sqlmap-payloads.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/sqlmap-code-analysis/sqlmap-payloads-1.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/sqlmap-code-analysis/sqlmap-payloads-2.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/sqlmap-code-analysis/sqlmap-payloads-3.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/sqlmap-code-analysis/sqlmap-takeover.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/sqlmap-code-analysis/sqlmap-webshell.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/sqlmap-code-analysis/sqlmap-webshell-php-upload.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/sqlmap-code-analysis/sqlmap-webshell-php-upload-2.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/sqlmap-code-analysis/sqlmap-webshell-php-exec.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/sqlmap-code-analysis/sqlmap-api.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/sqlmap-code-analysis/sqlmap-update.png">
+<meta property="og:updated_time" content="2017-09-27T04:07:03.252Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Sqlmap Code Analysis">
+<meta name="twitter:description" content="概述不得不承认，Sqlmap是目前使用人数最多，功能最复杂的SQL注入工具。作为一款开源工具，开发者有意的让我们自行去阅读并对其进行扩充，从Github可以看出一直在更新的。对于渗透人员来说，阅读sqlmap源码是很有必要的，我们可以从它的源码之中学习到一些优秀的代码编写思维以及方式，应用到平时的渗透中去。">
+<meta name="twitter:image" content="http://orleven.orleven.com/images/sqlmap-code-analysis/sqlmap-dir.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://orleven.orleven.com/2017/09/27/sqlmap-code-analysis/"/>
+
+
+
+
+
+  <title>Sqlmap Code Analysis | Orleven Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Orleven Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Orleven Blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://orleven.orleven.com/2017/09/27/sqlmap-code-analysis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Orleven">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Orleven Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Sqlmap Code Analysis</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-27T03:11:12+08:00">
+                2017-09-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tool/" itemprop="url" rel="index">
+                    <span itemprop="name">tool</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/09/27/sqlmap-code-analysis/" class="leancloud_visitors" data-flag-title="Sqlmap Code Analysis">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>不得不承认，Sqlmap是目前使用人数最多，功能最复杂的SQL注入工具。作为一款开源工具，开发者有意的让我们自行去阅读并对其进行扩充，从<a href="https://github.com/sqlmapproject/sqlmap" target="_blank" rel="noopener">Github</a>可以看出一直在更新的。对于渗透人员来说，阅读sqlmap源码是很有必要的，我们可以从它的源码之中学习到一些优秀的代码编写思维以及方式，应用到平时的渗透中去。</p>
+<a id="more"></a>
+<h1 id="Sqlmap的结构"><a href="#Sqlmap的结构" class="headerlink" title="Sqlmap的结构"></a>Sqlmap的结构</h1><p>首先看看Sqlmap的目录结构：</p>
+<p><img src="/images/sqlmap-code-analysis/sqlmap-dir.png" alt="sqlmap-dir"></p>
+<p>目录说明:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">Doc   帮助文档</div><div class="line">Extra 拓展程序，包含多种额外功能，例如运行cmd、安全执行、shellcode等</div><div class="line">Lib 类库程序，包含多种连接库，如5种注入类型、提权操作</div><div class="line">Plugins  插件程序，包括各种数据库的信息以及数据库的通用事项</div><div class="line">Procs sql语句，包含oracle，postgresql 等的dns_request程序、Mysql的读写文件、mssql的xp_cmdshell等sql语句</div><div class="line">Shell  shell应用，包含多个语言注入成功的shell脚本</div><div class="line">Tamper  多个绕过程序</div><div class="line">Thirdparty 第三方程序，如beautifulsoup、优化，保持连接，颜色等等</div><div class="line">Txt 爆破字典，如浏览器类型、 表，列字典</div><div class="line">Udf   用户定义的mysql的攻击载荷</div><div class="line">Waf  waf防火墙特征指纹</div><div class="line">Xml 多种数据库检测载荷以及指纹定义</div><div class="line">sqlmap.conf 配置文件</div><div class="line">sqlmap.py 主程序</div><div class="line">sqlmap.api 接口程序</div></pre></td></tr></table></figure>
+<p>Sqlmap的流程图如下所示：</p>
+<p><img src="/images/sqlmap-code-analysis/sqlmap-process.png" alt="sqlmap-process"></p>
+<p>概括起来就是当在命令行输入命令的时候，sqlmap首先会进行初始化的操作（版本检测、模块检测、命令行参数解析、Session读取等），之后便会简单的检测是否存在注入点，如果存在注入点便会进行进一步的注入，最后才是接管（takeover）操作。</p>
+<h1 id="Sqlmap初始化"><a href="#Sqlmap初始化" class="headerlink" title="Sqlmap初始化"></a>Sqlmap初始化</h1><p>大部分工具在进行攻击时都会进行初始化，Sqlmap也不例外。为了保证Sqlmap的正常运行首先需要进行python的版本、功能模块的自检。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># sqlmap.py 开头，这里利用__import__()抛出的异常来检查必要库的存在。</span></div><div class="line"><span class="keyword">try</span>:</div><div class="line">    __import__(<span class="string">"lib.utils.versioncheck"</span>)  <span class="comment"># this has to be the first non-standard import</span></div><div class="line"><span class="keyword">except</span> ImportError:</div><div class="line">    exit(<span class="string">"[!] wrong installation detected (missing modules). Visit 'https://github.com/sqlmapproject/sqlmap/#installation' for further details"</span>)</div><div class="line">``` </div><div class="line"></div><div class="line">下面是<span class="keyword">import</span>的模块：</div><div class="line"></div><div class="line">``` python</div><div class="line"><span class="comment"># /lib/utils/versioncheck.py </span></div><div class="line"><span class="keyword">if</span> PYVERSION &gt;= <span class="string">"3"</span> <span class="keyword">or</span> PYVERSION &lt; <span class="string">"2.6"</span>:</div><div class="line">    exit(<span class="string">"[CRITICAL] incompatible Python version detected ('%s'). For successfully running sqlmap you'll have to use version 2.6.x or 2.7.x (visit 'http://www.python.org/download/')"</span> % PYVERSION)</div><div class="line"></div><div class="line">extensions = (<span class="string">"gzip"</span>, <span class="string">"ssl"</span>, <span class="string">"sqlite3"</span>, <span class="string">"zlib"</span>)</div><div class="line"><span class="keyword">try</span>:</div><div class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> extensions:</div><div class="line">        __import__(_)</div><div class="line"><span class="keyword">except</span> ImportError:</div><div class="line">    errMsg = <span class="string">"missing one or more core extensions (%s) "</span> % (<span class="string">", "</span>.join(<span class="string">"'%s'"</span> % _ <span class="keyword">for</span> _ <span class="keyword">in</span> extensions))</div><div class="line">    errMsg += <span class="string">"most likely because current version of Python has been "</span></div><div class="line">    errMsg += <span class="string">"built without appropriate dev packages (e.g. 'libsqlite3-dev')"</span></div><div class="line">    exit(errMsg)</div></pre></td></tr></table></figure>
+<p>在这之后才进入<code>main()</code>函数,而<code>main()</code>函数的开头便是检查环境（路径、版本）、输出banner信息、读取命令行参数。这里主要关注的是<code>modulePath()</code>函数，为了方便在Windows以及Linux上运行，这里统一将操作系统的编码转化为Unicode编码后返回：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># sqlmap.py</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></div><div class="line">    checkEnvironment()</div><div class="line">    setPaths(modulePath())</div><div class="line">    banner()</div><div class="line"></div><div class="line">    <span class="comment"># Store original command line options for possible later restoration</span></div><div class="line">    cmdLineOptions.update(cmdLineParser().__dict__)</div><div class="line">    nitOptions(cmdLineOptions)</div><div class="line">    ....</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">modulePath</span><span class="params">()</span>:</span></div><div class="line">    ...</div><div class="line">    <span class="keyword">return</span> getUnicode(os.path.dirname(os.path.realpath(_)), encoding=sys.getfilesystemencoding() <span class="keyword">or</span> UNICODE_ENCODING)</div></pre></td></tr></table></figure>
+<p>之后利用python的optionparser模块来对输入的参数进行分析，在此之前，提取出第一个参数前的内容，例python sqlmap.py作为参数传入OptionParser之后就是对参数进行分析了，首先是帮助、版本、log级有关参数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># /lib/parse/cmdline </span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">cmdLineParser</span><span class="params">(argv=None)</span>:</span></div><div class="line">    ...</div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        parser.add_option(<span class="string">"--hh"</span>, dest=<span class="string">"advancedHelp"</span>,action=<span class="string">"store_true"</span>,help=<span class="string">"Show advanced help message and exit"</span>)</div><div class="line">        parser.add_option(<span class="string">"--version"</span>, dest=<span class="string">"showVersion"</span>,action=<span class="string">"store_true"</span>,help=<span class="string">"Show program's version number and exit"</span>)</div><div class="line">        parser.add_option(<span class="string">"-v"</span>, dest=<span class="string">"verbose"</span>, type=<span class="string">"int"</span>,help=<span class="string">"Verbosity level: 0-6 (default %d)"</span> % defaults.verbose)</div><div class="line">        ....</div><div class="line">    ...</div></pre></td></tr></table></figure>
+<p>主要显示如下：<br><img src="/images/sqlmap-code-analysis/sqlmap-help.png" alt="sqlmap-help"></p>
+<p>接下来便是一个<code>init()</code>函数，千万不要小看这个<code>init()</code>函数，因为它做了很多很多的工作，当然它大部分与你输入的参数有关：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># /lib/core/option.py</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">init</span><span class="params">()</span>:</span></div><div class="line">    _useWizardInterface()           <span class="comment"># 引导界面、新手教学</span></div><div class="line">    setVerbosity()                  <span class="comment"># 设置输出的详细程度</span></div><div class="line">    _saveConfig()                   <span class="comment"># 保存参数到配置文件</span></div><div class="line">    _setRequestFromFile()           <span class="comment"># 读取文件中的http请求</span></div><div class="line">    _cleanupOptions()               <span class="comment"># 清除配置选项</span></div><div class="line">    _cleanupEnvironment()           <span class="comment"># 清除环境变量</span></div><div class="line">    _dirtyPatches()                 <span class="comment"># 设置http的最大行数</span></div><div class="line">    _purgeOutput()                  <span class="comment"># 文件粉碎</span></div><div class="line">    _checkDependencies()            <span class="comment"># 检查第三方库是否存在，比如mysql、mssql等连接库</span></div><div class="line">    _createTemporaryDirectory()     <span class="comment"># 创建临时目录</span></div><div class="line">    _basicOptionValidation()        <span class="comment"># 检查参数是否有效</span></div><div class="line">    _setProxyList()                 <span class="comment"># 设置代理</span></div><div class="line">    _setTorProxySettings()          <span class="comment"># 设置tor代理</span></div><div class="line">    _setDNSServer()                 <span class="comment"># 设置dns服务器</span></div><div class="line">    _adjustLoggingFormatter()       <span class="comment"># 调整日志格式</span></div><div class="line">    _setMultipleTargets()           <span class="comment"># 检测多个目标</span></div><div class="line">    _setTamperingFunctions()        <span class="comment"># tamper模块</span></div><div class="line">    _setWafFunctions()              <span class="comment"># waf识别模块</span></div><div class="line">    _setTrafficOutputFP()       </div><div class="line">    _setupHTTPCollector()       </div><div class="line">    _resolveCrossReferences()   </div><div class="line">    _checkWebSocket()               <span class="comment"># 检测websocket</span></div><div class="line"></div><div class="line">    parseTargetUrl()                <span class="comment"># 分析目标检查url，并给config赋值</span></div><div class="line">    parseTargetDirect()             <span class="comment"># 分析目标数据库，并给config赋值</span></div><div class="line"></div><div class="line">    <span class="keyword">if</span> any((conf.url, conf.logFile, conf.bulkFile, conf.sitemapUrl, conf.requestFile, conf.googleDork, conf.liveTest)):</div><div class="line">        _setHTTPTimeout()</div><div class="line">        _setHTTPExtraHeaders()      <span class="comment"># 设置http头</span></div><div class="line">        _setHTTPCookies()       </div><div class="line">        _setHTTPReferer()</div><div class="line">        _setHTTPHost()</div><div class="line">        _setHTTPUserAgent()</div><div class="line">        _setHTTPAuthentication()    <span class="comment"># 设置http验证方式</span></div><div class="line">        _setHTTPHandlers()      </div><div class="line">        _setDNSCache()</div><div class="line">        _setSocketPreConnect()      <span class="comment"># 创建一个预连接的socker connect</span></div><div class="line">        _setSafeVisit()         </div><div class="line">        _doSearch()                 <span class="comment"># 搜索url注入</span></div><div class="line">        _setBulkMultipleTargets()   <span class="comment"># 通过bulkfile读取多个url列表</span></div><div class="line">        _setSitemapTargets()        <span class="comment"># 分析sitemap读取url列表  </span></div><div class="line">        _checkTor()                 </div><div class="line">        _setCrawler()               <span class="comment"># 页面爬取深度</span></div><div class="line">        _findPageForms()            <span class="comment"># 从页面中搜索表单</span></div><div class="line">        _setDBMS()                  <span class="comment"># 设置数据库类型</span></div><div class="line">        _setTechnique()             <span class="comment"># 设置注入类型</span></div><div class="line"></div><div class="line">    _setThreads()                   <span class="comment"># 设置线程数</span></div><div class="line">    _setOS()    </div><div class="line">    _setWriteFile()</div><div class="line">    _setMetasploit()                <span class="comment"># 设置msf接管功能</span></div><div class="line">    _setDBMSAuthentication()    </div><div class="line">    loadBoundaries()                <span class="comment"># 加载boundaries.xml文件</span></div><div class="line">    loadPayloads()                  <span class="comment"># 加载payload.xml文件</span></div><div class="line">    _setPrefixSuffix()</div><div class="line">    update()                        <span class="comment"># sqlmap自动更新</span></div><div class="line">    _loadQueries()                  <span class="comment"># 加载queries.xml文件</span></div></pre></td></tr></table></figure>
+<p>在初始化之后，便根据不同的需求运行不同的代码，如下所示：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># sqlmap.py</span></div><div class="line"><span class="comment">#性能的自测功能，输出是图形文件，可以看出整个程序每个步骤的占用时间百分比、函数调用次数，便于能够直观看出程序运行的瓶颈所在。</span></div><div class="line"><span class="keyword">if</span> conf.profile:</div><div class="line">    profile()      </div><div class="line"><span class="comment"># 冒烟测试，简单来说就是对一个软件镜像尽可能的功能覆盖测试。                </span></div><div class="line"><span class="keyword">elif</span> conf.smokeTest:</div><div class="line">    smokeTest()</div><div class="line"><span class="comment"># 从livetests.xml里加载用于测试注入功能的网站和配置样例，进行全面的注入测试。</span></div><div class="line"><span class="keyword">elif</span> conf.liveTest:</div><div class="line">    liveTest()</div><div class="line"><span class="keyword">else</span>:</div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        start()                     <span class="comment"># 真正的开始运行</span></div><div class="line">    <span class="keyword">except</span> thread.error <span class="keyword">as</span> ex:</div><div class="line">        ....</div></pre></td></tr></table></figure></p>
+<p>前三个部分主要是软件的测试，和我们平时渗透没有多大关系，这里便不继续深究下去。</p>
+<h1 id="Sqlmap核心"><a href="#Sqlmap核心" class="headerlink" title="Sqlmap核心"></a>Sqlmap核心</h1><h2 id="数据库直连"><a href="#数据库直连" class="headerlink" title="数据库直连"></a>数据库直连</h2><p>sqlmap可以通过<code>-d</code>参数来直接连接目标数据库，不过一般需要额外安装第三方模块。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># /lib/controller/controller.py</span></div><div class="line"><span class="keyword">if</span> conf.direct:</div><div class="line">    initTargetEnv()</div><div class="line">    setupTargetEnv()</div><div class="line">    action()</div><div class="line">    <span class="keyword">return</span> <span class="keyword">True</span></div></pre></td></tr></table></figure>
+<p><img src="/images/sqlmap-code-analysis/sqlmap-direct.png" alt="sqlmap-direct"></p>
+<h2 id="读取Session"><a href="#读取Session" class="headerlink" title="读取Session"></a>读取Session</h2><p>对一个网站进行sql注入测试的时候，sqlmap一般会在当前用户的目录下创建一个<code>.sqlmap</code>目录，里面一般会保存目标网站的一些日志、注入点设置、session信息。session信息一般会以sqllite数据库文件的形式存储，里面主要是id、value两个字段，具体图如下：</p>
+<p><img src="/images/sqlmap-code-analysis/sqlmap-sqlite.png" alt="sqlmap-sqlite"></p>
+<p>它的value值一部分是以明文的形式存储，另一部是<code>AttribDict</code>这个对象序列化后的以base64编码后的形式存储的。</p>
+<p><img src="/images/sqlmap-code-analysis/sqlmap-attribdict.png" alt="sqlmap-attribdict"></p>
+<h2 id="注入标记符"><a href="#注入标记符" class="headerlink" title="注入标记符"></a>注入标记符</h2><p>接下来是检索注入标记符并给出提示询问是否对标记点检测注入，也就是我们常用的<code>*</code>，来指定注入的位置。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># /lib/core/target.py </span></div><div class="line"><span class="keyword">if</span> conf.data <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</div><div class="line">    conf.method = HTTPMETHOD.POST <span class="keyword">if</span> <span class="keyword">not</span> conf.method <span class="keyword">or</span> conf.method == HTTPMETHOD.GET <span class="keyword">else</span> conf.method</div><div class="line">    hintNames = []</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">process</span><span class="params">(match, repl)</span>:</span>               </div><div class="line">        retVal = match.group(<span class="number">0</span>)         <span class="comment"># 先取出整个字符串</span></div><div class="line"></div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> (conf.testParameter <span class="keyword">and</span> match.group(<span class="string">"name"</span>) <span class="keyword">not</span> <span class="keyword">in</span> conf.testParameter):  <span class="comment"># 如果没有指定注入参数</span></div><div class="line">            retVal = repl</div><div class="line">            <span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">                _ = re.search(<span class="string">r"\\g&lt;([^&gt;]+)&gt;"</span>, retVal)</div><div class="line">                <span class="keyword">if</span> _:</div><div class="line">                    retVal = retVal.replace(_.group(<span class="number">0</span>), match.group(int(_.group(<span class="number">1</span>)) <span class="keyword">if</span> _.group(<span class="number">1</span>).isdigit() <span class="keyword">else</span> _.group(<span class="number">1</span>)))</div><div class="line">                <span class="keyword">else</span>:</div><div class="line">                    <span class="keyword">break</span></div><div class="line">            <span class="keyword">if</span> kb.customInjectionMark <span class="keyword">in</span> retVal:            <span class="comment"># 如果有注入标记符</span></div><div class="line">                hintNames.append((retVal.split(kb.customInjectionMark)[<span class="number">0</span>], match.group(<span class="string">"name"</span>)))</div><div class="line">        <span class="keyword">return</span> retVal</div><div class="line"></div><div class="line">    <span class="comment"># 如果data中有注入标记符(这里默认的就是*星号，可以用来指定注入位置)</span></div><div class="line">    <span class="keyword">if</span> kb.processUserMarks <span class="keyword">is</span> <span class="keyword">None</span> <span class="keyword">and</span> kb.customInjectionMark <span class="keyword">in</span> conf.data:         </div><div class="line">        message = <span class="string">"custom injection marker ('%s') found in option "</span> % kb.customInjectionMark</div><div class="line">        message += <span class="string">"'--data'. Do you want to process it? [Y/n/q] "</span></div><div class="line">        choice = readInput(message, default=<span class="string">'Y'</span>).upper()</div><div class="line"></div><div class="line">        <span class="keyword">if</span> choice == <span class="string">'Q'</span>:</div><div class="line">            <span class="keyword">raise</span> SqlmapUserQuitException</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            kb.processUserMarks = choice == <span class="string">'Y'</span></div><div class="line"></div><div class="line">            <span class="keyword">if</span> kb.processUserMarks:</div><div class="line">                kb.testOnlyCustom = <span class="keyword">True</span></div></pre></td></tr></table></figure>
+<h2 id="action"><a href="#action" class="headerlink" title="action"></a>action</h2><p>sqlmap 的aciton比较简介，功能也比较清楚，主要就是根据我们的参数来dump相应的数据以及接管的操作,我稍微列举了几个有代表性的功能。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># /lib/controller/action.py </span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">action</span><span class="params">()</span>:</span></div><div class="line">    ...</div><div class="line">    <span class="comment"># dump </span></div><div class="line">    <span class="keyword">if</span> conf.getDbs:</div><div class="line">        conf.dumper.dbs(conf.dbmsHandler.getDbs())</div><div class="line"></div><div class="line">    <span class="keyword">if</span> conf.getTables:</div><div class="line">        conf.dumper.dbTables(conf.dbmsHandler.getTables())</div><div class="line"></div><div class="line">    <span class="keyword">if</span> conf.commonTables:</div><div class="line">        conf.dumper.dbTables(tableExists(paths.COMMON_TABLES))</div><div class="line">    ...</div><div class="line"></div><div class="line">    <span class="comment"># takeover</span></div><div class="line">    <span class="keyword">if</span> conf.osCmd:</div><div class="line">        conf.dbmsHandler.osCmd()</div><div class="line"></div><div class="line">    <span class="keyword">if</span> conf.osShell:</div><div class="line">        conf.dbmsHandler.osShell()</div><div class="line"></div><div class="line">    <span class="keyword">if</span> conf.regRead:</div><div class="line">        conf.dumper.registerValue(conf.dbmsHandler.regRead())</div><div class="line"></div><div class="line">    <span class="keyword">if</span> conf.regAdd:</div><div class="line">        conf.dbmsHandler.regAdd()</div><div class="line">    ....</div></pre></td></tr></table></figure>
+<h2 id="Waf指纹"><a href="#Waf指纹" class="headerlink" title="Waf指纹"></a>Waf指纹</h2><p>接下来是加载WAF/IDS/IPS测试函数(可选参数)，conf.identifyWaf对应的是<code>--identify-waf</code>参数，sqlmap能够测试的WAF基本上是很齐全了，都在<code>waf</code>目录中。</p>
+<p><img src="/images/sqlmap-code-analysis/sqlmap-waf.png" alt="sqlmap-waf"></p>
+<p>从上图中的右边代码可以清楚的看出，主要就是发送几个payload来查看服务器做出的回应。然后根据正则等方式进行waf的指纹匹配.</p>
+<p>主要发送的payload我也看一下，由以下四部分组成：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># /lib/core/settings.py</span></div><div class="line">WAF_ATTACK_VECTORS = (</div><div class="line">    <span class="string">""</span>,  <span class="comment"># NIL</span></div><div class="line">    <span class="string">"search=&lt;script&gt;alert(1)&lt;/script&gt;"</span>,</div><div class="line">    <span class="string">"file=../../../../etc/passwd"</span>,</div><div class="line">    <span class="string">"q=&lt;invalid&gt;foobar"</span>,</div><div class="line">    <span class="string">"id=1 %s"</span> % IDS_WAF_CHECK_PAYLOAD</div><div class="line">)</div><div class="line"></div><div class="line">IDS_WAF_CHECK_PAYLOAD = <span class="string">"AND 1=1 UNION ALL SELECT 1,NULL,'&lt;script&gt;alert(\"XSS\")&lt;/script&gt;',table_name FROM information_schema.tables WHERE 2&gt;1--/**/; EXEC xp_cmdshell('cat ../../../etc/passwd')#"</span></div></pre></td></tr></table></figure>
+<h2 id="crawl爬虫"><a href="#crawl爬虫" class="headerlink" title="crawl爬虫"></a>crawl爬虫</h2><p>sqlmap的爬虫模块主要<code>--crawl</code>这个参数有关，可以收集潜在的可能存在漏洞的连接，后面跟的参数是爬行的深度。crawl函数在爬虫模块/lib/utils/crawler.py中。代码就不进行列举了，简单的说明下就是Sqlmap会创建一个visited队列和一个value队列，然后进行爬行，先将页面的url通过正则、sitemap之后放入value队列（去重），然后将爬过了url放入visited队列（去重），每次爬行时都会先看看是否已经visited。</p>
+<p>接下来是<code>--forms</code>，解析出页面的所有表单的功能实现。调用了<code>/lib/core/common.py</code>中的<code>findPageForms()</code>函数，而对于除了-u方式直接输入目标url的其他输入方式都采用先解析urls，再分别查表的方式</p>
+<h2 id="payload-核心"><a href="#payload-核心" class="headerlink" title="payload(核心)"></a>payload(核心)</h2><p>Sqlmap最强大的就是它的注射技术，这也是它最为核心的部分。<br>Sqlmap启动后首先设置测试的level和risk，并识别受测试元素的类型，最终拼凑出相应的漏洞利用方案。<br>这里的payload它主要由<code>boundaries</code>、<code>payloads</code>、<code>queries</code>这几部分组成，且都保存在xml目录下。</p>
+<p><img src="/images/sqlmap-code-analysis/sqlmap-xml.png" alt="sqlmap-xml"></p>
+<h3 id="boundaries"><a href="#boundaries" class="headerlink" title="boundaries"></a>boundaries</h3><p>boundaries.xml中保存了注入语句的前缀、后缀，主要就是用来闭合注入点处的前半部分和后半部分。举个例子来说: <code>?keyword=hello world</code>这里<code>keyword</code>存在注入点，并且是搜索行注入，那么它在服务器端拼接成的语句就是:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">select</span> * <span class="keyword">from</span> articles <span class="keyword">where</span> title <span class="keyword">like</span>  <span class="string">'%hello world%'</span>;</div></pre></td></tr></table></figure>
+<p>所以sqlmap就需要闭合掉前面的引号和后面的引号，就可能会用到boundaries.xml的下列部分：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">boundary</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">level</span>&gt;</span>1<span class="tag">&lt;/<span class="name">level</span>&gt;</span>                <span class="comment">&lt;!-- \-\-level 的等级--&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">clause</span>&gt;</span>1<span class="tag">&lt;/<span class="name">clause</span>&gt;</span>              <span class="comment">&lt;!-- 从句的类型--&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">where</span>&gt;</span>1,2<span class="tag">&lt;/<span class="name">where</span>&gt;</span>              <span class="comment">&lt;!-- 语句注入处, 1 为原始数据后注入，2为随机数后注入--&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">ptype</span>&gt;</span>2<span class="tag">&lt;/<span class="name">ptype</span>&gt;</span>    </div><div class="line">    <span class="tag">&lt;<span class="name">prefix</span>&gt;</span>%'<span class="tag">&lt;/<span class="name">prefix</span>&gt;</span>             <span class="comment">&lt;!-- 闭合前半部分--&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">suffix</span>&gt;</span> AND '%'='<span class="tag">&lt;/<span class="name">suffix</span>&gt;</span>     <span class="comment">&lt;!-- 闭合后半部分--&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">boundary</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>最终会闭合成：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">select</span> * <span class="keyword">from</span> articles <span class="keyword">where</span> title <span class="keyword">like</span>  <span class="string">'%hello world%'</span> <span class="keyword">AND</span> <span class="string">'%'</span>=<span class="string">'%'</span>;</div></pre></td></tr></table></figure>
+<h3 id="payloads"><a href="#payloads" class="headerlink" title="payloads"></a>payloads</h3><p><code>xml/payloads</code> 目标下保存着六种注入类型（基于布尔、基于时间、基于错误、union、内联、堆叠）的payload，一般以<code>&lt;test&gt;</code>为结点，<code>&lt;test&gt;</code>具有特定漏洞的全部信息，包括漏洞的level、risk，漏洞类型，利用的方法，检测方法等。主要格式如下：</p>
+<p><img src="/images/sqlmap-code-analysis/sqlmap-payloads.png" alt="sqlmap-payloads"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">（keyword=&apos;%hello world）+prefix（%&apos;）+payloads（AND [RANDNUM]=[RANDNUM]）+comment（#）+suffix（AND (&apos;%&apos;=&apos;） + （ %&apos;）</div></pre></td></tr></table></figure>
+<h3 id="queries"><a href="#queries" class="headerlink" title="queries"></a>queries</h3><p>queries.xml主要就是具体的dump语句了：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span></div><div class="line">    <span class="comment">&lt;!-- MySQL --&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">dbms</span> <span class="attr">value</span>=<span class="string">"MySQL"</span>&gt;</span></div><div class="line">        <span class="comment">&lt;!-- ....  --&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">hostname</span> <span class="attr">query</span>=<span class="string">"@@HOSTNAME"</span>/&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">table_comment</span> <span class="attr">query</span>=<span class="string">"SELECT table_comment FROM INFORMATION_SCHEMA.TABLES WHERE table_schema='%s' AND table_name='%s'"</span>/&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">column_comment</span> <span class="attr">query</span>=<span class="string">"SELECT column_comment FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema='%s' AND table_name='%s' AND column_name='%s'"</span>/&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">is_dba</span> <span class="attr">query</span>=<span class="string">"(SELECT super_priv FROM mysql.user WHERE user='%s' LIMIT 0,1)='Y'"</span>/&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">check_udf</span> <span class="attr">query</span>=<span class="string">"(SELECT name FROM mysql.func WHERE name='%s' LIMIT 0,1)='%s'"</span>/&gt;</span></div><div class="line">        <span class="comment">&lt;!-- ....  --&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="example"><a href="#example" class="headerlink" title="example"></a>example</h3><p>在测试一个参数的时候sqlmap会遍历所有符合要求的test节点，会分别发送request与response节点下的payload，然后对服务器响应的数据包进行对比，看其是否存在差异，当确认存在注入的时候，就会以vector来加载queries.xml中的查询语句进行注入。</p>
+<p>拿个实际注入的例子来说：</p>
+<p><img src="/images/sqlmap-code-analysis/sqlmap-payloads-1.png" alt="sqlmap-payloads-1"></p>
+<p><img src="/images/sqlmap-code-analysis/sqlmap-payloads-2.png" alt="sqlmap-payloads-2"></p>
+<p><img src="/images/sqlmap-code-analysis/sqlmap-payloads-3.png" alt="sqlmap-payloads-3"></p>
+<h2 id="Tamper"><a href="#Tamper" class="headerlink" title="Tamper"></a>Tamper</h2><p>Sqlmap 的Tamper模块主要就是用来绕waf用的，一般都保存在<code>tamper</code> 目录中，可以依据标准格式自定义，比如把payload用like替换等号，base64编码等…..，tamper都是具有一定的格式的，如果在渗透测试中发现sqlmap自带的tamper不符合，便可以依样画葫芦写个tamper出来：</p>
+<p>下面是sqlmap自带的tamper，主要将等号替换成like的tamper：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># quealtolike.py </span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">dependencies</span><span class="params">()</span>:</span></div><div class="line">    singleTimeWarnMessage(<span class="string">"tamper script '%s' is unlikely to work against %s"</span> % (os.path.basename(__file__).split(<span class="string">"."</span>)[<span class="number">0</span>], DBMS.PGSQL))</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">tamper</span><span class="params">(payload, **kwargs)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    Replaces all occurances of operator equal ('=') with operator 'LIKE'</div><div class="line"></div><div class="line">    Tested against:</div><div class="line">        * Microsoft SQL Server 2005</div><div class="line">        * MySQL 4, 5.0 and 5.5</div><div class="line"></div><div class="line">    Notes:</div><div class="line">        * Useful to bypass weak and bespoke web application firewalls that</div><div class="line">          filter the equal character ('=')</div><div class="line">        * The LIKE operator is SQL standard. Hence, this tamper script</div><div class="line">          should work against all (?) databases</div><div class="line"></div><div class="line">    &gt;&gt;&gt; tamper('SELECT * FROM users WHERE id=1')</div><div class="line">    'SELECT * FROM users WHERE id LIKE 1'</div><div class="line">    """</div><div class="line"></div><div class="line">    retVal = payload</div><div class="line"></div><div class="line">    <span class="keyword">if</span> payload:</div><div class="line">        retVal = re.sub(<span class="string">r"\s*=\s*"</span>, <span class="string">" LIKE "</span>, retVal)</div><div class="line"></div><div class="line">    <span class="keyword">return</span> retVal</div></pre></td></tr></table></figure>
+<h1 id="Sqlmap接管"><a href="#Sqlmap接管" class="headerlink" title="Sqlmap接管"></a>Sqlmap接管</h1><p>接下来是跟提权/后门/系统有关的模块，主要与takeover.py这类型的脚本有关。</p>
+<p><img src="/images/sqlmap-code-analysis/sqlmap-takeover.png" alt="sqlmap-takeover"></p>
+<p>下面是<code>osCmd()</code> 函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">osCmd</span><span class="params">(self)</span>:</span></div><div class="line">    <span class="keyword">if</span> isStackingAvailable() <span class="keyword">or</span> conf.direct:</div><div class="line">        web = <span class="keyword">False</span></div><div class="line">    <span class="keyword">elif</span> <span class="keyword">not</span> isStackingAvailable() <span class="keyword">and</span> Backend.isDbms(DBMS.MYSQL):</div><div class="line">        infoMsg = <span class="string">"going to use a web backdoor for command execution"</span></div><div class="line">        logger.info(infoMsg)</div><div class="line"></div><div class="line">        web = <span class="keyword">True</span></div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        errMsg = <span class="string">"unable to execute operating system commands via "</span></div><div class="line">        errMsg += <span class="string">"the back-end DBMS"</span></div><div class="line">        <span class="keyword">raise</span> SqlmapNotVulnerableException(errMsg)</div><div class="line"> </div><div class="line">    self.getRemoteTempPath()    <span class="comment"># 得到远程临时路径,写入webshell</span></div><div class="line">    self.initEnv(web=web)       </div><div class="line"></div><div class="line">    <span class="keyword">if</span> <span class="keyword">not</span> web <span class="keyword">or</span> (web <span class="keyword">and</span> self.webBackdoorUrl <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>):</div><div class="line">        self.runCmd(conf.osCmd) <span class="comment"># 执行命令</span></div><div class="line"></div><div class="line">    <span class="keyword">if</span> <span class="keyword">not</span> conf.osShell <span class="keyword">and</span> <span class="keyword">not</span> conf.osPwn <span class="keyword">and</span> <span class="keyword">not</span> conf.cleanup:</div><div class="line">        self.cleanup(web=web)   <span class="comment"># 清除shell</span></div></pre></td></tr></table></figure>
+<h2 id="webshell"><a href="#webshell" class="headerlink" title="webshell"></a>webshell</h2><p>sqlmap自带了一部分的webshell，主要保存在<code>shell</code>目录下，由stager（上传马）、backdoor（执行马），不过这些webshell被压缩过了：</p>
+<p><img src="/images/sqlmap-code-analysis/sqlmap-webshell.png" alt="sqlmap-webshell"></p>
+<p>php的上传马(stager)：</p>
+<p><img src="/images/sqlmap-code-analysis/sqlmap-webshell-php-upload.png" alt="sqlmap-webshell-php-upload"></p>
+<p><img src="/images/sqlmap-code-analysis/sqlmap-webshell-php-upload-2.png" alt="sqlmap-webshell-php-upload-2"></p>
+<p>php的执行马(backdoor)：</p>
+<p><img src="/images/sqlmap-code-analysis/sqlmap-webshell-php-exec.png" alt="sqlmap-webshell-php-exec"></p>
+<p>各位有兴趣的可以改成自己的webshell，压缩的代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">data = zlib.decompress(hideAscii(data))</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">hideAscii</span><span class="params">(data)</span>:</span></div><div class="line">    retVal = <span class="string">""</span></div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> xrange(len(data)):</div><div class="line">        <span class="keyword">if</span> ord(data[i]) &lt; <span class="number">128</span>:</div><div class="line">            retVal += chr(ord(data[i]) ^ <span class="number">127</span>)</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            retVal += data[i]</div><div class="line"></div><div class="line">    <span class="keyword">return</span> retVal</div></pre></td></tr></table></figure>
+<h1 id="Sqlmap其他模块"><a href="#Sqlmap其他模块" class="headerlink" title="Sqlmap其他模块"></a>Sqlmap其他模块</h1><h2 id="文件粉碎"><a href="#文件粉碎" class="headerlink" title="文件粉碎"></a>文件粉碎</h2><p>sqlmap自带了文件粉碎功能，可以安全删除文件，且无法恢复。主要由整理硬盘垃圾数据，获取文件句柄，填充垃圾数据，随机命名，最终删除这几个步骤组成。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">purge</span><span class="params">(directory)</span>:</span></div><div class="line">    ...</div><div class="line">    <span class="comment"># 遍历文件</span></div><div class="line">    <span class="keyword">for</span> rootpath, directories, filenames <span class="keyword">in</span> os.walk(directory):</div><div class="line">        dirpaths.extend([os.path.abspath(os.path.join(rootpath, _)) <span class="keyword">for</span> _ <span class="keyword">in</span> directories])</div><div class="line">        filepaths.extend([os.path.abspath(os.path.join(rootpath, _)) <span class="keyword">for</span> _ <span class="keyword">in</span> filenames])</div><div class="line"></div><div class="line">    <span class="comment"># 修改文件读写属性</span></div><div class="line">    <span class="keyword">for</span> filepath <span class="keyword">in</span> filepaths:</div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            os.chmod(filepath, stat.S_IREAD | stat.S_IWRITE)</div><div class="line">        <span class="keyword">except</span>:</div><div class="line">            <span class="keyword">pass</span></div><div class="line"></div><div class="line">    <span class="comment"># 填充垃圾数据</span></div><div class="line">    <span class="keyword">for</span> filepath <span class="keyword">in</span> filepaths:</div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            filesize = os.path.getsize(filepath)</div><div class="line">            <span class="keyword">with</span> open(filepath, <span class="string">"w+b"</span>) <span class="keyword">as</span> f:</div><div class="line">                f.write(<span class="string">""</span>.join(chr(random.randint(<span class="number">0</span>, <span class="number">255</span>)) <span class="keyword">for</span> _ <span class="keyword">in</span> xrange(filesize)))</div><div class="line">        <span class="keyword">except</span>:</div><div class="line">            <span class="keyword">pass</span></div><div class="line"></div><div class="line">    <span class="comment"># 截断文件 ...</span></div><div class="line">    <span class="comment"># 重命名文件 ...</span></div><div class="line">    <span class="comment"># 删除文件 ...</span></div></pre></td></tr></table></figure>
+<h2 id="Sqlmap-api"><a href="#Sqlmap-api" class="headerlink" title="Sqlmap api"></a>Sqlmap api</h2><p>如果我们要做二次开发，就可以直接利用这个sqlmap的api，通过进程通信的方式来完成sqlmap的功能,具体请参考<a href="http://blog.csdn.net/yueguanghaidao/article/details/38026431" target="_blank" rel="noopener">这里</a>。</p>
+<p><img src="/images/sqlmap-code-analysis/sqlmap-api.png" alt="sqlmap-api"></p>
+<h2 id="异常汇报"><a href="#异常汇报" class="headerlink" title="异常汇报"></a>异常汇报</h2><p>在脚本运行中难免会碰到这样那样的错误，sqlmap因此做了很多异常捕获以及处理，如果sqlmap捕获到的异常它无法识别以及处理，便会上传到github上，因此来告知开发者对其进行bug的修复。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">createGithubIssue</span><span class="params">(errMsg, excMsg)</span>:</span></div><div class="line">    ......</div><div class="line"></div><div class="line">    <span class="keyword">if</span> choice:</div><div class="line">        ex = <span class="keyword">None</span></div><div class="line">        errMsg = errMsg[errMsg.find(<span class="string">"\n"</span>):]</div><div class="line"></div><div class="line">        req = urllib2.Request(url=<span class="string">"https://api.github.com/search/issues?q=%s"</span> % urllib.quote(<span class="string">"repo:sqlmapproject/sqlmap Unhandled exception (#%s)"</span> % key))</div><div class="line"></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            content = urllib2.urlopen(req).read()</div><div class="line">            _ = json.loads(content)</div><div class="line">            duplicate = _[<span class="string">"total_count"</span>] &gt; <span class="number">0</span></div><div class="line">            closed = duplicate <span class="keyword">and</span> _[<span class="string">"items"</span>][<span class="number">0</span>][<span class="string">"state"</span>] == <span class="string">"closed"</span></div><div class="line">            <span class="keyword">if</span> duplicate:</div><div class="line">                warnMsg = <span class="string">"issue seems to be already reported"</span></div><div class="line">                <span class="keyword">if</span> closed:</div><div class="line">                    warnMsg += <span class="string">" and resolved. Please update to the latest "</span></div><div class="line">                    warnMsg += <span class="string">"development version from official GitHub repository at '%s'"</span> % GIT_PAGE</div><div class="line">                logger.warn(warnMsg)</div><div class="line">                <span class="keyword">return</span></div><div class="line">        <span class="keyword">except</span>:</div><div class="line">            <span class="keyword">pass</span></div></pre></td></tr></table></figure>
+<h2 id="自动更新"><a href="#自动更新" class="headerlink" title="自动更新"></a>自动更新</h2><p>这部分就不便多展开了，主要就是指sqlmap支持一键升级的功能：</p>
+<p><img src="/images/sqlmap-code-analysis/sqlmap-update.png" alt="sqlmap-update"></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这几天大致阅读了Sqlmap的源码，才明白了Sqlmap的强大之处不仅仅在于它的注射功能，更在于它那优秀的代码编码方式、优秀的设计理念、Pythonic 的技巧、各种Python内置模块以及第三方模块的调用等等。也因此学习到了很多新的知识，比如临时文件的粉碎级别删除等等，看了它那优秀的编码后才明白自己平时渗透测试时写的脚本看上去狗爬一般。看来平时还得多抽空看看那些有些的渗透框架、工具，这样才可以尽量避免闭门造车，省去很多很多精力。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+            <a href="/tags/sqlmap/" rel="tag"># sqlmap</a>
+          
+            <a href="/tags/code/" rel="tag"># code</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/25/android-codeengn/" rel="next" title="Android CodeEngn 练习">
+                <i class="fa fa-chevron-left"></i> Android CodeEngn 练习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/11/java-deserialize/" rel="prev" title="Commons Collections Java 反序列化漏洞总结">
+                Commons Collections Java 反序列化漏洞总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+      
+        
+          <ul class="sidebar-nav motion-element">
+            <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+              文章目录
+            </li>
+            <li class="sidebar-nav-overview" data-target="site-overview">
+              站点概览
+            </li>
+          </ul>
+        
+      
+
+
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Orleven" />
+          <p class="site-author-name" itemprop="name">Orleven</p>
+           
+              <p class="site-description motion-element" itemprop="description">Life is full of ups and downs.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/ || archive">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index-1.html">
+                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-link"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://www.warmeng.com/" title="warmeng" target="_blank">warmeng</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://blog.0kami.cn/" title="0kimi" target="_blank">0kimi</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+      
+        
+        <!--noindex-->
+          <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+            <div class="post-toc">
+
+              
+                
+              
+
+              
+                <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Sqlmap的结构"><span class="nav-number">2.</span> <span class="nav-text">Sqlmap的结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Sqlmap初始化"><span class="nav-number">3.</span> <span class="nav-text">Sqlmap初始化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Sqlmap核心"><span class="nav-number">4.</span> <span class="nav-text">Sqlmap核心</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库直连"><span class="nav-number">4.1.</span> <span class="nav-text">数据库直连</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#读取Session"><span class="nav-number">4.2.</span> <span class="nav-text">读取Session</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注入标记符"><span class="nav-number">4.3.</span> <span class="nav-text">注入标记符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#action"><span class="nav-number">4.4.</span> <span class="nav-text">action</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Waf指纹"><span class="nav-number">4.5.</span> <span class="nav-text">Waf指纹</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#crawl爬虫"><span class="nav-number">4.6.</span> <span class="nav-text">crawl爬虫</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#payload-核心"><span class="nav-number">4.7.</span> <span class="nav-text">payload(核心)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#boundaries"><span class="nav-number">4.7.1.</span> <span class="nav-text">boundaries</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#payloads"><span class="nav-number">4.7.2.</span> <span class="nav-text">payloads</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#queries"><span class="nav-number">4.7.3.</span> <span class="nav-text">queries</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#example"><span class="nav-number">4.7.4.</span> <span class="nav-text">example</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tamper"><span class="nav-number">4.8.</span> <span class="nav-text">Tamper</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Sqlmap接管"><span class="nav-number">5.</span> <span class="nav-text">Sqlmap接管</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#webshell"><span class="nav-number">5.1.</span> <span class="nav-text">webshell</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Sqlmap其他模块"><span class="nav-number">6.</span> <span class="nav-text">Sqlmap其他模块</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#文件粉碎"><span class="nav-number">6.1.</span> <span class="nav-text">文件粉碎</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sqlmap-api"><span class="nav-number">6.2.</span> <span class="nav-text">Sqlmap api</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#异常汇报"><span class="nav-number">6.3.</span> <span class="nav-text">异常汇报</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自动更新"><span class="nav-number">6.4.</span> <span class="nav-text">自动更新</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              
+
+            </div>
+          </section>
+        <!--/noindex-->
+        
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Orleven</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">orleven.com</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+
+  <div class="theme-info">  <a class="theme-link" target="_blank" href="https://blog.orleven.com">My blog</a> version 1.1 </div>
+
+
+
+  
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("EdyobKaxPz3ofLTPlxfLIN1V-gzGzoHsz", "3hpzfKGL11zsIHV0ONyWgUgW");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

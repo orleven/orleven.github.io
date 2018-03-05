@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="code audit,java," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="概述由于工作需要，开始接触代码审计的相关工作。因为之前对这方面并没有很清晰的概念，所以特地学习下">
+<meta name="keywords" content="code audit,java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="代码审计(Java)">
+<meta property="og:url" content="http://orleven.orleven.com/2017/12/31/code-audit-java/index.html">
+<meta property="og:site_name" content="Orleven Blog">
+<meta property="og:description" content="概述由于工作需要，开始接触代码审计的相关工作。因为之前对这方面并没有很清晰的概念，所以特地学习下">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-01-26T07:32:49.997Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="代码审计(Java)">
+<meta name="twitter:description" content="概述由于工作需要，开始接触代码审计的相关工作。因为之前对这方面并没有很清晰的概念，所以特地学习下">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://orleven.orleven.com/2017/12/31/code-audit-java/"/>
+
+
+
+
+
+  <title>代码审计(Java) | Orleven Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Orleven Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Orleven Blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://orleven.orleven.com/2017/12/31/code-audit-java/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Orleven">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Orleven Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">代码审计(Java)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-31T20:52:12+08:00">
+                2017-12-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/code-audit/" itemprop="url" rel="index">
+                    <span itemprop="name">code audit</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/12/31/code-audit-java/" class="leancloud_visitors" data-flag-title="代码审计(Java)">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>由于工作需要，开始接触代码审计的相关工作。因为之前对这方面并没有很清晰的概念，所以特地学习下</p>
+<a id="more"></a>
+<h1 id="Web应用安全的核心问题"><a href="#Web应用安全的核心问题" class="headerlink" title="Web应用安全的核心问题"></a>Web应用安全的核心问题</h1><p>用户提交的数据不可信是Web应用程序核心安全问题。</p>
+<h1 id="SQL注入"><a href="#SQL注入" class="headerlink" title="SQL注入"></a>SQL注入</h1><h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><h3 id="合法输入"><a href="#合法输入" class="headerlink" title="合法输入"></a>合法输入</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">id=1</div><div class="line">SELECT * FROM users WHRER id=&apos;1&apos;;</div></pre></td></tr></table></figure>
+<h3 id="恶意输入"><a href="#恶意输入" class="headerlink" title="恶意输入"></a>恶意输入</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">id=1&apos; or &apos;1&apos;=&apos;1</div><div class="line">SELECT * FROM users WHRER id=&apos;1&apos; or &apos;a&apos;=&apos;a&apos;;</div></pre></td></tr></table></figure>
+<h2 id="Java代码分析"><a href="#Java代码分析" class="headerlink" title="Java代码分析"></a>Java代码分析</h2><h3 id="不合规代码"><a href="#不合规代码" class="headerlink" title="不合规代码"></a>不合规代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div></pre></td><td class="code"><pre><div class="line">public class SQLInject &#123;</div><div class="line">    public static void main(String[] args)throws Exception&#123;</div><div class="line">        //正常输入</div><div class="line">        select(&quot;1&quot;);</div><div class="line">        // 恶意输入</div><div class="line">        select(&quot;&apos; or &apos;a&apos;=&apos;a&quot;);</div><div class="line">    &#125;</div><div class="line">    public static void  select(String id)&#123;</div><div class="line">        if (id!=null&amp;&amp;!id.isEmpty())&#123;</div><div class="line">            //声明Connection对象</div><div class="line">            Connection con;</div><div class="line">            //驱动程序名</div><div class="line">            String driver = &quot;com.mysql.jdbc.Driver&quot;;</div><div class="line">            //URL指向要访问的数据库名mydata</div><div class="line">            String url = &quot;jdbc:mysql://localhost:3306/test&quot;;</div><div class="line">            //MySQL配置时的用户名</div><div class="line">            String user = &quot;root&quot;;</div><div class="line">            //MySQL配置时的密码</div><div class="line">            String password = &quot;123456&quot;;</div><div class="line">            //遍历查询结果集</div><div class="line">            try &#123;</div><div class="line">                //加载驱动程序</div><div class="line">                Class&lt;?&gt; aClass = Class.forName(driver);</div><div class="line">                //1.getConnection()方法，连接MySQL数据库！！</div><div class="line">                con = DriverManager.getConnection(url,user,password);</div><div class="line">                 if(!con.isClosed()) &#123;</div><div class="line">                    //2.创建statement类对象，用来执行SQL语句！！</div><div class="line">                    Statement statement = con.createStatement();</div><div class="line">                    //要执行的SQL语句</div><div class="line">                    String sql = &quot;select * from users where id=&apos;&quot; + id + &quot;&apos;&quot;;</div><div class="line">                    //3.ResultSet类，用来存放获取的结果集！！</div><div class="line">                    ResultSet rs = statement.executeQuery(sql);</div><div class="line">                    System.out.println(&quot;-----------------&quot;);</div><div class="line">                    System.out.println(&quot;执行Sql语句:    &quot;+sql);</div><div class="line">                    System.out.println(&quot;执行结果如下所示:&quot;);</div><div class="line">                    String name, uname;</div><div class="line">                    while (rs.next()) &#123;</div><div class="line">                        //获取stuname这列数据</div><div class="line">                        uname = rs.getString(&quot;uname&quot;);</div><div class="line">                        //获取stuid这列数据</div><div class="line">                        name = rs.getString(&quot;name&quot;);</div><div class="line">                        //输出结果</div><div class="line">                        System.out.println(uname + &quot;\t&quot; + name);</div><div class="line">                        res.add(new String[]&#123;&quot;id: &quot;+rs.getString(&quot;id&quot;)</div><div class="line">                                + &quot;,uname:&quot;+rs.getString(&quot;uname&quot;)</div><div class="line">                                + &quot;,passwd:&quot;+rs.getString(&quot;passwd&quot;)</div><div class="line">                                + &quot;,name:&quot;+rs.getString(&quot;name&quot;)&#125;</div><div class="line">                        );</div><div class="line">                    &#125;</div><div class="line">                    rs.close();</div><div class="line">                    con.close();</div><div class="line">                &#125;</div><div class="line">            &#125; catch(ClassNotFoundException e) &#123;</div><div class="line">                //数据库驱动类异常处理</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125; catch(SQLException e) &#123;</div><div class="line">                //数据库连接失败异常处理</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;catch (Exception e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">            result.put(&quot;data&quot;,res);</div><div class="line">            result.put(&quot;success&quot;,true);</div><div class="line">            return DataUtil.toJson(result);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">SQL Paramter:1</div><div class="line">-----------------</div><div class="line">执行Sql语句: select * from users where id=&apos;1&apos;</div><div class="line">执行结果如下所示:</div><div class="line">test    Alice</div><div class="line">-----------------</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">SQL Paramter:&apos; or &apos;a&apos;=&apos;a</div><div class="line">-----------------</div><div class="line">执行Sql语句:select * from users where id=&apos;1&apos; or &apos;a&apos;=&apos;a&apos;</div><div class="line">执行结果如下所示:</div><div class="line">test    Alice</div><div class="line">admin   Orleven</div><div class="line">user    Bob</div><div class="line">-----------------</div></pre></td></tr></table></figure>
+<h3 id="合规代码（参数化查询）"><a href="#合规代码（参数化查询）" class="headerlink" title="合规代码（参数化查询）"></a>合规代码（参数化查询）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">public class SQLFormat &#123;</div><div class="line">    public static void main(String[] args)throws Exception&#123;</div><div class="line">        select(&quot;1&quot;);</div><div class="line">        select(&quot;&apos; or &apos;a&apos;=&apos;a&quot;);</div><div class="line">    &#125;</div><div class="line">    public static void  select(String id)&#123;</div><div class="line">        if (id!=null&amp;&amp;!id.isEmpty())&#123;</div><div class="line">            //声明Connection对象</div><div class="line">            Connection con;</div><div class="line">            //驱动程序名</div><div class="line">            String driver = &quot;com.mysql.jdbc.Driver&quot;;</div><div class="line">            //URL指向要访问的数据库名mydata</div><div class="line">            String url = &quot;jdbc:mysql://localhost:3306/test&quot;;</div><div class="line">            //MySQL配置时的用户名</div><div class="line">            String user = &quot;root&quot;;</div><div class="line">            //MySQL配置时的密码</div><div class="line">            String password = &quot;123456&quot;;</div><div class="line">            //遍历查询结果集</div><div class="line">            try &#123;</div><div class="line">                //加载驱动程序</div><div class="line">                Class&lt;?&gt; aClass = Class.forName(driver);</div><div class="line">                //1.getConnection()方法，连接MySQL数据库！！</div><div class="line">                con = DriverManager.getConnection(url,user,password);</div><div class="line">                if(!con.isClosed()) &#123;</div><div class="line">                    //要执行的SQL语句</div><div class="line">                    String sql = &quot;select * from users where id=?&quot;;</div><div class="line">                    //创建statement类对象，ResultSet类，用来存放获取的结果集！！</div><div class="line">                    PreparedStatement stmt = con.prepareStatement(sql);</div><div class="line">                    stmt.setString(1, id);</div><div class="line">                    ResultSet rs = stmt.executeQuery();</div><div class="line">                    System.out.println(&quot;-----------------&quot;);</div><div class="line">                    System.out.println(&quot;执行Sql语句: &quot;+stmt.toString());</div><div class="line">                    System.out.println(&quot;执行结果如下所示:&quot;);</div><div class="line">                    String uname,name;</div><div class="line">                    while (rs.next()) &#123;</div><div class="line">                        //获取stuname这列数据</div><div class="line">                        uname = rs.getString(&quot;uname&quot;);</div><div class="line">                        //获取stuid这列数据</div><div class="line">                        name = rs.getString(&quot;name&quot;);</div><div class="line">                        //输出结果</div><div class="line">                        System.out.println(uname + &quot;\t&quot; + name);</div><div class="line">                    &#125;</div><div class="line">                    rs.close();</div><div class="line">                    con.close();</div><div class="line">                &#125;</div><div class="line">            &#125; catch(ClassNotFoundException e) &#123;</div><div class="line">                //数据库驱动类异常处理</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125; catch(SQLException e) &#123;</div><div class="line">                //数据库连接失败异常处理</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;catch (Exception e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">            result.put(&quot;data&quot;,res);</div><div class="line">            result.put(&quot;success&quot;,true);</div><div class="line">            return DataUtil.toJson(result);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">SQL Paramter:1</div><div class="line">-----------------</div><div class="line">执行Sql语句: select * from users where id=&apos;1&apos;</div><div class="line">执行结果如下所示:</div><div class="line">test    Alice</div></pre></td></tr></table></figure>
+<p>至于为什么还有1个查询结果，那就是Mysql的字符特性的问题了，这里不作多的解释。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">SQL Paramter:&apos; or &apos;a&apos;=&apos;a</div><div class="line">-----------------</div><div class="line">执行Sql语句: select * from users where id=&apos;1\&apos; or \&apos;a\&apos;=\&apos;a&apos;</div><div class="line">执行结果如下所示:</div><div class="line">test    Alice</div></pre></td></tr></table></figure></p>
+<h2 id="防范建议"><a href="#防范建议" class="headerlink" title="防范建议"></a>防范建议</h2><ol>
+<li>采用参数查询即预编译方式（首选）</li>
+<li>字符串过滤</li>
+</ol>
+<h1 id="XXE"><a href="#XXE" class="headerlink" title="XXE"></a>XXE</h1><h2 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h2><h3 id="合法输入-1"><a href="#合法输入-1" class="headerlink" title="合法输入"></a>合法输入</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</div><div class="line">&lt;users&gt;</div><div class="line">    &lt;user&gt;</div><div class="line">        &lt;id&gt;1&lt;/id&gt;</div><div class="line">        &lt;uname&gt;test&lt;/uname&gt;</div><div class="line">        &lt;passwd&gt;e10adc3949ba59abbe56e057f20f883e&lt;/passwd&gt;</div><div class="line">        &lt;name&gt;Alice&lt;/name&gt;</div><div class="line">    &lt;/user&gt;</div><div class="line">&lt;/users&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;&quot;id&quot;:&quot;1&quot;,&quot;uname&quot;:&quot;test&quot;,&quot;passwd&quot;:&quot;e10adc3949ba59abbe56e057f20f883e&quot;,&quot;name&quot;:&quot;Alice&quot;&#125;</div></pre></td></tr></table></figure>
+<h3 id="恶意输入-1"><a href="#恶意输入-1" class="headerlink" title="恶意输入"></a>恶意输入</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;  ?&gt;</div><div class="line">&lt;!DOCTYPE xdsec [</div><div class="line">&lt;!ELEMENT methodname ANY &gt;</div><div class="line">&lt;!ENTITY xxe SYSTEM &quot;http://localhost/text.txt&quot; &gt;]&gt;</div><div class="line">&lt;methodcall&gt;</div><div class="line">&lt;methodname&gt;%26xxe;&lt;/methodname&gt;</div><div class="line">&lt;/methodcall&gt;</div></pre></td></tr></table></figure>
+<p>本地80端口WEB服务器收到如下请求：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">127.0.0.1 - - [08/Jan/2018:17:03:27 +0800] &quot;GET /text.txt HTTP/1.1&quot; 404 1053 &quot;-&quot; &quot;Java/1.8.0_51&quot;</div><div class="line">127.0.0.1 - - [08/Jan/2018:17:03:28 +0800] &quot;GET /text.txt HTTP/1.1&quot; 404 1053 &quot;-&quot; &quot;Java/1.8.0_51&quot;</div><div class="line">127.0.0.1 - - [08/Jan/2018:17:03:28 +0800] &quot;GET /text.txt HTTP/1.1&quot; 404 1053 &quot;-&quot; &quot;Java/1.8.0_51&quot;</div><div class="line">127.0.0.1 - - [08/Jan/2018:17:03:28 +0800] &quot;GET /text.txt HTTP/1.1&quot; 404 1053 &quot;-&quot; &quot;Java/1.8.0_51&quot;</div><div class="line">127.0.0.1 - - [08/Jan/2018:17:03:28 +0800] &quot;GET /text.txt HTTP/1.1&quot; 404 1053 &quot;-&quot; &quot;Java/1.8.0_51&quot;</div></pre></td></tr></table></figure>
+<h2 id="Java代码分析-1"><a href="#Java代码分析-1" class="headerlink" title="Java代码分析"></a>Java代码分析</h2><h3 id="不合规代码-1"><a href="#不合规代码-1" class="headerlink" title="不合规代码"></a>不合规代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">public class XMlXXEFormat &#123;</div><div class="line">    public static void main(String[] args)throws Exception&#123;</div><div class="line">        String data = &quot;&quot;;</div><div class="line">        XMlXXEInject(data);</div><div class="line">    &#125;</div><div class="line">    public String XMlXXEInject(String data)&#123;</div><div class="line">        Map&lt;String,Object&gt; result = new HashMap&lt;&gt;();</div><div class="line">        List&lt;User&gt; res = new ArrayList();</div><div class="line">        result.put(&quot;success&quot;,false);</div><div class="line">        if (data!=null&amp;&amp;!data.isEmpty())&#123;</div><div class="line">            // 获取基于SAX的解析器的实例</div><div class="line">            try &#123;</div><div class="line">                System.out.println(data);</div><div class="line">                SAXParserFactory factory = SAXParserFactory.newInstance();</div><div class="line">                // 2.创建一个SAXParser实例</div><div class="line">                SAXParser saxParser = factory.newSAXParser();</div><div class="line">                // 3.解析</div><div class="line">                MySaxHandler myhandler = new MySaxHandler();</div><div class="line">                saxParser.parse(new ByteArrayInputStream(data.getBytes()), myhandler);</div><div class="line">                res = myhandler.getUserList();</div><div class="line">                &#125;catch (Exception e)&#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        result.put(&quot;data&quot;, res);</div><div class="line">        System.out.println(DataUtil.toJson(result));</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="合规代码"><a href="#合规代码" class="headerlink" title="合规代码"></a>合规代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">public class XMlXXEFormat &#123;</div><div class="line">    public static void main(String[] args)throws Exception&#123;</div><div class="line">        String data = &quot;&quot;;</div><div class="line">        XMlXXEInject(data);</div><div class="line">    &#125;</div><div class="line">    public String XMlXXEInject(String data)&#123;</div><div class="line">        Map&lt;String,Object&gt; result = new HashMap&lt;&gt;();</div><div class="line">        List&lt;User&gt; res = new ArrayList();</div><div class="line">        result.put(&quot;success&quot;,false);</div><div class="line">        if (data!=null&amp;&amp;!data.isEmpty())&#123;</div><div class="line">            // 获取基于SAX的解析器的实例</div><div class="line">            try &#123;</div><div class="line">                System.out.println(data);</div><div class="line">                SAXParserFactory factory = SAXParserFactory.newInstance();</div><div class="line">                factory.setFeature(&quot;http://apache.org/xml/features/disallow-doctype-decl&quot;, true);</div><div class="line">                factory.setFeature(&quot;http://xml.org/sax/features/external-general-entities&quot;, false);</div><div class="line">                factory.setFeature(&quot;http://xml.org/sax/features/external-parameter-entities&quot;, false);</div><div class="line">                // 2.创建一个SAXParser实例</div><div class="line">                SAXParser saxParser = factory.newSAXParser();</div><div class="line">                // 3.解析</div><div class="line">                MySaxHandler myhandler = new MySaxHandler();</div><div class="line">                saxParser.parse(new ByteArrayInputStream(data.getBytes()), myhandler);</div><div class="line">                res = myhandler.getUserList();</div><div class="line">            &#125;</div><div class="line">            catch (Exception e)&#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        result.put(&quot;data&quot;, res);</div><div class="line">        System.out.println(DataUtil.toJson(result));</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>报错如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 50; 将功能 &quot;http://apache.org/xml/features/disallow-doctype-decl&quot; 设置为“真”时, 不允许使用 DOCTYPE。</div></pre></td></tr></table></figure></p>
+<h2 id="防范建议-1"><a href="#防范建议-1" class="headerlink" title="防范建议"></a>防范建议</h2><ol>
+<li>使用开发语言提供的禁用外部实体的方法（首选）</li>
+<li>过滤用户提交的XML数据，关键词：<code>&lt;!DOCTYPE</code>和<code>&lt;!ENTITY</code>，或者<code>SYSTEM</code>和<code>PUBLIC</code>。</li>
+</ol>
+<h1 id="命令注入"><a href="#命令注入" class="headerlink" title="命令注入"></a>命令注入</h1><h2 id="原理-2"><a href="#原理-2" class="headerlink" title="原理"></a>原理</h2><h3 id="合法输入-2"><a href="#合法输入-2" class="headerlink" title="合法输入"></a>合法输入</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">8.8.8.8</div><div class="line">ping -n/-c 1 8.8.8.8</div></pre></td></tr></table></figure>
+<h3 id="恶意输入-2"><a href="#恶意输入-2" class="headerlink" title="恶意输入"></a>恶意输入</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">8.8.8.8 &amp; whoami</div><div class="line">ping -n/-c 1 8.8.8.8 &amp; whoami</div></pre></td></tr></table></figure>
+<h2 id="Java代码分析-2"><a href="#Java代码分析-2" class="headerlink" title="Java代码分析"></a>Java代码分析</h2><h3 id="不合规代码-2"><a href="#不合规代码-2" class="headerlink" title="不合规代码"></a>不合规代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">public class ExecTestController &#123;</div><div class="line"></div><div class="line">  public static void main(String[] args)throws Exception&#123;</div><div class="line">        String data = &quot;8.8.8.8 &amp; ipconfig/all &quot;;</div><div class="line">        ExecInject(data);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public String ExecInject(HttpServletRequest request)&#123;</div><div class="line">        String command = request.getParameter(&quot;command&quot;);</div><div class="line">        Map&lt;String,Object&gt; result = new HashMap&lt;&gt;();</div><div class="line">        result.put(&quot;success&quot;,false);</div><div class="line">        StringBuffer  buffer = null;</div><div class="line">        if (command!=null&amp;&amp;!command.isEmpty())&#123;</div><div class="line">            // 1.获取基于SAX的解析器的实例</div><div class="line">            try &#123;</div><div class="line">                System.out.println(&quot;Command: ping&quot;+ command);</div><div class="line">                Runtime rt = Runtime.getRuntime();</div><div class="line">                Process proc = rt.exec(&quot;cmd.exe /C ping &quot;+command);</div><div class="line">                //   Process proc = rt.exec(new String [] &#123;&quot;sh&quot;, &quot;-c&quot;, &quot;ls &quot;+order&#125;);</div><div class="line">                int res = proc.waitFor();</div><div class="line">                if(res !=0)&#123;</div><div class="line">                    System.out.println(&quot;process error: &quot;+ res);</div><div class="line">                &#125;</div><div class="line">                InputStream in = (res == 0)? proc.getInputStream() : proc.getErrorStream();</div><div class="line">                BufferedReader reader=new BufferedReader(new InputStreamReader(in));</div><div class="line">                buffer=new StringBuffer();</div><div class="line">                String line;</div><div class="line">                while((line = reader.readLine())!=null)&#123;</div><div class="line">                    buffer.append(line+&quot;\n&quot;);</div><div class="line">                &#125;</div><div class="line">                </div><div class="line">            &#125;catch (Exception e)&#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">        </div><div class="line">        &#125;</div><div class="line">      System.out.print(buffer.toString()); </div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="合规代码-1"><a href="#合规代码-1" class="headerlink" title="合规代码"></a>合规代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">public class ExecTestController &#123;</div><div class="line"></div><div class="line">  public static void main(String[] args)throws Exception&#123;</div><div class="line">        String data = &quot;8.8.8.8 &amp; ipconfig/all &quot;;</div><div class="line">        ExecFormat(data);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public String ExecFormat(HttpServletRequest request)&#123;</div><div class="line">        String command = request.getParameter(&quot;command&quot;);</div><div class="line">        Map&lt;String,Object&gt; result = new HashMap&lt;&gt;();</div><div class="line">        result.put(&quot;success&quot;,false);</div><div class="line">        StringBuffer  buffer = null;</div><div class="line">        if (command!=null&amp;&amp;!command.isEmpty())&#123;</div><div class="line">            // 1.获取基于SAX的解析器的实例</div><div class="line">            try &#123;</div><div class="line">                // 严格校验参数</div><div class="line">                if (!Pattern.matches(&quot;[A-Za-z@.]+&quot;, command))&#123; ;</div><div class="line">                    result.put(&quot;message&quot;, &quot;Error!&quot;);</div><div class="line">                    return DataUtil.toJson(result);</div><div class="line">                &#125;</div><div class="line">                System.out.println(&quot;Command: ping&quot;+ command);</div><div class="line">                Runtime rt = Runtime.getRuntime();</div><div class="line">                Process proc = rt.exec(&quot;cmd.exe /C ping &quot;+command);</div><div class="line">                //   Process proc = rt.exec(new String [] &#123;&quot;sh&quot;, &quot;-c&quot;, &quot;ls &quot;+order&#125;);</div><div class="line">                int res = proc.waitFor();</div><div class="line">                if(res !=0)&#123;</div><div class="line">                    System.out.println(&quot;process error: &quot;+ res);</div><div class="line">                &#125;</div><div class="line">                InputStream in = (res == 0)? proc.getInputStream() : proc.getErrorStream();</div><div class="line">                BufferedReader reader=new BufferedReader(new InputStreamReader(in));</div><div class="line">                buffer=new StringBuffer();</div><div class="line">                String line;</div><div class="line">                while((line = reader.readLine())!=null)&#123;</div><div class="line">                    buffer.append(line+&quot;\n&quot;);</div><div class="line">                &#125;</div><div class="line">                </div><div class="line">            &#125;catch (Exception e)&#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">        </div><div class="line">        &#125;</div><div class="line">      System.out.print(buffer.toString()); </div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="防范建议-2"><a href="#防范建议-2" class="headerlink" title="防范建议"></a>防范建议</h2><ol>
+<li>白名单</li>
+<li>严格权限限制等等</li>
+<li>严格校验参数</li>
+</ol>
+<h1 id="任意文件下载-目录遍历"><a href="#任意文件下载-目录遍历" class="headerlink" title="任意文件下载/目录遍历"></a>任意文件下载/目录遍历</h1><h2 id="原理-3"><a href="#原理-3" class="headerlink" title="原理"></a>原理</h2><p>在JAVA web程序的下载文件相关的代码中，若不对HTTP请求中的待下载文件名进行检查，则有可能产生任意文件下载漏洞。<br>目录遍历与任意文件下载的原理相似，这里就简单列个文件下载好了</p>
+<h3 id="合法输入-3"><a href="#合法输入-3" class="headerlink" title="合法输入"></a>合法输入</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">path=users.docs</div><div class="line">config/users.docs</div></pre></td></tr></table></figure>
+<h3 id="恶意输入-3"><a href="#恶意输入-3" class="headerlink" title="恶意输入"></a>恶意输入</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">path=../../../../Windows/System32/drivers/etc/HOSTS</div><div class="line">config/../../../../Windows/System32/drivers/etc/HOSTS</div></pre></td></tr></table></figure>
+<h2 id="Java代码分析-3"><a href="#Java代码分析-3" class="headerlink" title="Java代码分析"></a>Java代码分析</h2><h3 id="不合规代码-3"><a href="#不合规代码-3" class="headerlink" title="不合规代码"></a>不合规代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">public class FileTestController &#123;</div><div class="line"></div><div class="line">    public void FileFileDownVul(HttpServletRequest request,HttpServletResponse response)&#123;</div><div class="line">        String path = request.getParameter(&quot;path&quot;);</div><div class="line">        Map&lt;String,Object&gt; result = new HashMap&lt;&gt;();</div><div class="line">        result.put(&quot;success&quot;,false);</div><div class="line">        if (path!=null&amp;&amp;!path.isEmpty())&#123;</div><div class="line">            // 1.获取基于SAX的解析器的实例</div><div class="line">            try &#123;</div><div class="line">                path = &quot;config/&quot;+path;</div><div class="line">                File file = new File(path);</div><div class="line">                System.out.println(path);</div><div class="line">                response.setHeader(&quot;Content-Disposition&quot;, &quot;attachment;filename=\&quot;&quot;</div><div class="line">                        + new String(path.getBytes(), &quot;ISO8859-1&quot;) + &quot;\&quot;&quot;);</div><div class="line">                response.setContentLength((int) file.length());</div><div class="line">                byte[] buffer = new byte[4096];// 缓冲区</div><div class="line">                BufferedOutputStream output = null;</div><div class="line">                BufferedInputStream input = null;</div><div class="line">                try &#123;</div><div class="line">                    output = new BufferedOutputStream(response.getOutputStream());</div><div class="line">                    input = new BufferedInputStream(new FileInputStream(file));</div><div class="line">                    int n = -1;</div><div class="line">                    //遍历，开始下载</div><div class="line">                    while ((n = input.read(buffer, 0, 4096)) &gt; -1) &#123;</div><div class="line">                        output.write(buffer, 0, n);</div><div class="line">                    &#125;</div><div class="line">                    output.flush();   //不可少</div><div class="line">                    response.flushBuffer();//不可少</div><div class="line">                &#125; catch (Exception e) &#123;</div><div class="line">                    //异常自己捕捉</div><div class="line">                &#125; finally &#123;</div><div class="line">                    //关闭流，不可少</div><div class="line">                    if (input != null)</div><div class="line">                        input.close();</div><div class="line">                    if (output != null)</div><div class="line">                        output.close();</div><div class="line">                &#125;</div><div class="line">            &#125;catch (Exception e)&#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="合规代码-2"><a href="#合规代码-2" class="headerlink" title="合规代码"></a>合规代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">public class FileTestController &#123;</div><div class="line">    public void FileFileDownFormat(HttpServletRequest request,HttpServletResponse response)&#123;</div><div class="line">        String path = request.getParameter(&quot;path&quot;);</div><div class="line">        Map&lt;String,Object&gt; result = new HashMap&lt;&gt;();</div><div class="line">        result.put(&quot;success&quot;,false);</div><div class="line">        if (path!=null&amp;&amp;!path.isEmpty())&#123;</div><div class="line">            try &#123;</div><div class="line">                if (!Pattern.matches(&quot;^([a-z0-9]&#123;32&#125;)$&quot;, path))&#123; ;</div><div class="line">                    return ;</div><div class="line">                &#125;</div><div class="line">                path = &quot;config/&quot;+path+&quot;.docx&quot;;</div><div class="line">                File file = new File(path);</div><div class="line">                System.out.println(path);</div><div class="line">                response.setHeader(&quot;Content-Disposition&quot;, &quot;attachment;filename=\&quot;&quot;</div><div class="line">                        + new String(path.getBytes(), &quot;ISO8859-1&quot;) + &quot;\&quot;&quot;);</div><div class="line">                response.setContentLength((int) file.length());</div><div class="line">                byte[] buffer = new byte[4096];// 缓冲区</div><div class="line">                BufferedOutputStream output = null;</div><div class="line">                BufferedInputStream input = null;</div><div class="line">                try &#123;</div><div class="line">                    output = new BufferedOutputStream(response.getOutputStream());</div><div class="line">                    input = new BufferedInputStream(new FileInputStream(file));</div><div class="line">                    int n = -1;</div><div class="line">                    //遍历，开始下载</div><div class="line">                    while ((n = input.read(buffer, 0, 4096)) &gt; -1) &#123;</div><div class="line">                        output.write(buffer, 0, n);</div><div class="line">                    &#125;</div><div class="line">                    output.flush();   //不可少</div><div class="line">                    response.flushBuffer();//不可少</div><div class="line">                &#125; catch (Exception e) &#123;</div><div class="line">                    //异常自己捕捉</div><div class="line">                &#125; finally &#123;</div><div class="line">                    //关闭流，不可少</div><div class="line">                    if (input != null)</div><div class="line">                        input.close();</div><div class="line">                    if (output != null)</div><div class="line">                        output.close();</div><div class="line">                &#125;</div><div class="line">            &#125;catch (Exception e)&#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="防范建议-3"><a href="#防范建议-3" class="headerlink" title="防范建议"></a>防范建议</h2><ol>
+<li>严格的权限限制。</li>
+<li>控制路径后缀，对文件名进行检查等。</li>
+<li>采用getCanonicalPath、getAbsolutePath等方法。</li>
+</ol>
+<h1 id="任意文件上传"><a href="#任意文件上传" class="headerlink" title="任意文件上传"></a>任意文件上传</h1><h2 id="原理-4"><a href="#原理-4" class="headerlink" title="原理"></a>原理</h2><p>当攻击者利用恶意文件上传漏洞时，通常会向服务器上传jsp木马并访问，可以直接控制服务器。</p>
+<h3 id="合法输入-4"><a href="#合法输入-4" class="headerlink" title="合法输入"></a>合法输入</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">-----------------------------11922861918696</div><div class="line">Content-Disposition: form-data; name=&quot;name&quot;</div><div class="line"></div><div class="line">test.txt</div><div class="line">-----------------------------11922861918696</div><div class="line">Content-Disposition: form-data; name=&quot;file&quot;; filename=&quot;test.txt&quot;</div><div class="line">Content-Type: text/plain</div><div class="line"></div><div class="line">test</div><div class="line"></div><div class="line">-----------------------------11922861918696--</div></pre></td></tr></table></figure>
+<h3 id="恶意输入-4"><a href="#恶意输入-4" class="headerlink" title="恶意输入"></a>恶意输入</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">-----------------------------11922861918696</div><div class="line">Content-Disposition: form-data; name=&quot;name&quot;</div><div class="line"></div><div class="line">../test.jsp</div><div class="line">-----------------------------11922861918696</div><div class="line">Content-Disposition: form-data; name=&quot;file&quot;; filename=&quot;test.txt&quot;</div><div class="line">Content-Type: text/plain</div><div class="line"></div><div class="line">...</div><div class="line">webshell</div><div class="line">....</div><div class="line"></div><div class="line">-----------------------------11922861918696--</div></pre></td></tr></table></figure>
+<h2 id="Java代码分析-4"><a href="#Java代码分析-4" class="headerlink" title="Java代码分析"></a>Java代码分析</h2><h3 id="不合规代码-4"><a href="#不合规代码-4" class="headerlink" title="不合规代码"></a>不合规代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">public class FileTestController &#123;</div><div class="line"></div><div class="line">    @RequestMapping(&quot;/Index&quot;)</div><div class="line">    public String FileFileUpload(Map&lt;String,Object&gt; map)&#123;</div><div class="line">        return &quot;Fileup&quot;;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @ResponseBody</div><div class="line">    @RequestMapping(value= &quot;/File/FileUpVul&quot;,method= RequestMethod.POST)</div><div class="line">    public String FileFileUpVul(HttpServletRequest request,@RequestParam(&quot;file&quot;) MultipartFile file)&#123;</div><div class="line">        String name = request.getParameter(&quot;name&quot;);</div><div class="line">        if (!file.isEmpty()) &#123;</div><div class="line">            try &#123;</div><div class="line">                byte[] bytes = file.getBytes();</div><div class="line">                BufferedOutputStream stream =</div><div class="line">                        new BufferedOutputStream(new FileOutputStream(new File(&quot;config/&quot;+name)));</div><div class="line">                stream.write(bytes);</div><div class="line">                stream.close();</div><div class="line">                return &quot;You successfully uploaded &quot; + name + &quot; into config/&quot; + name;</div><div class="line">            &#125; catch (Exception e) &#123;</div><div class="line">                return &quot;You failed to upload &quot; + name + &quot; =&gt; &quot; + e.getMessage();</div><div class="line">            &#125;</div><div class="line">        &#125; else &#123;</div><div class="line">            return &quot;You failed to upload &quot; + name + &quot; because the file was empty.&quot;;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="合规代码-3"><a href="#合规代码-3" class="headerlink" title="合规代码"></a>合规代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">public class FileTestController &#123;</div><div class="line"></div><div class="line">    @RequestMapping(&quot;/Index&quot;)</div><div class="line">    public String FileFileUpload(Map&lt;String,Object&gt; map)&#123;</div><div class="line">        return &quot;Fileup&quot;;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @ResponseBody</div><div class="line">    @RequestMapping(value= &quot;/File/FileUpVul&quot;,method= RequestMethod.POST)</div><div class="line">    public String FileFileUpVul(HttpServletRequest request,@RequestParam(&quot;file&quot;) MultipartFile file)&#123;</div><div class="line">      String name = DataUtil.getTimeStamp()+&quot;.jpg&quot;;</div><div class="line">        if (!file.isEmpty()) &#123;</div><div class="line">            try &#123;</div><div class="line">                // 判断大小等等,只要做好配置，并不需要检查文件头。</div><div class="line">                if(file.getSize()&lt;1024*1024*10)&#123;</div><div class="line">                    byte[] bytes = file.getBytes();</div><div class="line">                    BufferedOutputStream stream =</div><div class="line">                            new BufferedOutputStream(new FileOutputStream(new File(&quot;config/&quot;+name)));</div><div class="line">                    stream.write(bytes);</div><div class="line">                    stream.close();</div><div class="line">                    return &quot;You successfully uploaded &quot; + name + &quot; into config/&quot; + name;</div><div class="line">                &#125;</div><div class="line"></div><div class="line">            &#125; catch (Exception e) &#123;</div><div class="line">                return &quot;You failed to upload &quot; + name + &quot; =&gt; &quot; + e.getMessage();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        return &quot;You failed to upload &quot; + name + &quot; because the file was empty.&quot;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="防范建议-4"><a href="#防范建议-4" class="headerlink" title="防范建议"></a>防范建议</h2><ol>
+<li>控制文件名</li>
+<li>控制文件内容</li>
+<li>控制上传目录的权限</li>
+</ol>
+<h1 id="XSS"><a href="#XSS" class="headerlink" title="XSS"></a>XSS</h1><h2 id="原理-5"><a href="#原理-5" class="headerlink" title="原理"></a>原理</h2><p>这里仅仅拿了个反射的XSS做例子。</p>
+<h3 id="合法输入-5"><a href="#合法输入-5" class="headerlink" title="合法输入"></a>合法输入</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">alice</div><div class="line">hello,alice.</div></pre></td></tr></table></figure>
+<h3 id="恶意输入-5"><a href="#恶意输入-5" class="headerlink" title="恶意输入"></a>恶意输入</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">1&lt;script&gt;alert(1)&lt;/script&gt;</div><div class="line">hello,1&lt;script&gt;alert(1)&lt;/script&gt;.</div></pre></td></tr></table></figure>
+<h2 id="Java代码分析-5"><a href="#Java代码分析-5" class="headerlink" title="Java代码分析"></a>Java代码分析</h2><h3 id="不合规代码-5"><a href="#不合规代码-5" class="headerlink" title="不合规代码"></a>不合规代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public class XSSTestController &#123;</div><div class="line">    public String XXSXXSInject(HttpServletRequest request)&#123;</div><div class="line">        String data = request.getParameter(&quot;data&quot;);</div><div class="line"></div><div class="line">        if (data!=null&amp;&amp;!data.isEmpty())&#123;</div><div class="line"></div><div class="line">            return &quot;hello,&quot;+data+&quot;.&quot;;</div><div class="line">        &#125;</div><div class="line">        return &quot;404&quot;;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="合规代码-4"><a href="#合规代码-4" class="headerlink" title="合规代码"></a>合规代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public class XSSTestController &#123;</div><div class="line">    public String XXSXXSInject(HttpServletRequest request)&#123;</div><div class="line">        String data = request.getParameter(&quot;data&quot;);</div><div class="line">        if (data!=null&amp;&amp;!data.isEmpty())&#123;</div><div class="line">            return &quot;hello,&quot;+HtmlUtils.htmlEscape(data)+&quot;.&quot;;</div><div class="line">        &#125;</div><div class="line">        return &quot;404&quot;;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">1&lt;script&gt;alert(1)&lt;/script&gt;</div><div class="line">hello,1&amp;lt;script&amp;gt;alert(1)&amp;lt;/script&amp;gt;.</div></pre></td></tr></table></figure>
+<h2 id="防范建议-5"><a href="#防范建议-5" class="headerlink" title="防范建议"></a>防范建议</h2><ol>
+<li>对用户的输入进行html编码。</li>
+</ol>
+<h1 id="其他场景"><a href="#其他场景" class="headerlink" title="其他场景"></a>其他场景</h1><p>这些场景和前面提到的类似或者比较浅显易懂，就不贴代码了。</p>
+<h2 id="压缩文件问题"><a href="#压缩文件问题" class="headerlink" title="压缩文件问题"></a>压缩文件问题</h2><p>没有检测压缩后的大小等细节。</p>
+<h2 id="其他未净化输入导致日志等处被污染"><a href="#其他未净化输入导致日志等处被污染" class="headerlink" title="其他未净化输入导致日志等处被污染"></a>其他未净化输入导致日志等处被污染</h2><p>顾名思义，应用程序的日志被污染，如果输出到页面上也容易触发XSS。</p>
+<h3 id="合法输入-6"><a href="#合法输入-6" class="headerlink" title="合法输入"></a>合法输入</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">orleven</div><div class="line">正常用户登录失败，记录日志.....</div><div class="line">User Login Successed for: orleven</div></pre></td></tr></table></figure>
+<h3 id="恶意输入-6"><a href="#恶意输入-6" class="headerlink" title="恶意输入"></a>恶意输入</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">orleven\r\nUser Login Successed for: administrator</div><div class="line">恶意用户登录失败，记录日志.....</div><div class="line">User Login Failed for: orleven</div><div class="line">User Login Successed for: administrator</div></pre></td></tr></table></figure>
+<h2 id="正则表达式的拼接"><a href="#正则表达式的拼接" class="headerlink" title="正则表达式的拼接"></a>正则表达式的拼接</h2><p>原理与SQL注入基本相同。</p>
+<h3 id="合法输入-7"><a href="#合法输入-7" class="headerlink" title="合法输入"></a>合法输入</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">search=error</div><div class="line">(.*? +public\\[\\d+\\]+.*error.*)</div></pre></td></tr></table></figure>
+<h3 id="恶意输入-7"><a href="#恶意输入-7" class="headerlink" title="恶意输入"></a>恶意输入</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">search=.*)|(.*</div><div class="line">(.*? +public\\[\\d+\\]+.*.*)|(.*.*)</div></pre></td></tr></table></figure>
+<h2 id="XML注入的拼接"><a href="#XML注入的拼接" class="headerlink" title="XML注入的拼接"></a>XML注入的拼接</h2><p>原理与SQL注入基本相同。</p>
+<h3 id="合法输入-8"><a href="#合法输入-8" class="headerlink" title="合法输入"></a>合法输入</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">quantity=1</div><div class="line">&lt;item&gt;</div><div class="line">    &lt;name&gt;apple&lt;/name&gt;</div><div class="line">    &lt;price&gt;500.0&lt;/price&gt;</div><div class="line">    &lt;quantity&gt;1&lt;/quantity&gt;</div><div class="line">&lt;item&gt;</div></pre></td></tr></table></figure>
+<h3 id="恶意输入-8"><a href="#恶意输入-8" class="headerlink" title="恶意输入"></a>恶意输入</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">quantity=1&lt;/quantity&gt;&lt;price&gt;5.0&lt;/price&gt;&lt;quantity&gt;1</div><div class="line">&lt;item&gt;</div><div class="line">    &lt;name&gt;apple&lt;/name&gt;</div><div class="line">    &lt;price&gt;500.0&lt;/price&gt;</div><div class="line">    &lt;quantity&gt;1&lt;/quantity&gt;&lt;price&gt;5.0&lt;/price&gt;&lt;quantity&gt;1&lt;/quantity&gt;</div><div class="line">&lt;item&gt;</div></pre></td></tr></table></figure>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>想要学好代码审计，就必须多接触主流的的框架，例如Spring等，在了解各各类框架之后，才能更快的上手。</p>
+<p><a href="https://github.com/orleven/javatest" target="_blank" rel="noopener">相关测试代码</a><br><a href="http://wooyun.jozxing.cc/search?keywords=%E6%94%BB%E5%87%BBJavaWeb%E5%BA%94%E7%94%A8&amp;content_search_by=by_drops" target="_blank" rel="noopener">参考文章</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/code-audit/" rel="tag"># code audit</a>
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/23/weblogic-cve-2017-10271/" rel="next" title="Weblogic CVE-2017-10271 ">
+                <i class="fa fa-chevron-left"></i> Weblogic CVE-2017-10271 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/13/code-audit-summary/" rel="prev" title="代码审计总结">
+                代码审计总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+      
+        
+          <ul class="sidebar-nav motion-element">
+            <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+              文章目录
+            </li>
+            <li class="sidebar-nav-overview" data-target="site-overview">
+              站点概览
+            </li>
+          </ul>
+        
+      
+
+
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Orleven" />
+          <p class="site-author-name" itemprop="name">Orleven</p>
+           
+              <p class="site-description motion-element" itemprop="description">Life is full of ups and downs.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/ || archive">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index-1.html">
+                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-link"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://www.warmeng.com/" title="warmeng" target="_blank">warmeng</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://blog.0kami.cn/" title="0kimi" target="_blank">0kimi</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+      
+        
+        <!--noindex-->
+          <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+            <div class="post-toc">
+
+              
+                
+              
+
+              
+                <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Web应用安全的核心问题"><span class="nav-number">2.</span> <span class="nav-text">Web应用安全的核心问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SQL注入"><span class="nav-number">3.</span> <span class="nav-text">SQL注入</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#原理"><span class="nav-number">3.1.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#合法输入"><span class="nav-number">3.1.1.</span> <span class="nav-text">合法输入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#恶意输入"><span class="nav-number">3.1.2.</span> <span class="nav-text">恶意输入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java代码分析"><span class="nav-number">3.2.</span> <span class="nav-text">Java代码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#不合规代码"><span class="nav-number">3.2.1.</span> <span class="nav-text">不合规代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#合规代码（参数化查询）"><span class="nav-number">3.2.2.</span> <span class="nav-text">合规代码（参数化查询）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#防范建议"><span class="nav-number">3.3.</span> <span class="nav-text">防范建议</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#XXE"><span class="nav-number">4.</span> <span class="nav-text">XXE</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#原理-1"><span class="nav-number">4.1.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#合法输入-1"><span class="nav-number">4.1.1.</span> <span class="nav-text">合法输入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#恶意输入-1"><span class="nav-number">4.1.2.</span> <span class="nav-text">恶意输入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java代码分析-1"><span class="nav-number">4.2.</span> <span class="nav-text">Java代码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#不合规代码-1"><span class="nav-number">4.2.1.</span> <span class="nav-text">不合规代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#合规代码"><span class="nav-number">4.2.2.</span> <span class="nav-text">合规代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#防范建议-1"><span class="nav-number">4.3.</span> <span class="nav-text">防范建议</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#命令注入"><span class="nav-number">5.</span> <span class="nav-text">命令注入</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#原理-2"><span class="nav-number">5.1.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#合法输入-2"><span class="nav-number">5.1.1.</span> <span class="nav-text">合法输入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#恶意输入-2"><span class="nav-number">5.1.2.</span> <span class="nav-text">恶意输入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java代码分析-2"><span class="nav-number">5.2.</span> <span class="nav-text">Java代码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#不合规代码-2"><span class="nav-number">5.2.1.</span> <span class="nav-text">不合规代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#合规代码-1"><span class="nav-number">5.2.2.</span> <span class="nav-text">合规代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#防范建议-2"><span class="nav-number">5.3.</span> <span class="nav-text">防范建议</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#任意文件下载-目录遍历"><span class="nav-number">6.</span> <span class="nav-text">任意文件下载/目录遍历</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#原理-3"><span class="nav-number">6.1.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#合法输入-3"><span class="nav-number">6.1.1.</span> <span class="nav-text">合法输入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#恶意输入-3"><span class="nav-number">6.1.2.</span> <span class="nav-text">恶意输入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java代码分析-3"><span class="nav-number">6.2.</span> <span class="nav-text">Java代码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#不合规代码-3"><span class="nav-number">6.2.1.</span> <span class="nav-text">不合规代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#合规代码-2"><span class="nav-number">6.2.2.</span> <span class="nav-text">合规代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#防范建议-3"><span class="nav-number">6.3.</span> <span class="nav-text">防范建议</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#任意文件上传"><span class="nav-number">7.</span> <span class="nav-text">任意文件上传</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#原理-4"><span class="nav-number">7.1.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#合法输入-4"><span class="nav-number">7.1.1.</span> <span class="nav-text">合法输入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#恶意输入-4"><span class="nav-number">7.1.2.</span> <span class="nav-text">恶意输入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java代码分析-4"><span class="nav-number">7.2.</span> <span class="nav-text">Java代码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#不合规代码-4"><span class="nav-number">7.2.1.</span> <span class="nav-text">不合规代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#合规代码-3"><span class="nav-number">7.2.2.</span> <span class="nav-text">合规代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#防范建议-4"><span class="nav-number">7.3.</span> <span class="nav-text">防范建议</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#XSS"><span class="nav-number">8.</span> <span class="nav-text">XSS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#原理-5"><span class="nav-number">8.1.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#合法输入-5"><span class="nav-number">8.1.1.</span> <span class="nav-text">合法输入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#恶意输入-5"><span class="nav-number">8.1.2.</span> <span class="nav-text">恶意输入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java代码分析-5"><span class="nav-number">8.2.</span> <span class="nav-text">Java代码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#不合规代码-5"><span class="nav-number">8.2.1.</span> <span class="nav-text">不合规代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#合规代码-4"><span class="nav-number">8.2.2.</span> <span class="nav-text">合规代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#防范建议-5"><span class="nav-number">8.3.</span> <span class="nav-text">防范建议</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#其他场景"><span class="nav-number">9.</span> <span class="nav-text">其他场景</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#压缩文件问题"><span class="nav-number">9.1.</span> <span class="nav-text">压缩文件问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他未净化输入导致日志等处被污染"><span class="nav-number">9.2.</span> <span class="nav-text">其他未净化输入导致日志等处被污染</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#合法输入-6"><span class="nav-number">9.2.1.</span> <span class="nav-text">合法输入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#恶意输入-6"><span class="nav-number">9.2.2.</span> <span class="nav-text">恶意输入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#正则表达式的拼接"><span class="nav-number">9.3.</span> <span class="nav-text">正则表达式的拼接</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#合法输入-7"><span class="nav-number">9.3.1.</span> <span class="nav-text">合法输入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#恶意输入-7"><span class="nav-number">9.3.2.</span> <span class="nav-text">恶意输入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XML注入的拼接"><span class="nav-number">9.4.</span> <span class="nav-text">XML注入的拼接</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#合法输入-8"><span class="nav-number">9.4.1.</span> <span class="nav-text">合法输入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#恶意输入-8"><span class="nav-number">9.4.2.</span> <span class="nav-text">恶意输入</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">10.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              
+
+            </div>
+          </section>
+        <!--/noindex-->
+        
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Orleven</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">orleven.com</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+
+  <div class="theme-info">  <a class="theme-link" target="_blank" href="https://blog.orleven.com">My blog</a> version 1.1 </div>
+
+
+
+  
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("EdyobKaxPz3ofLTPlxfLIN1V-gzGzoHsz", "3hpzfKGL11zsIHV0ONyWgUgW");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
