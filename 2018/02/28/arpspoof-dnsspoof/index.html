@@ -129,7 +129,7 @@
 <meta property="og:image" content="http://orleven.orleven.com/images/arpspoof/arpspoof-2.jpg">
 <meta property="og:image" content="http://orleven.orleven.com/images/arpspoof/arpspoof-3.jpg">
 <meta property="og:image" content="http://orleven.orleven.com/images/arpspoof/arpspoof-4.png">
-<meta property="og:updated_time" content="2018-03-07T15:09:32.433Z">
+<meta property="og:updated_time" content="2018-03-07T15:12:35.903Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ARP毒化与DNS毒化">
 <meta name="twitter:description" content="概述操作一波中间人攻击的ARP毒化与DNS欺骗，备忘。">
@@ -444,7 +444,9 @@
 <a id="more"></a>
 <h1 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h1><p>测试机子如下 ： </p>
 <p>攻击者：192.168.111.183<br>被欺骗主机：192.168.111.173<br>默认网关（_gateway）：192.168.111.2</p>
-<h1 id="ARP毒化"><a href="#ARP毒化" class="headerlink" title="ARP毒化"></a>ARP毒化</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">root@kali:~# arp</div><div class="line">Address                  HWtype  HWaddress           Flags Mask            Iface</div><div class="line">192.168.111.254          ether   00:50:56:fe:53:af   C                     eth0</div><div class="line">_gateway                 ether   00:50:56:e6:26:42   C                     eth0</div></pre></td></tr></table></figure>
+<h1 id="ARP毒化"><a href="#ARP毒化" class="headerlink" title="ARP毒化"></a>ARP毒化</h1><p>查看arp表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">root@kali:~# arp</div><div class="line">Address                  HWtype  HWaddress           Flags Mask            Iface</div><div class="line">192.168.111.254          ether   00:50:56:fe:53:af   C                     eth0</div><div class="line">_gateway                 ether   00:50:56:e6:26:42   C                     eth0</div></pre></td></tr></table></figure>
+<p>开启转发</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">root@kali:~# cat /proc/sys/net/ipv4/ip_forward</div><div class="line">0</div><div class="line">root@kali:~# echo 1 &gt;&gt; /proc/sys/net/ipv4/ip_forward</div><div class="line">root@kali:~# cat /proc/sys/net/ipv4/ip_forward</div><div class="line">1</div></pre></td></tr></table></figure>
 <h2 id="Ettercap"><a href="#Ettercap" class="headerlink" title="Ettercap"></a>Ettercap</h2><p>Ettercap是一个多用途的开源工具，可以用来执行嗅探、密码抓取、主机分析等，并且还可以图形化启动。</p>
 <p>另外ettercap有些不错的插件，可以增强中间人攻击。</p>
