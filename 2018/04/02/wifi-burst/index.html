@@ -134,7 +134,7 @@
 <meta property="og:image" content="http://orleven.orleven.com/images/wifi-burst/wifi-burst-5.png">
 <meta property="og:image" content="http://orleven.orleven.com/images/wifi-burst/wifi-burst-6.jpg">
 <meta property="og:image" content="http://orleven.orleven.com/images/wifi-burst/wifi-burst-7.jpg">
-<meta property="og:updated_time" content="2018-04-01T16:15:25.826Z">
+<meta property="og:updated_time" content="2018-04-03T01:40:51.917Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="无线攻击——WIFI">
 <meta name="twitter:description" content="概述工作需要学习一点无线知识，索性就买了个USB的无线网卡，做了个实验，简单了解下wifi无线破解的知识。">
@@ -524,8 +524,9 @@
 <ol>
 <li>抓取目标网络的握手包，命令如下： </li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">airodump-ng -c 1 -–bssid F0:B4:29:65:06:1B  - w /root/Desktop/ wlan0mon</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">airodump-ng -c 1 --bssid F0:B4:29:65:06:1B  -w /root/Desktop/ wlan0mon</div></pre></td></tr></table></figure>
 <p><img src="/images/wifi-burst/wifi-burst-5.png" alt="wifi-burst-5"></p>
+<p>如果抓不到握手包，说明没有人用这个热点。</p>
 <ol>
 <li>重新打开一个terminal窗口，使用DEAUTH攻击使已经连接的客户端断开并重新连接，以产生握手包。（注意：抓握手包破解必须有合法的客户端才行）命令如下： </li>
 </ol>
