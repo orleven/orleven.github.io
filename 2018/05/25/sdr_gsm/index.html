@@ -125,22 +125,22 @@
 <meta property="og:site_name" content="Orleven Blog">
 <meta property="og:description" content="概述抽空了解下SDR以及GSM的一些知识。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://orleven.orleven.com/images/sdr-gsm/sdr-1.jpg">
-<meta property="og:image" content="http://orleven.orleven.com/images/sdr-gsm/sdr-1.jpg">
-<meta property="og:image" content="http://orleven.orleven.com/images/sdr-gsm/sdr-3.jpg">
-<meta property="og:image" content="http://orleven.orleven.com/images/sdr-gsm/sdr-4.jpg">
-<meta property="og:image" content="http://orleven.orleven.com/images/sdr-gsm/sdr-5.jpg">
-<meta property="og:image" content="http://orleven.orleven.com/images/sdr-gsm/sdr-6.jpg">
-<meta property="og:image" content="http://orleven.orleven.com/images/sdr-gsm/sdr-7.jpg">
-<meta property="og:image" content="http://orleven.orleven.com/images/sdr-gsm/sdr-8.jpg">
-<meta property="og:image" content="http://orleven.orleven.com/images/sdr-gsm/sdr-9.jpg">
-<meta property="og:image" content="http://orleven.orleven.com/images/sdr-gsm/sdr-10.jpg">
-<meta property="og:image" content="http://orleven.orleven.com/images/sdr-gsm/sdr-11.jpg">
-<meta property="og:updated_time" content="2018-07-18T15:03:19.698Z">
+<meta property="og:image" content="http://orleven.orleven.com/images/sdr-gsm/sdr-1.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/sdr-gsm/sdr-1.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/sdr-gsm/sdr-3.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/sdr-gsm/sdr-4.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/sdr-gsm/sdr-5.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/sdr-gsm/sdr-6.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/sdr-gsm/sdr-7.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/sdr-gsm/sdr-8.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/sdr-gsm/sdr-9.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/sdr-gsm/sdr-10.png">
+<meta property="og:image" content="http://orleven.orleven.com/images/sdr-gsm/sdr-11.png">
+<meta property="og:updated_time" content="2018-07-18T15:23:24.039Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初识SDR与GSM嗅探">
 <meta name="twitter:description" content="概述抽空了解下SDR以及GSM的一些知识。">
-<meta name="twitter:image" content="http://orleven.orleven.com/images/sdr-gsm/sdr-1.jpg">
+<meta name="twitter:image" content="http://orleven.orleven.com/images/sdr-gsm/sdr-1.png">
 
 
 
@@ -463,13 +463,13 @@
 <p>在整个射频通信中，主要包含以下几种频率：传输频率、接收频率、中频和基带频率。基带频率是用来调制数据的信号频率。</p>
 <p>软件定义的无线电(Software Defined Radio，SDR) 是一种无线电广播通信技术，它基于软件定义的无线通信协议而非通过硬连线实现。频带、空中接口协议和功能可通过软件下载和更新来升级，而不用完全更换硬件。</p>
 <p>其中已在硬件被典型地实现的组件（例如混频器，滤波器，放大器，调制器 / 解调器，检测器等）。</p>
-<p><img src="/images/sdr-gsm/sdr-1.jpg" alt="sdr-1"></p>
+<p><img src="/images/sdr-gsm/sdr-1.png" alt="sdr-1"></p>
 <p>直接利用软体调变的方式而不需变更硬体架构，省去硬体架构调整的负担。</p>
-<p><img src="/images/sdr-gsm/sdr-1.jpg" alt="sdr-2"></p>
+<p><img src="/images/sdr-gsm/sdr-1.png" alt="sdr-2"></p>
 <p>三款SDR平台： HackRF，bladeRF和USRP。</p>
 <h2 id="HackRFOne"><a href="#HackRFOne" class="headerlink" title="HackRFOne"></a>HackRFOne</h2><p>HackRFOne 是一款软件定义无线电外设，能够发送或接受1MHz至6GHz 的无线电信号。</p>
 <p>hackRF One旨在支持现代和下一代无线电技术的测试和开发，是一个开源硬件平台，可用作USB外设或编程独立运行。</p>
-<p><img src="/images/sdr-gsm/sdr-3.jpg" alt="sdr-3"></p>
+<p><img src="/images/sdr-gsm/sdr-3.png" alt="sdr-3"></p>
 <h3 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h3><ol>
 <li>HackRF最大支持20MHz的采样率</li>
 <li>High Speed USB，USB供电接口</li>
@@ -477,13 +477,13 @@
 <li>全面支持GNURadio</li>
 </ol>
 <h2 id="GNURadio"><a href="#GNURadio" class="headerlink" title="GNURadio"></a>GNURadio</h2><p>GNURadio就是开源世界中软件无线电的代表项目，实现了软件无线电所需要的大部分模块，并且完成了对于采样数据流的缓冲、调度，并由开源社区集体维护。GNURadio对于软件无线电射频前端硬件的支持非常全面，例如USRP、HackRF、BladeRF等。</p>
-<p><img src="/images/sdr-gsm/sdr-4.jpg" alt="sdr-4"></p>
+<p><img src="/images/sdr-gsm/sdr-4.png" alt="sdr-4"></p>
 <p>信号源由osmocom模块提供，设置好信号源的中心频率和采样率，对来自信号源的信号通过抽取，再经过低通滤波，只保留所要解调信号的频率范围，即调频信号的带宽，滤波器截止频率通过GUI Slider设置。滤波后的信号送入WBFM解调模块进行解调，输出即为音频信号，后送入Audio Sink，GNURadio会自动通过音频驱动将音频信号送到计算机的音频输出，在扬声器就会发出FM广播的声音。还可以加上GUI FFT Sink观察广播信号的频谱。</p>
 <h1 id="移动通信"><a href="#移动通信" class="headerlink" title="移动通信"></a>移动通信</h1><p>随着互联网的普及和智能手机的广泛应用，大家对2G、3G、4G网络并不陌生。然而什么是2G、3G、4G网络，很多人就只能懵逼的人为是上网速度有差异。</p>
 <p>其实，真正从个人用户的角度来说，上述理解无可厚非。G指的是Generation，也就是“代”的意思。1G~5G等的定义，主要是从速率，业务类型，传输时延，还有各种切换成功率角度给出具体实现的技术不同。所以1G就是第一代移动通信系统的意思，2G、3G、4G、5G就分别指第二、三、四、五代移动通信系统，而这也确实是人为划代。</p>
-<p><img src="/images/sdr-gsm/sdr-5.jpg" alt="sdr-5"></p>
+<p><img src="/images/sdr-gsm/sdr-5.png" alt="sdr-5"></p>
 <p>第一代移动通信：摩托罗拉8000X，即俗称“大哥大”，语音、短信<br>第二代移动通信：主要的制式为GSM 以及CDMA IS95/CDMA2000 1x ，语音、短信、连入互联网。<br>第三代移动通信（3G）：3G主流的制式主要就是WCDMA、CDMA2000 EVDO、TD-SCDMA、Wimax，提高了响应速度，降低了时延。<br>第四代移动通信：整个网络更加扁平化，降低时延，提升用户感受，看视频。<br>第五代移动通信：拭目以待。</p>
-<p><img src="/images/sdr-gsm/sdr-6.jpg" alt="sdr-6"></p>
+<p><img src="/images/sdr-gsm/sdr-6.png" alt="sdr-6"></p>
 <h2 id="GSM"><a href="#GSM" class="headerlink" title="GSM"></a>GSM</h2><p>全球移动通信系统，即GSM(Global System for Mobile Communications)，是当前应用最为广泛的移动电话标准，GSM是一个蜂窝网络，蜂窝网络的原因，是因为一个数学结论，即以相同半径的圆形覆盖平面, 当圆心处于正六边形网格的各正六边形中心，也就是当圆心处于正三角网格的格点时所用圆的数量最少。作为运营商，为了考虑成本，不会建设大量多余的基站。</p>
 <p>GSM加密采用A5算法。A5算法是一种序列密码，它是欧洲GSM标准中规定的加密算法，专用于数字蜂窝移动电话的加密，用于对从电话到基站连接的加密。A5的特点是效率高，适合硬件上高效实现。<br>A5发展至今，有A5/1、A5/2、A5/3、A5/4、A5/5、A5/6、A5/7等7个版本，目前GSM终端一般都支持A5/1和A5/3，A5/4以上基本不涉及。</p>
 <p>我们国家移动和联通的2G电话网络采用的是GSM。</p>
@@ -497,14 +497,14 @@
 </ol>
 <h2 id="嗅探GSM"><a href="#嗅探GSM" class="headerlink" title="嗅探GSM"></a>嗅探GSM</h2><p>每个国家所采用的每个操作码都使用GSM频率段中的不同的频率，通常是从900 Mhz开始。</p>
 <p>可以使用kal 命令找到想嗅探的频率</p>
-<p><img src="/images/sdr-gsm/sdr-7.jpg" alt="sdr-7"></p>
+<p><img src="/images/sdr-gsm/sdr-7.png" alt="sdr-7"></p>
 <p>或者直接<a href="https://www.worldtimezone.com/gsm.html" target="_blank" rel="noopener">查询</a>，或者百度运营商GSM更快</p>
-<p><img src="/images/sdr-gsm/sdr-8.jpg" alt="sdr-8"></p>
+<p><img src="/images/sdr-gsm/sdr-8.png" alt="sdr-8"></p>
 <p>使用gqrx寻找相关频率（gqrx 是 GNU Radio 的一个前端实现，主流的发行版软件源中均带有 gqrx。安装非常便捷，使用包管理器即可）：</p>
-<p><img src="/images/sdr-gsm/sdr-9.jpg" alt="sdr-9"></p>
+<p><img src="/images/sdr-gsm/sdr-9.png" alt="sdr-9"></p>
 <p>结合wireshark： </p>
-<p><img src="/images/sdr-gsm/sdr-10.jpg" alt="sdr-10"></p>
-<p><img src="/images/sdr-gsm/sdr-11.jpg" alt="sdr-11"></p>
+<p><img src="/images/sdr-gsm/sdr-10.png" alt="sdr-10"></p>
+<p><img src="/images/sdr-gsm/sdr-11.png" alt="sdr-11"></p>
 <h2 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h2><p>这里涉及到上行数据和下载数据，基站发到手机端的是下行短信，手机发送到基站的是上行短信。所以要嗅探到下行的短信相对容易（广播），所以可能看到GMS SMS内容(因为这些不加密…) </p>
 <p>下行短信里没有短信接受者的号码，简单来讲，短信接受者的号码、IMEI等数据，只有在“Location Update”时才会在网络中出现，并且是以加密形式传输的。当接收短信时，基站根据之前位置更新时注册的信息，判断接收者的位置。所以，想要拿到接受者的号码，需要破解A5/1算法并还原出“Location Update”时的原文，Airprobe项目里有介绍如何破解A5/1算法找到Kc。 <a href="https://www.ckn.io/blog/2015/11/29/gsm-sniffing-sms-traffic" target="_blank" rel="noopener">参考文章</a></p>
 <p>很多情况下，把手机调成2G了也嗅探不到自己的短息，这是因为在所有操作成功的前提下，能嗅探到别人的短信却抓不到自己的大概是因为抓取的ARFCN和手机选择的ARFCN不是同一个，一个区域可能有几个到十几个可以注册的ARFCN，原则上手机一般会自动选择信号最强的ARFCN注册，但是具体注册哪里一个还是有手机系统来确定，所以要完整抓取一个区域内所有的下行短信。</p>
@@ -653,7 +653,7 @@
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/tags/index.html">
+              <a href="/tags/index-1.html">
                 <span class="site-state-item-count">65</span>
                 <span class="site-state-item-name">标签</span>
               </a>
